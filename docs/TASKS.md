@@ -9,7 +9,7 @@ Làm theo thứ tự. Mỗi task đủ nhỏ để xong trong một phiên, có 
   _Xong khi:_ trang `/dev/styleguide` hiển thị màu, heading, nút.
 - [x] **T03 Database & Prisma**: schema đầy đủ theo ARCHITECTURE.md §3, migration đầu tiên, `server/db.ts`.
   _Xong khi:_ `prisma migrate dev` chạy, Prisma Studio thấy đủ bảng.
-- [ ] **T04 Seed dữ liệu mẫu**: 6 nhóm danh mục + ~15 danh mục con, 6 công trình, 3 đánh giá, 3 bài viết, 1 banner, cài đặt site, 1 admin. Mọi nội dung đánh dấu `[MẪU]`.
+- [x] **T04 Seed dữ liệu mẫu**: 6 nhóm danh mục + ~15 danh mục con, 6 công trình, 3 đánh giá, 3 bài viết, 1 banner, cài đặt site, 1 admin. Mọi nội dung đánh dấu `[MẪU]`.
   _Xong khi:_ `pnpm db:seed` chạy lại nhiều lần không lỗi.
 - [ ] **T05 Tiện ích chung**: `slugify` (tiếng Việt), `formatPriceRange`, helper metadata SEO, helper JSON-LD + unit test.
   _Xong khi:_ test `slugify("Mộ Đá Đôi") === "mo-da-doi"` pass.
