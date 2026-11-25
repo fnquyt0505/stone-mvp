@@ -26,3 +26,18 @@ export async function hitRateLimit(
   await db.rateLimitHit.deleteMany({ where: { key, createdAt: { lt: since } } });
   return { allowed: true, count: count + 1 };
 }
+
+/** Read-only check: true when `key` already has `limit` hits inside the window. */
+export async function isRateLimited(
+  key: string,
+  limit: number,
+  windowMs: number,
+): Promise<boolean> {
+  const since = new Date(Date.now() - windowMs);
+  return (await db.rateLimitHit.count({ where: { key, createdAt: { gte: since } } })) >= limit;
+}
+
+/** Records one hit (e.g. a failed login) for `key`. */
+export async function recordHit(key: string): Promise<void> {
+  await db.rateLimitHit.create({ data: { key } });
+}

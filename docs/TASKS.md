@@ -37,7 +37,7 @@ Làm theo thứ tự. Mỗi task đủ nhỏ để xong trong một phiên, có 
 
 ## Giai đoạn 4 — Admin
 - [x] **T18 Auth admin**: Auth.js Credentials, trang login, middleware + `requireAdmin()`.
-- [ ] **T19 Khung admin**: sidebar, dashboard (lead mới hôm nay/tuần, tổng nội dung).
+- [x] **T19 Khung admin**: sidebar, dashboard (lead mới hôm nay/tuần, tổng nội dung).
 - [ ] **T20 Quản lý Lead**: bảng lọc theo trạng thái/ngày, đổi trạng thái, ghi chú, bấm gọi; xuất CSV.
 - [ ] **T21 Upload ảnh**: `/api/upload` ký Cloudinary, ImageUploader kéo-thả nhiều ảnh, bắt buộc alt.
 - [ ] **T22 Rich text editor**: Tiptap (heading, list, bảng, ảnh, link) + renderer phía site đã sanitize.
