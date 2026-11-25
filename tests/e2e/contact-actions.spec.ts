@@ -19,9 +19,10 @@ test.describe("floating contact (desktop)", () => {
     await mockGtag(page);
     await page.goto("/");
 
-    const call = page.getByRole("link", { name: /^Gọi ngay \d/ });
+    const floating = page.getByRole("group", { name: "Liên hệ nhanh" });
+    const call = floating.getByRole("link", { name: /^Gọi ngay \d/ });
     await expect(call).toHaveAttribute("href", /^tel:\+84\d{9}$/);
-    const zalo = page.getByRole("link", { name: "Nhắn tin Zalo" });
+    const zalo = floating.getByRole("link", { name: "Nhắn tin Zalo" });
     await expect(zalo).toHaveAttribute("href", /^https:\/\/zalo\.me\/0\d{9}$/);
 
     // Prevent navigation so we can inspect the tracked event.

@@ -3,22 +3,29 @@
 > Cập nhật sau **mỗi** task. Mục mới nhất ở trên cùng. Giữ ngắn gọn, đủ để người/AI khác tiếp tục ngay.
 
 ## Trạng thái hiện tại
-- **Giai đoạn:** 1 — Khung site công khai
+- **Giai đoạn:** 2 — Nội dung cốt lõi
 - **Task đang làm:** —
-- **Task tiếp theo:** T09 Trang chủ
+- **Task tiếp theo:** T10 Route `/[slug]`
 - **Chặn bởi:** Cần chủ dự án chốt tên thương hiệu, logo, hotline, Zalo, địa chỉ (có thể dùng `[MẪU]` để làm trước).
 
 ## Tổng quan
 | Giai đoạn | Task | Xong |
 |---|---|---|
 | 0 Nền móng | T01–T05 | 5/5 |
-| 1 Khung site | T06–T09 | 3/4 |
+| 1 Khung site | T06–T09 | 4/4 |
 | 2 Nội dung | T10–T14 | 0/5 |
 | 3 Thu lead | T15–T17 | 0/3 |
 | 4 Admin | T18–T25 | 0/8 |
 | 5 Ra mắt | T26–T30 | 0/5 |
 
 ## Nhật ký
+
+### 2026-11-25 — T09 Trang chủ
+- ✅ Đã xong: trang chủ `app/(site)/page.tsx`: Hero (H1 + Nhận báo giá / Gọi ngay, lớp phủ 40%; chưa có ảnh → nền gradient đá), lưới 6 nhóm danh mục (CategoryCard 4:3, "Giá từ …" = giá thấp nhất của nhóm + con), khối thành tích (SiteSetting `achievements`), công trình tiêu biểu (ProjectCard 3:2, badge tỉnh, năm), quy trình 7 bước (ProcessSteps ngang/dọc, giữ câu "không gồm phần móng"), 3 đánh giá, dải CTA báo giá (Báo giá · Gọi · Zalo). Metadata riêng (canonical `/`, description). Component: `hero`, `cards`, `image-frame` (ảnh hoặc placeholder cố định tỉ lệ), `section`, `process-steps`, `quote-cta`; query `server/queries/home.ts`; `lib/order-process.ts` (dùng lại ở T14). E2E `home.spec.ts`; 11/11 e2e + 39 unit pass; build OK.
+- 📁 File thay đổi: `src/app/(site)/page.tsx`, `src/components/site/{hero,cards,image-frame,section,process-steps,quote-cta,contact-actions}.tsx`, `src/server/queries/{home,site}.ts`, `src/lib/order-process.ts`, `src/schemas/site-settings.ts`, `prisma/seed-data.ts`, `next.config.ts`, `tests/e2e/*.spec.ts`.
+- 🐞 Lỗi / vấn đề: `unstable_cache` trả object cài đặt cũ (thiếu `achievements`) → giờ chỉ cache dòng thô, parse Zod ngoài cache. Locator e2e cũ bị trùng do trang chủ có thêm link → giới hạn vào header / nhóm "Liên hệ nhanh".
+- 🧠 Quyết định quan trọng: số liệu thành tích là `[MẪU] 00+` (không bịa số) — chủ xưởng phải nhập số thật. Cho phép ảnh từ `res.cloudinary.com`. **Cần ảnh thật** (hero + ảnh bìa danh mục/công trình) trước khi ra mắt.
+- ⏭️ Bước tiếp theo: T10 (giai đoạn 2).
 
 ### 2026-11-25 — T08 FloatingContact + StickyBottomBar
 - ✅ Đã xong: `components/site/contact-actions.tsx`: **FloatingContact** (≥ md, góc phải dưới: Gọi đỏ rung nhẹ `animate-ring` chỉ khi `motion-safe`, Zalo, TikTok nếu có link, Lên đầu trang hiện sau 400px) và **StickyBottomBar** (< md: Gọi · Zalo · Báo giá, chừa `safe-area-inset-bottom`, có khoảng đệm để không che footer). `lib/analytics.ts` (`trackEvent`, `trackContactClick` → GA4 event `contact_click` {channel, placement, page_path}, an toàn khi chưa có gtag); `zaloHref` trong `lib/phone.ts`. Test: 4 unit + 3 e2e (link `tel:`/Zalo đúng, bắn event, nút lên đầu, hiển thị đúng theo màn hình) → 39 unit + 7 e2e pass.

@@ -194,4 +194,11 @@ export const SITE_SETTINGS: Record<string, unknown> = {
   address: `${SAMPLE} Địa chỉ xưởng sẽ cập nhật`,
   workingHours: `${SAMPLE} 7:00 – 21:00, tất cả các ngày`,
   social: { facebook: "", tiktok: "", youtube: "" },
+  /** Placeholder figures only — replace with verified numbers before launch. */
+  achievements: [
+    { value: "[MẪU] 00+", label: "Năm kinh nghiệm" },
+    { value: "[MẪU] 000+", label: "Công trình đã thi công" },
+    { value: "[MẪU] 00", label: "Tỉnh thành phục vụ" },
+    { value: "[MẪU] 0 năm", label: "Bảo hành kết cấu" },
+  ],
 };

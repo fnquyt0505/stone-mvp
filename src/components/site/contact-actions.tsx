@@ -38,7 +38,11 @@ export function FloatingContact({ hotline, zalo, tiktok }: ContactInfo) {
   const zaloNumber = zalo || hotline;
 
   return (
-    <div className="fixed right-5 bottom-6 z-30 hidden flex-col items-center gap-3 md:flex">
+    <div
+      role="group"
+      aria-label="Liên hệ nhanh"
+      className="fixed right-5 bottom-6 z-30 hidden flex-col items-center gap-3 md:flex"
+    >
       {hotline ? (
         <a
           href={telHref(hotline)}
