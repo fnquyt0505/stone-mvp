@@ -50,6 +50,27 @@
   --text-small--line-height: 1.5;
   --text-small-lg: 0.9375rem;
   --text-small-lg--line-height: 1.5;
+
+  /* Gentle "ringing" wiggle for the floating call button (pauses between rings). */
+  --animate-ring: ring 2.5s ease-in-out infinite;
+
+  @keyframes ring {
+    0%,
+    60%,
+    100% {
+      transform: rotate(0);
+    }
+    65%,
+    75%,
+    85% {
+      transform: rotate(-12deg);
+    }
+    70%,
+    80%,
+    90% {
+      transform: rotate(12deg);
+    }
+  }
 }
 
 /* shadcn/ui semantic tokens mapped onto the palette. */

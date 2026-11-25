@@ -20,3 +20,6 @@ export const EXPLORE_NAV = [
   { href: "/tin-tuc/", label: "Tin tức & kinh nghiệm" },
   { href: "/huong-dan-dat-hang/", label: "Hướng dẫn đặt hàng" },
 ] as const;
+
+/** Where "Báo giá" CTAs point until the quote popup exists (T17). */
+export const QUOTE_HREF = "/lien-he/#bao-gia";

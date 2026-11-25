@@ -18,3 +18,8 @@ export function telHref(raw: string): string {
   const p = normalizePhone(raw);
   return p.startsWith("0") ? `tel:+84${p.slice(1)}` : `tel:${p}`;
 }
+
+/** Zalo chat link for a phone number registered with Zalo (local 0-prefixed form). */
+export function zaloHref(raw: string): string {
+  return `https://zalo.me/${normalizePhone(raw)}`;
+}

@@ -32,7 +32,7 @@ export function TopBar({ settings }: { settings: SiteSettings }) {
           {hotline ? (
             <a
               href={telHref(hotline)}
-              className="flex items-center gap-2 font-semibold text-white hover:text-gold-600"
+              className="flex shrink-0 items-center gap-2 font-semibold whitespace-nowrap text-white hover:text-gold-600"
             >
               <Phone aria-hidden className="size-4" />
               <span className="sr-only">Hotline:</span>
