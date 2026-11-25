@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { JsonLd } from "@/components/json-ld";
-import { RichText } from "@/components/rich-text";
 import { CategoryView } from "@/components/site/category-view";
-import { breadcrumbJsonLd } from "@/lib/jsonld";
+import { StaticPageView } from "@/components/site/static-page-view";
 import { buildMetadata } from "@/lib/seo";
 import { getRelatedCategories } from "@/server/queries/related";
 import { getSiteSettings } from "@/server/queries/site";
@@ -44,23 +42,7 @@ export default async function SlugPage({ params }: Props) {
   const resolved = await resolveSlug(slug);
   if (!resolved) notFound();
 
-  const container = "mx-auto max-w-7xl px-4 py-10 md:px-6 md:py-16";
-
-  if (resolved.kind === "page") {
-    const { page } = resolved;
-    return (
-      <main className={container}>
-        <h1>{page.title}</h1>
-        <RichText doc={page.content} className="mt-8 max-w-prose space-y-4" />
-        <JsonLd
-          data={breadcrumbJsonLd([
-            { name: "Trang chủ", path: "/" },
-            { name: page.title, path: `/${page.slug}/` },
-          ])}
-        />
-      </main>
-    );
-  }
+  if (resolved.kind === "page") return <StaticPageView page={resolved.page} />;
 
   const [related, settings] = await Promise.all([
     getRelatedCategories(resolved.category.id, resolved.category.parentId),

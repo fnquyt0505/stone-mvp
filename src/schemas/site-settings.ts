@@ -25,6 +25,14 @@ export const siteSettingsSchema = z.object({
     .optional()
     .or(z.literal("").transform(() => undefined)),
   address: z.string().trim().default(""),
+  /** Google Maps "Embed a map" src. Only Google Maps embed URLs are accepted. */
+  mapEmbedUrl: z
+    .string()
+    .trim()
+    .url()
+    .refine((u) => u.startsWith("https://www.google.com/maps/embed"))
+    .optional()
+    .catch(undefined),
   workingHours: z.string().trim().default(""),
   social: z
     .object({ facebook: optionalUrl, tiktok: optionalUrl, youtube: optionalUrl })
