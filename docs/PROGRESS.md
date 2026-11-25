@@ -5,20 +5,27 @@
 ## Trạng thái hiện tại
 - **Giai đoạn:** 1 — Khung site công khai
 - **Task đang làm:** —
-- **Task tiếp theo:** T07 MegaMenu
+- **Task tiếp theo:** T08 FloatingContact + StickyBottomBar
 - **Chặn bởi:** Cần chủ dự án chốt tên thương hiệu, logo, hotline, Zalo, địa chỉ (có thể dùng `[MẪU]` để làm trước).
 
 ## Tổng quan
 | Giai đoạn | Task | Xong |
 |---|---|---|
 | 0 Nền móng | T01–T05 | 5/5 |
-| 1 Khung site | T06–T09 | 1/4 |
+| 1 Khung site | T06–T09 | 2/4 |
 | 2 Nội dung | T10–T14 | 0/5 |
 | 3 Thu lead | T15–T17 | 0/3 |
 | 4 Admin | T18–T25 | 0/8 |
 | 5 Ra mắt | T26–T30 | 0/5 |
 
 ## Nhật ký
+
+### 2026-11-25 — T07 MegaMenu
+- ✅ Đã xong: `components/site/mega-menu.tsx` (desktop ≥ lg: Radix NavigationMenu, nút "Sản phẩm" mở panel rộng bằng header, 6 cột theo nhóm + gạch vàng, cùng các link tĩnh); `components/site/mobile-menu.tsx` (< lg: Sheet trượt từ trái, Accordion một mục mở một lúc, "Tất cả …" cho từng nhóm, đóng khi chọn link); `server/queries/categories.ts` (`getMenuCategories`, tag `categories`). Thêm shadcn `navigation-menu`, `sheet`, `accordion`; dịch "Close" → "Đóng". **Playwright** + `tests/e2e/navigation.spec.ts`: mở bằng Enter, Tab vào panel, đóng bằng Esc; drawer accordion + Esc + đóng khi bấm link → 4/4 pass.
+- 📁 File thay đổi: `src/components/site/{mega-menu,mobile-menu,site-header}.tsx`, `src/server/queries/categories.ts`, `src/app/(site)/layout.tsx`, `src/components/ui/{navigation-menu,sheet,accordion}.tsx`, `playwright.config.ts`, `tests/e2e/navigation.spec.ts`, `package.json`, `.gitignore`.
+- 🐞 Lỗi / vấn đề: Radix bọc danh sách bằng `div` có `position: relative` inline → panel bị neo hẹp; sửa bằng `[&>div]:static!`. Radix Slot không gộp class của Link con → đặt class trên `NavigationMenuLink`.
+- 🧠 Quyết định quan trọng: Playwright local dùng Edge có sẵn (`channel: msedge`), CI sẽ cài Chromium khi đưa e2e vào CI (T28). Chưa có ảnh đại diện nhóm trong panel (DESIGN §5) vì chưa có ảnh — bổ sung khi có Image.
+- ⏭️ Bước tiếp theo: T08.
 
 ### 2026-11-25 — T06 Layout site
 - ✅ Đã xong: `app/(site)/layout.tsx` (TopBar, PromoBanner, Header dính, Footer, link "Bỏ qua menu", JSON-LD LocalBusiness, title template theo `brandName`, `revalidate = 3600`); `server/queries/site.ts` (`getSiteSettings`, `getActiveBanner` qua `unstable_cache` + tag `site-settings`/`banners`); `schemas/site-settings.ts` (Zod, parse từng key, giá trị lỗi → mặc định); `lib/phone.ts` (`formatPhone`, `telHref` dạng +84). Đã xem ảnh chụp desktop + mobile. 35 test pass, `pnpm build` OK.
