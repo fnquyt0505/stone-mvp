@@ -1,0 +1,26 @@
+# dependencies
+node_modules/
+.pnpm-store/
+
+# next.js
+.next/
+out/
+next-env.d.ts.bak
+
+# build / test output
+build/
+coverage/
+playwright-report/
+test-results/
+*.tsbuildinfo
+
+# env files (never commit secrets)
+.env
+.env*.local
+.env.production
+
+# misc
+.DS_Store
+*.log
+.vercel
+.claude/settings.local.json
