@@ -5,20 +5,27 @@
 ## Trạng thái hiện tại
 - **Giai đoạn:** 1 — Khung site công khai
 - **Task đang làm:** —
-- **Task tiếp theo:** T06 Layout site
+- **Task tiếp theo:** T07 MegaMenu
 - **Chặn bởi:** Cần chủ dự án chốt tên thương hiệu, logo, hotline, Zalo, địa chỉ (có thể dùng `[MẪU]` để làm trước).
 
 ## Tổng quan
 | Giai đoạn | Task | Xong |
 |---|---|---|
 | 0 Nền móng | T01–T05 | 5/5 |
-| 1 Khung site | T06–T09 | 0/4 |
+| 1 Khung site | T06–T09 | 1/4 |
 | 2 Nội dung | T10–T14 | 0/5 |
 | 3 Thu lead | T15–T17 | 0/3 |
 | 4 Admin | T18–T25 | 0/8 |
 | 5 Ra mắt | T26–T30 | 0/5 |
 
 ## Nhật ký
+
+### 2026-11-25 — T06 Layout site
+- ✅ Đã xong: `app/(site)/layout.tsx` (TopBar, PromoBanner, Header dính, Footer, link "Bỏ qua menu", JSON-LD LocalBusiness, title template theo `brandName`, `revalidate = 3600`); `server/queries/site.ts` (`getSiteSettings`, `getActiveBanner` qua `unstable_cache` + tag `site-settings`/`banners`); `schemas/site-settings.ts` (Zod, parse từng key, giá trị lỗi → mặc định); `lib/phone.ts` (`formatPhone`, `telHref` dạng +84). Đã xem ảnh chụp desktop + mobile. 35 test pass, `pnpm build` OK.
+- 📁 File thay đổi: `src/app/(site)/layout.tsx`, `src/components/site/{top-bar,promo-banner,site-header,site-footer,nav-links}.tsx|ts`, `src/server/queries/site.ts`, `src/schemas/site-settings.ts`, `src/lib/phone.ts`, `tests/unit/site-settings.test.ts`, `.github/workflows/ci.yml`, `.prettierrc.json`, `package.json` (zod).
+- 🐞 Lỗi / vấn đề: GitHub Pull Requests bị **major outage** (25/11 ~16:10) → không tạo được PR cho T05; T06 làm trên nhánh nối tiếp `task/T06-site-layout` (tách từ `task/T05-lib-utils`), sẽ mở PR khi GitHub ổn. Plugin Prettier-Tailwind chưa biết token màu → thêm `tailwindStylesheet`.
+- 🧠 Quyết định quan trọng: **CI có Postgres service** + `prisma migrate deploy` + `db:seed` trước `build`, vì trang công khai đọc DB khi prerender. Menu tạm là link tĩnh (Giới thiệu, Công trình, Đặt hàng, Tin tức, Liên hệ); MegaMenu danh mục ở T07; các route này sẽ 404 cho tới T10–T14. Footer chưa có bản đồ nhỏ (cần địa chỉ thật — làm cùng trang Liên hệ T14).
+- ⏭️ Bước tiếp theo: T07.
 
 ### 2026-11-25 — T05 Tiện ích chung
 - ✅ Đã xong: `lib/slugify.ts` (bỏ dấu tiếng Việt, đ→d); `lib/format-price.ts` (`formatPriceRange`: "20 – 50 triệu", "300 triệu – 1,5 tỷ", "Từ …", "Đến …", "Liên hệ"); `lib/site-url.ts` (`absoluteUrl` theo `NEXT_PUBLIC_SITE_URL`, tự thêm `/` cuối cho trailingSlash); `lib/seo.ts` (`buildMetadata`: title, description ≤ 160 ký tự, canonical, OG, Twitter, noindex); `lib/jsonld.ts` (BreadcrumbList, FAQPage, Article, LocalBusiness + `serializeJsonLd` chống chèn `</script>`); component `components/json-ld.tsx`. 23 unit test mới trong `tests/unit/lib.test.ts` (tổng 30 pass), gồm `slugify("Mộ Đá Đôi") === "mo-da-doi"`.

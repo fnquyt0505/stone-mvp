@@ -15,7 +15,7 @@ Làm theo thứ tự. Mỗi task đủ nhỏ để xong trong một phiên, có 
   _Xong khi:_ test `slugify("Mộ Đá Đôi") === "mo-da-doi"` pass.
 
 ## Giai đoạn 1 — Khung site công khai
-- [ ] **T06 Layout site**: TopBar, PromoBanner, Header dính, Footer (dữ liệu từ SiteSetting).
+- [x] **T06 Layout site**: TopBar, PromoBanner, Header dính, Footer (dữ liệu từ SiteSetting).
 - [ ] **T07 MegaMenu**: desktop dropdown nhiều cột; mobile drawer accordion; dữ liệu từ Category 2 cấp.
   _Xong khi:_ điều hướng được bằng bàn phím, đóng bằng Esc.
 - [ ] **T08 FloatingContact + StickyBottomBar**: Gọi (`tel:`), Zalo (`https://zalo.me/<sđt>`), TikTok, lên đầu; bắn event GA.

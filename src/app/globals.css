@@ -110,7 +110,7 @@
     @apply scroll-smooth;
   }
   body {
-    @apply bg-background text-body text-foreground md:text-body-lg font-sans antialiased;
+    @apply bg-background font-sans text-body text-foreground antialiased md:text-body-lg;
   }
   h1,
   h2,
@@ -119,7 +119,7 @@
     @apply font-heading font-semibold text-stone-900;
   }
   h1 {
-    @apply text-h1 md:text-h1-lg font-bold;
+    @apply text-h1 font-bold md:text-h1-lg;
   }
   h2 {
     @apply text-h2 md:text-h2-lg;
@@ -128,7 +128,7 @@
     @apply text-h3 md:text-h3-lg;
   }
   :focus-visible {
-    @apply outline-gold-600 outline-2 outline-offset-2;
+    @apply outline-2 outline-offset-2 outline-gold-600;
   }
 }
 
@@ -139,5 +139,5 @@
 
 /* Brand ornament: thin 48×2px gold line under section headings. */
 @utility section-ornament {
-  @apply after:bg-gold-600 after:mt-3 after:block after:h-0.5 after:w-12 after:content-[''];
+  @apply after:mt-3 after:block after:h-0.5 after:w-12 after:bg-gold-600 after:content-[''];
 }
