@@ -12,6 +12,7 @@ export type AdminNavItem = {
     | "pages"
     | "testimonials"
     | "banners"
+    | "images"
     | "settings";
   /** Roles allowed to see the item (default: all staff). */
   roles?: StaffRole[];
@@ -26,6 +27,7 @@ export const ADMIN_NAV: AdminNavItem[] = [
   { href: "/admin/pages/", label: "Trang tĩnh", icon: "pages" },
   { href: "/admin/testimonials/", label: "Đánh giá", icon: "testimonials" },
   { href: "/admin/banners/", label: "Banner", icon: "banners" },
+  { href: "/admin/images/", label: "Thư viện ảnh", icon: "images" },
   { href: "/admin/settings/", label: "Cài đặt", icon: "settings", roles: ["ADMIN"] },
 ];
 

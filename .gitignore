@@ -20,6 +20,9 @@ test-results/
 .env*.local
 .env.production
 
+# local dev/e2e image uploads (production uses Cloudinary)
+/public/uploads/
+
 # misc
 .DS_Store
 *.log
