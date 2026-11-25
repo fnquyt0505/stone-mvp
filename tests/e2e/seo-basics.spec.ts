@@ -5,7 +5,16 @@ import { expect, test } from "@playwright/test";
  * indexability, canonical, lang, viewport, link text, crawlable anchors,
  * image alt, legible font sizes) for the key public pages.
  */
-const PAGES = ["/", "/mo-da-doi/", "/lang-mo-da/"];
+const PAGES = [
+  "/",
+  "/mo-da-doi/",
+  "/lang-mo-da/",
+  "/cong-trinh/",
+  "/cong-trinh/mau-mo-da-doi-ninh-binh/",
+  "/tin-tuc/",
+  "/tin-tuc/mau-phan-biet-mo-cai-tang-va-an-tang/",
+  "/thu-vien-hinh-anh/",
+];
 const GENERIC_LINK_TEXT = ["click here", "bấm vào đây", "xem thêm", "tại đây", "here", "more"];
 
 for (const path of PAGES) {

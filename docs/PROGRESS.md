@@ -5,7 +5,7 @@
 ## Trạng thái hiện tại
 - **Giai đoạn:** 2 — Nội dung cốt lõi
 - **Task đang làm:** —
-- **Task tiếp theo:** T13 Blog & thư viện ảnh
+- **Task tiếp theo:** T14 Trang tĩnh
 - **Chặn bởi:** Cần chủ dự án chốt tên thương hiệu, logo, hotline, Zalo, địa chỉ (có thể dùng `[MẪU]` để làm trước).
 
 ## Tổng quan
@@ -13,12 +13,19 @@
 |---|---|---|
 | 0 Nền móng | T01–T05 | 5/5 |
 | 1 Khung site | T06–T09 | 4/4 |
-| 2 Nội dung | T10–T14 | 3/5 |
+| 2 Nội dung | T10–T14 | 4/5 |
 | 3 Thu lead | T15–T17 | 0/3 |
 | 4 Admin | T18–T25 | 0/8 |
 | 5 Ra mắt | T26–T30 | 0/5 |
 
 ## Nhật ký
+
+### 2026-11-26 — T13 Blog & thư viện ảnh
+- ✅ Đã xong: `/tin-tuc/` (PostCard 3:2, mới nhất trước, phân trang 9/trang, trang ≥ 2 `noindex,follow`); `/tin-tuc/[slug]/` (Breadcrumb, H1, ngày + tác giả, tóm tắt, ảnh bìa, nội dung, 3 bài khác, CTA, JSON-LD **Article** + BreadcrumbList, `generateStaticParams`); chỉ hiện bài có `publishedAt` ≤ hiện tại (cache 10 phút để bài hẹn giờ tự lên). `/thu-vien-hinh-anh/`: mọi ảnh dùng trong gallery danh mục/công trình đã xuất bản, mỗi ảnh một lần, kèm chú thích + link "Xem: …" về trang nguồn, lightbox, 24 ảnh/trang. Tách `components/site/pagination.tsx` + `lib/pagination.ts` dùng chung (Công trình cũng dùng). Seed: ảnh bìa + nội dung dài hơn cho bài viết. Test SEO mở rộng ra 8 trang. 68 unit + 65 e2e pass.
+- 📁 File thay đổi: `src/app/(site)/tin-tuc/{page.tsx,[slug]/page.tsx}`, `src/app/(site)/thu-vien-hinh-anh/page.tsx`, `src/server/queries/{posts,gallery}.ts`, `src/components/site/{pagination,gallery,cards,project-list-controls}.tsx`, `src/lib/pagination.ts`, `src/app/(site)/cong-trinh/page.tsx`, `prisma/seed.ts`, `tests/unit/pagination.test.ts`, `tests/e2e/{blog-gallery,seo-basics}.spec.ts`.
+- 🐞 Lỗi / vấn đề: không có.
+- 🧠 Quyết định quan trọng: thư viện ảnh lấy từ gallery có sẵn (không cần quản lý riêng); "Thư viện thiết kế" của site tham chiếu không làm trong MVP.
+- ⏭️ Bước tiếp theo: T14.
 
 ### 2026-11-26 — T12 Công trình (+ T11 đạt Lighthouse)
 - ✅ T11: chủ dự án đo Lighthouse mobile bản production `/mo-da-doi/`: **SEO 100**, Accessibility 100, Performance 99, Best Practices 96 → đánh dấu xong.

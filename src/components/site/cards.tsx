@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowRight, MapPin, Quote, Star } from "lucide-react";
 import { formatVndShort } from "@/lib/format-price";
 import type { HomeCategory, HomeProject, HomeTestimonial } from "@/server/queries/home";
+import type { PostCardData } from "@/server/queries/posts";
 import { ImageFrame } from "./image-frame";
 
 const CARD =
@@ -93,5 +94,36 @@ export function TestimonialCard({ testimonial }: { testimonial: HomeTestimonial 
         {province ? <span className="font-normal text-stone-700"> — {province}</span> : null}
       </figcaption>
     </figure>
+  );
+}
+
+export function formatViDate(iso: string): string {
+  return new Date(iso).toLocaleDateString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh" });
+}
+
+/** 3:2 cover, date, title, excerpt. */
+export function PostCard({ post }: { post: PostCardData }) {
+  return (
+    <article className={CARD}>
+      <ImageFrame
+        image={post.image}
+        ratio="aspect-[3/2]"
+        sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+      />
+      <div className="flex flex-1 flex-col gap-2 p-5">
+        <time dateTime={post.publishedAt} className="text-small-responsive text-stone-700">
+          {formatViDate(post.publishedAt)}
+        </time>
+        <h3 className="text-h3">
+          <Link
+            href={`/tin-tuc/${post.slug}/`}
+            className="after:absolute after:inset-0 hover:text-jade-700"
+          >
+            {post.title}
+          </Link>
+        </h3>
+        {post.excerpt ? <p className="line-clamp-2 text-stone-700">{post.excerpt}</p> : null}
+      </div>
+    </article>
   );
 }
