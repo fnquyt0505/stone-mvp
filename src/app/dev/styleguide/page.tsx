@@ -31,7 +31,7 @@ export default function StyleguidePage() {
     <main className="mx-auto max-w-7xl space-y-16 px-4 py-12 md:px-6 md:py-20">
       <header>
         <h1>Styleguide</h1>
-        <p className="text-muted-foreground mt-2">
+        <p className="mt-2 text-muted-foreground">
           Token màu, chữ và nút theo docs/DESIGN.md. Trang nội bộ, chỉ có ở môi trường dev.
         </p>
       </header>
@@ -57,8 +57,8 @@ export default function StyleguidePage() {
         <h2 id="sg-type" className="section-ornament">
           Chữ
         </h2>
-        <p className="font-heading text-h1 md:text-h1-lg font-bold">H1 — Mộ đá đôi xanh rêu</p>
-        <p className="font-heading text-h2 md:text-h2-lg font-semibold">H2 — Lăng thờ đá ba mái</p>
+        <p className="font-heading text-h1 font-bold md:text-h1-lg">H1 — Mộ đá đôi xanh rêu</p>
+        <p className="font-heading text-h2 font-semibold md:text-h2-lg">H2 — Lăng thờ đá ba mái</p>
         <h3>H3 — Nhà thờ họ bằng đá</h3>
         <p className="max-w-prose">
           Nội dung (17px / 18px, Be Vietnam Pro): Chúng tôi nhận chế tác mộ cải táng, mộ an táng

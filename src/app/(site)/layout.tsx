@@ -1,0 +1,54 @@
+import type { Metadata } from "next";
+import { JsonLd } from "@/components/json-ld";
+import { PromoBanner } from "@/components/site/promo-banner";
+import { SiteFooter } from "@/components/site/site-footer";
+import { SiteHeader } from "@/components/site/site-header";
+import { TopBar } from "@/components/site/top-bar";
+import { localBusinessJsonLd } from "@/lib/jsonld";
+import { normalizePhone } from "@/lib/phone";
+import { getSiteUrl } from "@/lib/site-url";
+import { getActiveBanner, getSiteSettings } from "@/server/queries/site";
+
+export const revalidate = 3600;
+
+export async function generateMetadata(): Promise<Metadata> {
+  const { brandName } = await getSiteSettings();
+  return {
+    metadataBase: new URL(getSiteUrl()),
+    title: { default: brandName, template: `%s | ${brandName}` },
+    openGraph: { siteName: brandName, locale: "vi_VN", type: "website" },
+  };
+}
+
+export default async function SiteLayout({ children }: { children: React.ReactNode }) {
+  const [settings, banner] = await Promise.all([getSiteSettings(), getActiveBanner()]);
+  const sameAs = Object.values(settings.social).filter((url): url is string => Boolean(url));
+
+  return (
+    <>
+      <a
+        href="#noi-dung"
+        className="sr-only z-50 rounded-md bg-white px-4 py-3 font-semibold focus:not-sr-only focus:fixed focus:top-2 focus:left-2"
+      >
+        Bỏ qua menu, đến nội dung chính
+      </a>
+      <TopBar settings={settings} />
+      <PromoBanner banner={banner} hotline={settings.hotline} />
+      <SiteHeader settings={settings} />
+      <div id="noi-dung" className="min-h-[50vh]">
+        {children}
+      </div>
+      <SiteFooter settings={settings} />
+      <JsonLd
+        data={localBusinessJsonLd({
+          name: settings.brandName,
+          telephone: settings.hotline ? `+84${normalizePhone(settings.hotline).slice(1)}` : null,
+          email: settings.email,
+          address: settings.address,
+          openingHours: settings.workingHours,
+          sameAs,
+        })}
+      />
+    </>
+  );
+}

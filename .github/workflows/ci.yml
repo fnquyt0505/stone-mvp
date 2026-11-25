@@ -17,6 +17,27 @@ jobs:
   check:
     name: Lint, typecheck, test, build
     runs-on: ubuntu-latest
+    # Throwaway database so `next build` can prerender pages that read from Postgres.
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: ci
+          POSTGRES_PASSWORD: ci
+          POSTGRES_DB: stone_ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U ci -d stone_ci"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      DATABASE_URL: postgresql://ci:ci@localhost:5432/stone_ci?schema=public
+      NEXT_PUBLIC_SITE_URL: http://localhost:3000
+      # CI-only throwaway credentials for the seeded admin; not a real secret.
+      SEED_ADMIN_EMAIL: ci-admin@example.com
+      SEED_ADMIN_PASSWORD: ci-only-password-not-secret
     steps:
       - uses: actions/checkout@v4
 
@@ -31,6 +52,8 @@ jobs:
       - run: pnpm lint
       - run: pnpm typecheck
       - run: pnpm test
+      - run: pnpm prisma migrate deploy
+      - run: pnpm db:seed
       - run: pnpm build
 
   auto-merge:
