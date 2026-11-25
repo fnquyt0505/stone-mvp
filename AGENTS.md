@@ -5,22 +5,22 @@ Bạn đang xây MVP website giới thiệu và thu lead cho một **xưởng đ
 ## Đọc trước khi làm bất cứ việc gì
 | File | Khi nào đọc |
 |---|---|
-| `PRD.md` | Hiểu sản phẩm, người dùng, phạm vi MVP |
-| `ARCHITECTURE.md` | Stack, cấu trúc thư mục, mô hình dữ liệu, luồng dữ liệu |
-| `DESIGN.md` | Trước khi viết bất kỳ UI nào |
-| `RULES.md` | **Luôn luôn** — quy tắc code và danh sách điều cấm |
-| `TASKS.md` | Chọn task tiếp theo chưa đánh dấu |
+| `docs/PRD.md` | Hiểu sản phẩm, người dùng, phạm vi MVP |
+| `docs/ARCHITECTURE.md` | Stack, cấu trúc thư mục, mô hình dữ liệu, luồng dữ liệu |
+| `docs/DESIGN.md` | Trước khi viết bất kỳ UI nào |
+| `docs/RULES.md` | **Luôn luôn** — quy tắc code và danh sách điều cấm |
+| `docs/TASKS.md` | Chọn task tiếp theo chưa đánh dấu |
 | `PROGRESS.md` | Biết đã làm gì, lỗi gì, đang dở chỗ nào |
 
 Thứ tự ưu tiên khi các file mâu thuẫn: **RULES > PRD > ARCHITECTURE > DESIGN > TASKS**. Gặp mâu thuẫn thì dừng và hỏi.
 
 ## Vòng làm việc chuẩn
-1. Đọc `PROGRESS.md` → xác định task tiếp theo trong `TASKS.md`.
+1. Đọc `PROGRESS.md` → xác định task tiếp theo trong `docs/TASKS.md`.
 2. Nêu ngắn kế hoạch cho task (file sẽ tạo/sửa, cách kiểm tra).
 3. Tạo nhánh mới từ `main` mới nhất: `git checkout main && git pull && git checkout -b task/Txx-<slug>` (ví dụ `task/T02-design-tokens`).
 4. Thực hiện **chỉ** task đó.
 5. Kiểm tra: `pnpm lint && pnpm typecheck && pnpm test` (+ chạy thử trên trình duyệt nếu là UI).
-6. Đánh dấu `[x]` trong `TASKS.md`, thêm mục vào `PROGRESS.md` theo mẫu — commit chung trong nhánh task.
+6. Đánh dấu `[x]` trong `docs/TASKS.md`, thêm mục vào `PROGRESS.md` theo mẫu — commit chung trong nhánh task.
 7. Push nhánh và mở PR vào `main`: `git push -u origin HEAD && gh pr create --fill --base main`. Workflow `.github/workflows/ci.yml` chạy lint/typecheck/test/build; **pass thì tự squash-merge và xóa nhánh**. Theo dõi bằng `gh pr checks --watch`; CI đỏ thì sửa trên cùng nhánh rồi push lại. Không commit thẳng lên `main`.
 8. Tóm tắt cho người dùng: đã làm gì, link PR, cần họ làm gì (nếu có).
 
@@ -48,5 +48,5 @@ pnpm db:studio        # Prisma Studio
 - Giao diện, nội dung, thông báo lỗi cho người dùng: **tiếng Việt có dấu**.
 - Code, tên biến, comment, commit message: tiếng Anh (commit theo Conventional Commits, ví dụ `feat(lead): add quote form`).
 
-## Nhắc lại điều cấm quan trọng nhất (chi tiết ở RULES.md §5)
+## Nhắc lại điều cấm quan trọng nhất (chi tiết ở docs/RULES.md §5)
 Không lộ secret · không xóa dữ liệu/DB khi chưa xác nhận · không bịa giá, SĐT, giải thưởng, đánh giá như thật · không sao chép nội dung/ảnh của lamtao.vn · không lách lint/typecheck · không đổi stack.
