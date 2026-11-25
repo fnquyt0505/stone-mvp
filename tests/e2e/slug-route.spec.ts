@@ -7,7 +7,10 @@ test("child category resolves with breadcrumb JSON-LD", async ({ page }) => {
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", /\/mo-da-doi\/$/);
 
   const jsonLd = await page.locator('script[type="application/ld+json"]').allTextContents();
-  const breadcrumb = jsonLd.map((t) => JSON.parse(t)).find((d) => d["@type"] === "BreadcrumbList");
+  // A script may hold one node or an array of nodes.
+  const breadcrumb = jsonLd
+    .flatMap((t) => JSON.parse(t))
+    .find((d) => d["@type"] === "BreadcrumbList");
   expect(breadcrumb.itemListElement.map((i: { name: string }) => i.name)).toEqual([
     "Trang chủ",
     "Lăng mộ đá",

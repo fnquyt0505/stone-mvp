@@ -1,5 +1,6 @@
 import "server-only";
 import { unstable_cache } from "next/cache";
+import { cacheKey } from "@/server/cache-key";
 import { db } from "@/server/db";
 import { parseSiteSettings, type SiteSettings } from "@/schemas/site-settings";
 
@@ -11,7 +12,7 @@ const ONE_HOUR = 3600;
 // (new keys/defaults) applies immediately instead of serving a stale shape.
 const getSiteSettingRows = unstable_cache(
   async () => db.siteSetting.findMany({ select: { key: true, value: true } }),
-  ["site-setting-rows"],
+  cacheKey("site-setting-rows"),
   { tags: [SITE_SETTINGS_TAG], revalidate: ONE_HOUR },
 );
 
@@ -35,6 +36,6 @@ export const getActiveBanner = unstable_cache(
       orderBy: [{ order: "asc" }, { createdAt: "asc" }],
       select: { id: true, title: true, subtitle: true, ctaLabel: true, ctaHref: true },
     }),
-  ["active-banner"],
+  cacheKey("active-banner"),
   { tags: [BANNERS_TAG], revalidate: ONE_HOUR },
 );

@@ -1,5 +1,6 @@
 import "server-only";
 import { unstable_cache } from "next/cache";
+import { cacheKey } from "@/server/cache-key";
 import { db } from "@/server/db";
 import { CATEGORIES_TAG } from "./categories";
 
@@ -49,7 +50,7 @@ export const getHomeCategories = unstable_cache(
       };
     });
   },
-  ["home-categories"],
+  cacheKey("home-categories"),
   { tags: [CATEGORIES_TAG], revalidate: 3600 },
 );
 
@@ -83,7 +84,7 @@ export const getFeaturedProjects = unstable_cache(
       image: coverImage,
     }));
   },
-  ["featured-projects"],
+  cacheKey("featured-projects"),
   { tags: [PROJECTS_TAG], revalidate: 3600 },
 );
 
@@ -103,6 +104,6 @@ export const getTestimonials = unstable_cache(
       take: limit,
       select: { id: true, name: true, province: true, content: true, rating: true },
     }),
-  ["testimonials"],
+  cacheKey("testimonials"),
   { tags: [TESTIMONIALS_TAG], revalidate: 3600 },
 );
