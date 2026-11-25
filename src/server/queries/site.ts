@@ -7,14 +7,17 @@ export const SITE_SETTINGS_TAG = "site-settings";
 export const BANNERS_TAG = "banners";
 const ONE_HOUR = 3600;
 
-export const getSiteSettings = unstable_cache(
-  async (): Promise<SiteSettings> => {
-    const rows = await db.siteSetting.findMany({ select: { key: true, value: true } });
-    return parseSiteSettings(rows);
-  },
-  ["site-settings"],
+// Cache the raw rows only; parsing happens outside the cache so a schema change
+// (new keys/defaults) applies immediately instead of serving a stale shape.
+const getSiteSettingRows = unstable_cache(
+  async () => db.siteSetting.findMany({ select: { key: true, value: true } }),
+  ["site-setting-rows"],
   { tags: [SITE_SETTINGS_TAG], revalidate: ONE_HOUR },
 );
+
+export async function getSiteSettings(): Promise<SiteSettings> {
+  return parseSiteSettings(await getSiteSettingRows());
+}
 
 export type ActiveBanner = {
   id: string;

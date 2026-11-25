@@ -19,7 +19,7 @@ Làm theo thứ tự. Mỗi task đủ nhỏ để xong trong một phiên, có 
 - [x] **T07 MegaMenu**: desktop dropdown nhiều cột; mobile drawer accordion; dữ liệu từ Category 2 cấp.
   _Xong khi:_ điều hướng được bằng bàn phím, đóng bằng Esc.
 - [x] **T08 FloatingContact + StickyBottomBar**: Gọi (`tel:`), Zalo (`https://zalo.me/<sđt>`), TikTok, lên đầu; bắn event GA.
-- [ ] **T09 Trang chủ**: Hero, lưới danh mục, công trình tiêu biểu, ProcessSteps, testimonial, khối thành tích, CTA báo giá.
+- [x] **T09 Trang chủ**: Hero, lưới danh mục, công trình tiêu biểu, ProcessSteps, testimonial, khối thành tích, CTA báo giá.
 
 ## Giai đoạn 2 — Nội dung cốt lõi
 - [ ] **T10 Route `/[slug]`**: resolve Category hoặc Page; 404 nếu không có; `generateStaticParams`.

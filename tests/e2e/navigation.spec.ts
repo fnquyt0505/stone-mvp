@@ -11,9 +11,11 @@ test.describe("desktop mega menu", () => {
     await page.keyboard.press("Enter");
     await expect(trigger).toHaveAttribute("aria-expanded", "true");
 
-    const firstGroup = page.getByRole("link", { name: "Lăng mộ đá", exact: true });
+    // Scope to the header: the home page also links these categories.
+    const header = page.getByRole("banner");
+    const firstGroup = header.getByRole("link", { name: "Lăng mộ đá", exact: true });
     await expect(firstGroup).toBeVisible();
-    await expect(page.getByRole("link", { name: "Mộ đá đôi" })).toBeVisible();
+    await expect(header.getByRole("link", { name: "Mộ đá đôi" })).toBeVisible();
 
     // Tab moves focus from the trigger into the panel.
     await page.keyboard.press("Tab");
@@ -27,7 +29,7 @@ test.describe("desktop mega menu", () => {
   test("links category pages with trailing slashes", async ({ page }) => {
     await page.goto("/");
     await page.getByRole("button", { name: "Sản phẩm" }).click();
-    await expect(page.getByRole("link", { name: "Mộ đá đôi" })).toHaveAttribute(
+    await expect(page.getByRole("banner").getByRole("link", { name: "Mộ đá đôi" })).toHaveAttribute(
       "href",
       "/mo-da-doi/",
     );

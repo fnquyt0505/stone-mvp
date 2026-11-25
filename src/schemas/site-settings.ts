@@ -29,6 +29,11 @@ export const siteSettingsSchema = z.object({
   social: z
     .object({ facebook: optionalUrl, tiktok: optionalUrl, youtube: optionalUrl })
     .default({}),
+  /** Highlight figures for the home page, e.g. { value: "15+", label: "Năm kinh nghiệm" }. */
+  achievements: z
+    .array(z.object({ value: z.string().trim().min(1), label: z.string().trim().min(1) }))
+    .max(6)
+    .default([]),
 });
 
 export type SiteSettings = z.infer<typeof siteSettingsSchema>;
