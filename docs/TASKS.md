@@ -5,7 +5,7 @@ Làm theo thứ tự. Mỗi task đủ nhỏ để xong trong một phiên, có 
 ## Giai đoạn 0 — Nền móng
 - [x] **T01 Khởi tạo dự án**: Next.js 15 + TS + Tailwind v4 + ESLint + Prettier, pnpm, cấu trúc thư mục theo ARCHITECTURE.md, `.env.example`.
   _Xong khi:_ `pnpm dev` chạy, `pnpm lint && pnpm typecheck` sạch.
-- [ ] **T02 Design tokens & font**: khai báo màu, font Lora + Be Vietnam Pro (subset vietnamese), thang chữ trong DESIGN.md; cài shadcn/ui.
+- [x] **T02 Design tokens & font**: khai báo màu, font Lora + Be Vietnam Pro (subset vietnamese), thang chữ trong DESIGN.md; cài shadcn/ui.
   _Xong khi:_ trang `/dev/styleguide` hiển thị màu, heading, nút.
 - [ ] **T03 Database & Prisma**: schema đầy đủ theo ARCHITECTURE.md §3, migration đầu tiên, `server/db.ts`.
   _Xong khi:_ `prisma migrate dev` chạy, Prisma Studio thấy đủ bảng.
