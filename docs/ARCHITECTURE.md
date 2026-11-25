@@ -22,7 +22,8 @@
 ## 2. Cấu trúc thư mục
 ```
 .
-├── AGENTS.md  PRD.md  ARCHITECTURE.md  DESIGN.md  RULES.md  TASKS.md  PROGRESS.md
+├── AGENTS.md  PROGRESS.md
+├── docs/                        # PRD, ARCHITECTURE, DESIGN, RULES, TASKS
 ├── prisma/
 │   ├── schema.prisma
 │   └── seed.ts                  # dữ liệu mẫu
