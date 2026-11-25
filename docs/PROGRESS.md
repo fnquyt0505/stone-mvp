@@ -5,7 +5,7 @@
 ## Trạng thái hiện tại
 - **Giai đoạn:** 2 — Nội dung cốt lõi
 - **Task đang làm:** —
-- **Task tiếp theo:** T10 Route `/[slug]`
+- **Task tiếp theo:** T11 Trang danh mục
 - **Chặn bởi:** Cần chủ dự án chốt tên thương hiệu, logo, hotline, Zalo, địa chỉ (có thể dùng `[MẪU]` để làm trước).
 
 ## Tổng quan
@@ -13,12 +13,19 @@
 |---|---|---|
 | 0 Nền móng | T01–T05 | 5/5 |
 | 1 Khung site | T06–T09 | 4/4 |
-| 2 Nội dung | T10–T14 | 0/5 |
+| 2 Nội dung | T10–T14 | 1/5 |
 | 3 Thu lead | T15–T17 | 0/3 |
 | 4 Admin | T18–T25 | 0/8 |
 | 5 Ra mắt | T26–T30 | 0/5 |
 
 ## Nhật ký
+
+### 2026-11-25 — T10 Route `/[slug]`
+- ✅ Đã xong: `app/(site)/[slug]/page.tsx` resolve Category (đã xuất bản) rồi Page; 404 nếu không có hoặc slug sai định dạng (không truy vấn DB); `generateStaticParams` prerender 21 danh mục, `dynamicParams = true` cho slug mới; `generateMetadata` (seoTitle/seoDescription → canonical, OG); JSON-LD BreadcrumbList (Trang chủ → nhóm cha → danh mục). `server/queries/slug.ts` (`resolveSlug` cache tag `categories` + `pages`, `getAllSlugs`); `isValidSlug` trong `lib/slugify.ts`. Bộ render Tiptap JSON an toàn `components/rich-text.tsx` (chỉ React element, không HTML thô; không bao giờ ra `h1`; chặn link `javascript:`). Trang 404 tiếng Việt (trong layout site + bản gốc). Test: 15 unit mới (54 tổng) + 6 e2e mới (23 tổng) pass; build OK.
+- 📁 File thay đổi: `src/app/(site)/[slug]/page.tsx`, `src/app/(site)/not-found.tsx`, `src/app/not-found.tsx`, `src/server/queries/slug.ts`, `src/components/rich-text.tsx`, `src/lib/slugify.ts`, `vitest.config.ts`, `tests/unit/rich-text.test.tsx`, `tests/e2e/slug-route.spec.ts`.
+- 🐞 Lỗi / vấn đề: Vitest báo "React is not defined" với JSX → thêm `esbuild.jsx = "automatic"`.
+- 🧠 Quyết định quan trọng: phần hiển thị danh mục ở T10 là bản cơ bản; T11 thay bằng template đầy đủ. Nếu lỡ trùng slug, Category thắng Page (kiểm tra trùng khi lưu ở T23).
+- ⏭️ Bước tiếp theo: T11.
 
 ### 2026-11-25 — T09 Trang chủ
 - ✅ Đã xong: trang chủ `app/(site)/page.tsx`: Hero (H1 + Nhận báo giá / Gọi ngay, lớp phủ 40%; chưa có ảnh → nền gradient đá), lưới 6 nhóm danh mục (CategoryCard 4:3, "Giá từ …" = giá thấp nhất của nhóm + con), khối thành tích (SiteSetting `achievements`), công trình tiêu biểu (ProjectCard 3:2, badge tỉnh, năm), quy trình 7 bước (ProcessSteps ngang/dọc, giữ câu "không gồm phần móng"), 3 đánh giá, dải CTA báo giá (Báo giá · Gọi · Zalo). Metadata riêng (canonical `/`, description). Component: `hero`, `cards`, `image-frame` (ảnh hoặc placeholder cố định tỉ lệ), `section`, `process-steps`, `quote-cta`; query `server/queries/home.ts`; `lib/order-process.ts` (dùng lại ở T14). E2E `home.spec.ts`; 11/11 e2e + 39 unit pass; build OK.
