@@ -5,7 +5,7 @@
 ## Trạng thái hiện tại
 - **Giai đoạn:** 3 — Thu lead
 - **Task đang làm:** —
-- **Task tiếp theo:** T15 QuoteForm + Server Action `submitLead`
+- **Task tiếp theo:** T16 Thông báo lead
 - **Chặn bởi:** Cần chủ dự án chốt tên thương hiệu, logo, hotline, Zalo, địa chỉ (có thể dùng `[MẪU]` để làm trước).
 
 ## Tổng quan
@@ -14,11 +14,18 @@
 | 0 Nền móng | T01–T05 | 5/5 |
 | 1 Khung site | T06–T09 | 4/4 |
 | 2 Nội dung | T10–T14 | 5/5 |
-| 3 Thu lead | T15–T17 | 0/3 |
+| 3 Thu lead | T15–T17 | 1/3 |
 | 4 Admin | T18–T25 | 0/8 |
 | 5 Ra mắt | T26–T30 | 0/5 |
 
 ## Nhật ký
+
+### 2026-11-26 — T15 QuoteForm + Server Action `submitLead`
+- ✅ Đã xong: `server/actions/lead.ts` `submitLead`: honeypot (bot → báo thành công giả, không lưu) → Zod `schemas/lead.ts` (họ tên; SĐT VN di động/cố định, nhận +84; 34 tỉnh/thành hiện hành `lib/provinces.ts`; categoryId; ghi chú ≤ 1000; `sourceUrl` chỉ nhận path cùng site; UTM) → **Turnstile** (`server/turnstile.ts`, xác minh server) → **rate limit DB** (`server/rate-limit.ts`, bảng mới `RateLimitHit`, migration `add_rate_limit_hits`; 5 lần/10 phút/IP + 5 lần/ngày/SĐT; chỉ lưu hash có salt) → lưu Lead (NEW). Log lỗi che SĐT. Client `QuoteForm` (chạy được không cần JS, `useActionState`, thông báo `role=status` + focus, lỗi từng ô bằng `aria-invalid`/`aria-describedby`, **giữ nguyên dữ liệu đã nhập khi lỗi**, giữ trang nguồn + UTM first-touch qua sessionStorage, event GA `generate_lead`), `TurnstileWidget` (render tường minh), `QuoteSection` tại `#bao-gia` trên trang Liên hệ và trang danh mục (tự chọn loại sản phẩm). E2E `lead.spec.ts`: lỗi tiếng Việt, lưu lead (danh mục, tỉnh, sourceUrl, UTM kiểm tra trực tiếp trong DB), honeypot, **lần gửi thứ 6 bị chặn**, giữ dữ liệu khi lỗi rồi gửi lại thành công. 86 unit + 95 e2e pass.
+- 📁 File thay đổi: `prisma/schema.prisma` + migration, `src/server/{actions/lead,rate-limit,turnstile}.ts`, `src/schemas/lead.ts`, `src/lib/{provinces,utm}.ts`, `src/components/site/{quote-form,quote-section,turnstile-widget,category-view}.tsx`, `src/app/(site)/lien-he/page.tsx`, `.env.example`, `tests/unit/lead-schema.test.ts`, `tests/e2e/lead.spec.ts`.
+- 🐞 Lỗi / vấn đề: (1) React 19 tự reset form sau action → mất dữ liệu đã nhập khi lỗi; sửa bằng trả lại giá trị và dùng làm `defaultValue` (select cần `key` để mount lại); ô ẩn sourceUrl/UTM chuyển sang state. (2) Token Turnstile dùng 1 lần → reset sau mỗi lần gửi; câu báo lỗi đổi thành "bấm gửi lại sau giây lát".
+- 🧠 Quyết định quan trọng: rate limit chỉ đếm lần gửi **hợp lệ** (người dùng gõ sai SĐT không bị khóa). Thiếu `TURNSTILE_SECRET_KEY` → bỏ qua xác minh + log lỗi (không chặn toàn bộ lead); **production bắt buộc đặt key thật**. Local dùng key test chính thức của Cloudflare. Trường "Ảnh tham khảo" chưa làm — cần upload Cloudinary (T21), bổ sung sau. Rate limit theo `x-forwarded-for` (Vercel ghi đè header này nên không giả mạo được).
+- ⏭️ Bước tiếp theo: T16.
 
 ### 2026-11-26 — T14 Trang tĩnh
 - ✅ Đã xong: 5 trang Page trong DB (Giới thiệu + 4 chính sách) seed nội dung `[MẪU]`, hiển thị qua `/[slug]` bằng `StaticPageView` (Breadcrumb, H1, ngày cập nhật, nội dung, JSON-LD). `/huong-dan-dat-hang/` timeline dọc 7 bước (`ORDER_STEPS`) + hộp lưu ý "báo giá trọn gói nhưng không gồm phần móng". `/lien-he/`: Hotline, Zalo, email, địa chỉ, giờ làm; bản đồ Google Maps nhúng từ SiteSetting `mapEmbedUrl` (chỉ chấp nhận `https://www.google.com/maps/embed…`), chưa có → ô ghi chú; vùng `#bao-gia` chờ form T15. Test e2e mới: 5 trang tĩnh, 7 bước, trang liên hệ, **mọi link header/footer trả 200**; SEO check mở rộng 11 trang. 68 unit + 86 e2e pass.

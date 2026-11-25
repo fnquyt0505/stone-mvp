@@ -242,3 +242,13 @@ model SiteSetting {
   value     Json
   updatedAt DateTime @updatedAt
 }
+
+/// Sliding-window rate limit hits (e.g. quote form submissions per IP).
+/// `key` holds a salted hash, never a raw IP or phone number.
+model RateLimitHit {
+  id        String   @id @default(cuid())
+  key       String
+  createdAt DateTime @default(now())
+
+  @@index([key, createdAt])
+}

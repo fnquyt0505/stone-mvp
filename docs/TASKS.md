@@ -30,7 +30,7 @@ Làm theo thứ tự. Mỗi task đủ nhỏ để xong trong một phiên, có 
 - [x] **T14 Trang tĩnh**: Giới thiệu, Hướng dẫn đặt hàng (timeline 7 bước), Liên hệ (bản đồ + form), các trang chính sách.
 
 ## Giai đoạn 3 — Thu lead
-- [ ] **T15 QuoteForm + Server Action `submitLead`**: Zod (SĐT VN), honeypot, Turnstile, rate limit, lưu Lead, trạng thái thành công/lỗi.
+- [x] **T15 QuoteForm + Server Action `submitLead`**: Zod (SĐT VN), honeypot, Turnstile, rate limit, lưu Lead, trạng thái thành công/lỗi.
   _Xong khi:_ gửi form tạo bản ghi Lead; gửi 6 lần liên tiếp bị chặn.
 - [ ] **T16 Thông báo lead**: email Resend (+ Telegram tùy chọn), lỗi không làm hỏng việc lưu.
 - [ ] **T17 Popup báo giá**: mở từ CTA bất kỳ, tự điền loại sản phẩm theo trang đang xem, lưu `sourceUrl` + UTM.

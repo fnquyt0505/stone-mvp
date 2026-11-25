@@ -9,7 +9,7 @@ import { Breadcrumb } from "./breadcrumb";
 import { CategoryCard } from "./cards";
 import { AuthorBox, FaqList, PriceRange, SpecTable } from "./category-blocks";
 import { Gallery } from "./gallery";
-import { QuoteCta } from "./quote-cta";
+import { QuoteSection } from "./quote-section";
 import { Section, SectionHeading } from "./section";
 
 /**
@@ -101,9 +101,7 @@ export function CategoryView({
         </Section>
       ) : null}
 
-      <div id="bao-gia">
-        <QuoteCta hotline={settings.hotline} zalo={settings.zalo} />
-      </div>
+      <QuoteSection defaultCategoryId={category.id} idPrefix="category-quote" />
 
       <JsonLd data={[breadcrumbJsonLd(crumbs), faqJsonLd(faqs)].filter((d) => d !== null)} />
     </main>
