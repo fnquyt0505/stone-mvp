@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Clock, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 import { JsonLd } from "@/components/json-ld";
 import { Breadcrumb } from "@/components/site/breadcrumb";
-import { QuoteCta } from "@/components/site/quote-cta";
+import { QuoteSection } from "@/components/site/quote-section";
 import { breadcrumbJsonLd } from "@/lib/jsonld";
 import { formatPhone, telHref, zaloHref } from "@/lib/phone";
 import { buildMetadata } from "@/lib/seo";
@@ -123,10 +123,7 @@ export default async function ContactPage() {
         </div>
       </div>
 
-      {/* The quote form (T15) replaces this CTA band; QUOTE_HREF points here. */}
-      <div id="bao-gia">
-        <QuoteCta hotline={s.hotline} zalo={s.zalo} />
-      </div>
+      <QuoteSection idPrefix="contact-quote" />
       <JsonLd data={breadcrumbJsonLd(CRUMBS)} />
     </main>
   );
