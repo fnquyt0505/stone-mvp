@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { JsonLd } from "@/components/json-ld";
 import { Breadcrumb } from "@/components/site/breadcrumb";
 import { ProjectCard } from "@/components/site/cards";
-import { Pagination, ProjectFilterForm } from "@/components/site/project-list-controls";
+import { Pagination } from "@/components/site/pagination";
+import { ProjectFilterForm } from "@/components/site/project-list-controls";
 import { QuoteCta } from "@/components/site/quote-cta";
 import { breadcrumbJsonLd } from "@/lib/jsonld";
 import { buildMetadata } from "@/lib/seo";
@@ -78,7 +79,11 @@ export default async function ProjectsPage({ searchParams }: Props) {
           </ul>
         ) : null}
 
-        <Pagination filter={effective} page={effective.trang} pages={pages} />
+        <Pagination
+          page={effective.trang}
+          pages={pages}
+          hrefFor={(trang) => projectListHref({ ...effective, trang })}
+        />
       </div>
 
       <QuoteCta hotline={settings.hotline} zalo={settings.zalo} />

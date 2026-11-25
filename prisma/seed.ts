@@ -196,14 +196,18 @@ async function seedTestimonials() {
   }
 }
 
-async function seedPosts(authorId: string) {
+async function seedPosts(authorId: string, imageIds: string[]) {
   for (const [i, p] of POSTS.entries()) {
     const data = {
       title: `${SAMPLE} ${p.title}`,
       excerpt: `${SAMPLE} Tóm tắt bài viết minh họa.`,
-      content: doc("Nội dung bài viết minh họa."),
+      content: doc(
+        "Đoạn mở đầu bài viết minh họa, sẽ được biên tập trong trang quản trị.",
+        "Đoạn thứ hai trình bày kinh nghiệm chọn mẫu, kích thước và chất liệu đá.",
+      ),
       authorId,
       publishedAt: new Date(Date.UTC(2026, 0, 10 + i)),
+      coverImageId: pick(imageIds, i + 5),
       seoTitle: `${SAMPLE} ${p.title}`,
     };
     await prisma.post.upsert({
@@ -244,7 +248,7 @@ async function main() {
   const categoryIds = await seedCategories(imageIds);
   await seedProjects(categoryIds, imageIds);
   await seedTestimonials();
-  await seedPosts(admin.id);
+  await seedPosts(admin.id, imageIds);
   await seedBanner();
   await seedSettings();
 

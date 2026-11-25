@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import Lightbox from "yet-another-react-lightbox";
 import Captions from "yet-another-react-lightbox/plugins/captions";
 import "yet-another-react-lightbox/styles.css";
@@ -14,6 +15,8 @@ export type GalleryItem = {
   width: number;
   height: number;
   caption: string | null;
+  /** Optional link to the page the photo belongs to (photo library). */
+  source?: { label: string; href: string } | null;
 };
 
 /** 2/3/4-column lazy-loaded grid; clicking an image opens a captioned lightbox. */
@@ -41,9 +44,17 @@ export function Gallery({ items, title }: { items: GalleryItem[]; title: string 
                   className="object-cover transition-transform hover:scale-105"
                 />
               </button>
-              {item.caption ? (
+              {item.caption || item.source ? (
                 <figcaption className="mt-1 text-small-responsive text-stone-700">
                   {item.caption}
+                  {item.source ? (
+                    <Link
+                      href={item.source.href}
+                      className="block py-1 font-semibold text-jade-700 hover:underline"
+                    >
+                      Xem: {item.source.label}
+                    </Link>
+                  ) : null}
                 </figcaption>
               ) : null}
             </figure>

@@ -1,8 +1,6 @@
 import Link from "next/link";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { projectListHref, type ProjectFilter } from "@/schemas/project-filter";
+import type { ProjectFilter } from "@/schemas/project-filter";
 import type { FilterOption } from "@/server/queries/projects";
 
 const SELECT =
@@ -59,49 +57,5 @@ export function ProjectFilterForm({
         ) : null}
       </div>
     </form>
-  );
-}
-
-const PAGE_LINK =
-  "inline-flex size-12 items-center justify-center rounded-md border font-semibold hover:border-jade-700 hover:text-jade-700";
-
-export function Pagination({
-  filter,
-  page,
-  pages,
-}: {
-  filter: ProjectFilter;
-  page: number;
-  pages: number;
-}) {
-  if (pages <= 1) return null;
-  const href = (trang: number) => projectListHref({ ...filter, trang });
-  return (
-    <nav aria-label="Phân trang" className="mt-10 flex flex-wrap items-center justify-center gap-2">
-      {page > 1 ? (
-        <Link href={href(page - 1)} className={PAGE_LINK} aria-label="Trang trước" rel="prev">
-          <ChevronLeft aria-hidden className="size-5" />
-        </Link>
-      ) : null}
-      {Array.from({ length: pages }, (_, i) => i + 1).map((n) => (
-        <Link
-          key={n}
-          href={href(n)}
-          aria-current={n === page ? "page" : undefined}
-          aria-label={`Trang ${n}`}
-          className={cn(
-            PAGE_LINK,
-            n === page && "border-jade-700 bg-jade-700 text-white hover:text-white",
-          )}
-        >
-          {n}
-        </Link>
-      ))}
-      {page < pages ? (
-        <Link href={href(page + 1)} className={PAGE_LINK} aria-label="Trang sau" rel="next">
-          <ChevronRight aria-hidden className="size-5" />
-        </Link>
-      ) : null}
-    </nav>
   );
 }
