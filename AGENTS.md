@@ -32,6 +32,7 @@ pnpm lint             # ESLint
 pnpm typecheck        # tsc --noEmit
 pnpm test             # Vitest
 pnpm test:e2e         # Playwright
+pnpm db:up            # bật Postgres local (docker compose)
 pnpm db:migrate       # prisma migrate dev
 pnpm db:seed          # nạp dữ liệu mẫu
 pnpm db:studio        # Prisma Studio
