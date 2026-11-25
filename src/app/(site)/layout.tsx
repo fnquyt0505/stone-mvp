@@ -7,6 +7,7 @@ import { TopBar } from "@/components/site/top-bar";
 import { localBusinessJsonLd } from "@/lib/jsonld";
 import { normalizePhone } from "@/lib/phone";
 import { getSiteUrl } from "@/lib/site-url";
+import { getMenuCategories } from "@/server/queries/categories";
 import { getActiveBanner, getSiteSettings } from "@/server/queries/site";
 
 export const revalidate = 3600;
@@ -21,7 +22,11 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function SiteLayout({ children }: { children: React.ReactNode }) {
-  const [settings, banner] = await Promise.all([getSiteSettings(), getActiveBanner()]);
+  const [settings, banner, categories] = await Promise.all([
+    getSiteSettings(),
+    getActiveBanner(),
+    getMenuCategories(),
+  ]);
   const sameAs = Object.values(settings.social).filter((url): url is string => Boolean(url));
 
   return (
@@ -34,7 +39,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
       </a>
       <TopBar settings={settings} />
       <PromoBanner banner={banner} hotline={settings.hotline} />
-      <SiteHeader settings={settings} />
+      <SiteHeader settings={settings} categories={categories} />
       <div id="noi-dung" className="min-h-[50vh]">
         {children}
       </div>

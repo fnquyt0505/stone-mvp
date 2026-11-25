@@ -16,7 +16,7 @@ Làm theo thứ tự. Mỗi task đủ nhỏ để xong trong một phiên, có 
 
 ## Giai đoạn 1 — Khung site công khai
 - [x] **T06 Layout site**: TopBar, PromoBanner, Header dính, Footer (dữ liệu từ SiteSetting).
-- [ ] **T07 MegaMenu**: desktop dropdown nhiều cột; mobile drawer accordion; dữ liệu từ Category 2 cấp.
+- [x] **T07 MegaMenu**: desktop dropdown nhiều cột; mobile drawer accordion; dữ liệu từ Category 2 cấp.
   _Xong khi:_ điều hướng được bằng bàn phím, đóng bằng Esc.
 - [ ] **T08 FloatingContact + StickyBottomBar**: Gọi (`tel:`), Zalo (`https://zalo.me/<sđt>`), TikTok, lên đầu; bắn event GA.
 - [ ] **T09 Trang chủ**: Hero, lưới danh mục, công trình tiêu biểu, ProcessSteps, testimonial, khối thành tích, CTA báo giá.
