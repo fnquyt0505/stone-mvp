@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { JsonLd } from "@/components/json-ld";
+import { FloatingContact, StickyBottomBar } from "@/components/site/contact-actions";
 import { PromoBanner } from "@/components/site/promo-banner";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
@@ -44,6 +45,14 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
         {children}
       </div>
       <SiteFooter settings={settings} />
+      {/* Reserve space so the mobile bottom bar never covers the footer. */}
+      <div aria-hidden className="h-16 md:hidden" />
+      <FloatingContact
+        hotline={settings.hotline}
+        zalo={settings.zalo}
+        tiktok={settings.social.tiktok}
+      />
+      <StickyBottomBar hotline={settings.hotline} zalo={settings.zalo} />
       <JsonLd
         data={localBusinessJsonLd({
           name: settings.brandName,

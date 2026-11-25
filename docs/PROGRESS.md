@@ -5,20 +5,27 @@
 ## Trạng thái hiện tại
 - **Giai đoạn:** 1 — Khung site công khai
 - **Task đang làm:** —
-- **Task tiếp theo:** T08 FloatingContact + StickyBottomBar
+- **Task tiếp theo:** T09 Trang chủ
 - **Chặn bởi:** Cần chủ dự án chốt tên thương hiệu, logo, hotline, Zalo, địa chỉ (có thể dùng `[MẪU]` để làm trước).
 
 ## Tổng quan
 | Giai đoạn | Task | Xong |
 |---|---|---|
 | 0 Nền móng | T01–T05 | 5/5 |
-| 1 Khung site | T06–T09 | 2/4 |
+| 1 Khung site | T06–T09 | 3/4 |
 | 2 Nội dung | T10–T14 | 0/5 |
 | 3 Thu lead | T15–T17 | 0/3 |
 | 4 Admin | T18–T25 | 0/8 |
 | 5 Ra mắt | T26–T30 | 0/5 |
 
 ## Nhật ký
+
+### 2026-11-25 — T08 FloatingContact + StickyBottomBar
+- ✅ Đã xong: `components/site/contact-actions.tsx`: **FloatingContact** (≥ md, góc phải dưới: Gọi đỏ rung nhẹ `animate-ring` chỉ khi `motion-safe`, Zalo, TikTok nếu có link, Lên đầu trang hiện sau 400px) và **StickyBottomBar** (< md: Gọi · Zalo · Báo giá, chừa `safe-area-inset-bottom`, có khoảng đệm để không che footer). `lib/analytics.ts` (`trackEvent`, `trackContactClick` → GA4 event `contact_click` {channel, placement, page_path}, an toàn khi chưa có gtag); `zaloHref` trong `lib/phone.ts`. Test: 4 unit + 3 e2e (link `tel:`/Zalo đúng, bắn event, nút lên đầu, hiển thị đúng theo màn hình) → 39 unit + 7 e2e pass.
+- 📁 File thay đổi: `src/components/site/contact-actions.tsx`, `src/lib/analytics.ts`, `src/lib/phone.ts`, `src/components/site/{nav-links.ts,top-bar.tsx}`, `src/app/(site)/layout.tsx`, `src/app/globals.css`, `tests/unit/analytics.test.ts`, `tests/e2e/contact-actions.spec.ts`.
+- 🐞 Lỗi / vấn đề: GitHub Pull Requests vẫn **major outage** → T05–T08 đang nằm trên các nhánh nối tiếp, chưa PR.
+- 🧠 Quyết định quan trọng: nút "Báo giá" tạm trỏ `/lien-he/#bao-gia` (`QUOTE_HREF`), T17 đổi thành mở popup. TikTok dùng icon chung (lucide không có logo thương hiệu). Zalo dùng số `zalo` trong cài đặt, nếu trống thì dùng hotline. Script GA4 sẽ nạp ở T29 (`NEXT_PUBLIC_GA_ID`); các nút Gọi ở Header/TopBar/Banner chưa bắn event (là Server Component) — bổ sung khi nạp GA.
+- ⏭️ Bước tiếp theo: T09.
 
 ### 2026-11-25 — T07 MegaMenu
 - ✅ Đã xong: `components/site/mega-menu.tsx` (desktop ≥ lg: Radix NavigationMenu, nút "Sản phẩm" mở panel rộng bằng header, 6 cột theo nhóm + gạch vàng, cùng các link tĩnh); `components/site/mobile-menu.tsx` (< lg: Sheet trượt từ trái, Accordion một mục mở một lúc, "Tất cả …" cho từng nhóm, đóng khi chọn link); `server/queries/categories.ts` (`getMenuCategories`, tag `categories`). Thêm shadcn `navigation-menu`, `sheet`, `accordion`; dịch "Close" → "Đóng". **Playwright** + `tests/e2e/navigation.spec.ts`: mở bằng Enter, Tab vào panel, đóng bằng Esc; drawer accordion + Esc + đóng khi bấm link → 4/4 pass.
