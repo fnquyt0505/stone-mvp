@@ -36,7 +36,7 @@ Làm theo thứ tự. Mỗi task đủ nhỏ để xong trong một phiên, có 
 - [x] **T17 Popup báo giá**: mở từ CTA bất kỳ, tự điền loại sản phẩm theo trang đang xem, lưu `sourceUrl` + UTM.
 
 ## Giai đoạn 4 — Admin
-- [ ] **T18 Auth admin**: Auth.js Credentials, trang login, middleware + `requireAdmin()`.
+- [x] **T18 Auth admin**: Auth.js Credentials, trang login, middleware + `requireAdmin()`.
 - [ ] **T19 Khung admin**: sidebar, dashboard (lead mới hôm nay/tuần, tổng nội dung).
 - [ ] **T20 Quản lý Lead**: bảng lọc theo trạng thái/ngày, đổi trạng thái, ghi chú, bấm gọi; xuất CSV.
 - [ ] **T21 Upload ảnh**: `/api/upload` ký Cloudinary, ImageUploader kéo-thả nhiều ảnh, bắt buộc alt.

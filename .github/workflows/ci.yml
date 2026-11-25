@@ -38,6 +38,7 @@ jobs:
       # CI-only throwaway credentials for the seeded admin; not a real secret.
       SEED_ADMIN_EMAIL: ci-admin@example.com
       SEED_ADMIN_PASSWORD: ci-only-password-not-secret
+      AUTH_SECRET: ci-only-auth-secret-not-used-in-production
     steps:
       - uses: actions/checkout@v4
 
