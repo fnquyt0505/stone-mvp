@@ -3,15 +3,15 @@
 > Cập nhật sau **mỗi** task. Mục mới nhất ở trên cùng. Giữ ngắn gọn, đủ để người/AI khác tiếp tục ngay.
 
 ## Trạng thái hiện tại
-- **Giai đoạn:** 0 — Nền móng
+- **Giai đoạn:** 1 — Khung site công khai
 - **Task đang làm:** —
-- **Task tiếp theo:** T05 Tiện ích chung
+- **Task tiếp theo:** T06 Layout site
 - **Chặn bởi:** Cần chủ dự án chốt tên thương hiệu, logo, hotline, Zalo, địa chỉ (có thể dùng `[MẪU]` để làm trước).
 
 ## Tổng quan
 | Giai đoạn | Task | Xong |
 |---|---|---|
-| 0 Nền móng | T01–T05 | 4/5 |
+| 0 Nền móng | T01–T05 | 5/5 |
 | 1 Khung site | T06–T09 | 0/4 |
 | 2 Nội dung | T10–T14 | 0/5 |
 | 3 Thu lead | T15–T17 | 0/3 |
@@ -19,6 +19,13 @@
 | 5 Ra mắt | T26–T30 | 0/5 |
 
 ## Nhật ký
+
+### 2026-11-25 — T05 Tiện ích chung
+- ✅ Đã xong: `lib/slugify.ts` (bỏ dấu tiếng Việt, đ→d); `lib/format-price.ts` (`formatPriceRange`: "20 – 50 triệu", "300 triệu – 1,5 tỷ", "Từ …", "Đến …", "Liên hệ"); `lib/site-url.ts` (`absoluteUrl` theo `NEXT_PUBLIC_SITE_URL`, tự thêm `/` cuối cho trailingSlash); `lib/seo.ts` (`buildMetadata`: title, description ≤ 160 ký tự, canonical, OG, Twitter, noindex); `lib/jsonld.ts` (BreadcrumbList, FAQPage, Article, LocalBusiness + `serializeJsonLd` chống chèn `</script>`); component `components/json-ld.tsx`. 23 unit test mới trong `tests/unit/lib.test.ts` (tổng 30 pass), gồm `slugify("Mộ Đá Đôi") === "mo-da-doi"`.
+- 📁 File thay đổi: `src/lib/{slugify,format-price,site-url,seo,jsonld}.ts`, `src/components/json-ld.tsx`, `tests/unit/lib.test.ts`.
+- 🐞 Lỗi / vấn đề: ký tự U+2028/2029 trong regex bị ghi thành ký tự thô → bỏ, vì JSON-LD chỉ cần escape `<`, `>`, `&`.
+- 🧠 Quyết định quan trọng: `JsonLd` dùng `dangerouslySetInnerHTML` nhưng chỉ với chuỗi đã qua `serializeJsonLd` (đúng RULES §2). `DEFAULT_SITE_NAME` tạm là `[MẪU]`, sẽ lấy từ SiteSetting `brandName` ở T06.
+- ⏭️ Bước tiếp theo: T06 (giai đoạn 1).
 
 ### 2026-11-25 — T04 Seed dữ liệu mẫu
 - ✅ Đã xong: `prisma/seed.ts` + `prisma/seed-data.ts`: 6 nhóm + 15 danh mục con (specs, FAQ, khoảng giá mẫu, nội dung Tiptap), 6 công trình (3 nổi bật), 3 đánh giá, 3 bài viết, 1 banner, 8 cài đặt site, 1 admin (bcrypt cost 12). Mọi nội dung gắn `[MẪU]`; SĐT `0900000000`, email `@example.com`; `SiteSetting.isSampleData = true`. Upsert theo khóa cố định, không xóa gì → chạy `pnpm db:seed` 3 lần liên tiếp, số bản ghi không đổi. Unit test `tests/unit/seed-data.test.ts` (slug duy nhất, đúng định dạng, có `[MẪU]`).
