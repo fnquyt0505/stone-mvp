@@ -5,7 +5,7 @@
 ## Trạng thái hiện tại
 - **Giai đoạn:** 3 — Thu lead
 - **Task đang làm:** —
-- **Task tiếp theo:** T16 Thông báo lead
+- **Task tiếp theo:** T17 Popup báo giá
 - **Chặn bởi:** Cần chủ dự án chốt tên thương hiệu, logo, hotline, Zalo, địa chỉ (có thể dùng `[MẪU]` để làm trước).
 
 ## Tổng quan
@@ -14,11 +14,18 @@
 | 0 Nền móng | T01–T05 | 5/5 |
 | 1 Khung site | T06–T09 | 4/4 |
 | 2 Nội dung | T10–T14 | 5/5 |
-| 3 Thu lead | T15–T17 | 1/3 |
+| 3 Thu lead | T15–T17 | 2/3 |
 | 4 Admin | T18–T25 | 0/8 |
 | 5 Ra mắt | T26–T30 | 0/5 |
 
 ## Nhật ký
+
+### 2026-11-26 — T16 Thông báo lead
+- ✅ Đã xong: `server/notify.ts`: email qua **Resend REST API** (`RESEND_API_KEY`, `LEAD_NOTIFY_EMAIL` nhiều người nhận cách nhau dấu phẩy, `LEAD_NOTIFY_FROM` mới — mặc định người gửi test của Resend) + **Telegram** tùy chọn (`TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID`); timeout 8 giây; chưa cấu hình → bỏ qua. `lib/lead-notification.ts` dựng nội dung (họ tên, SĐT + link gọi, tỉnh, loại sản phẩm, ghi chú, trang gửi, UTM, giờ VN, link danh sách lead) và **escape HTML** dữ liệu khách nhập. `submitLead` gọi `notifyNewLead` trong `after()` — chạy sau khi đã trả kết quả cho khách; `notifyNewLead` không bao giờ ném lỗi, chỉ log (SĐT che `091****678`). Vitest alias `server-only` → stub để test được module server. 5 unit test mới (91 tổng) + 95 e2e pass.
+- 📁 File thay đổi: `src/server/notify.ts`, `src/lib/lead-notification.ts`, `src/server/actions/lead.ts`, `vitest.config.ts`, `tests/stubs/server-only.ts`, `tests/unit/notify.test.ts`, `.env.example`, `docs/ARCHITECTURE.md` (thêm `LEAD_NOTIFY_FROM?`).
+- 🐞 Lỗi / vấn đề: không có. Chưa gửi thử email/Telegram thật (chưa có key) — kiểm tra bằng fetch giả.
+- 🧠 Quyết định quan trọng: dùng REST API thay SDK Resend (không thêm thư viện). **Cần chủ xưởng:** tạo tài khoản Resend + xác minh tên miền gửi; (tùy chọn) tạo bot Telegram và lấy chat id.
+- ⏭️ Bước tiếp theo: T17.
 
 ### 2026-11-26 — T15 QuoteForm + Server Action `submitLead`
 - ✅ Đã xong: `server/actions/lead.ts` `submitLead`: honeypot (bot → báo thành công giả, không lưu) → Zod `schemas/lead.ts` (họ tên; SĐT VN di động/cố định, nhận +84; 34 tỉnh/thành hiện hành `lib/provinces.ts`; categoryId; ghi chú ≤ 1000; `sourceUrl` chỉ nhận path cùng site; UTM) → **Turnstile** (`server/turnstile.ts`, xác minh server) → **rate limit DB** (`server/rate-limit.ts`, bảng mới `RateLimitHit`, migration `add_rate_limit_hits`; 5 lần/10 phút/IP + 5 lần/ngày/SĐT; chỉ lưu hash có salt) → lưu Lead (NEW). Log lỗi che SĐT. Client `QuoteForm` (chạy được không cần JS, `useActionState`, thông báo `role=status` + focus, lỗi từng ô bằng `aria-invalid`/`aria-describedby`, **giữ nguyên dữ liệu đã nhập khi lỗi**, giữ trang nguồn + UTM first-touch qua sessionStorage, event GA `generate_lead`), `TurnstileWidget` (render tường minh), `QuoteSection` tại `#bao-gia` trên trang Liên hệ và trang danh mục (tự chọn loại sản phẩm). E2E `lead.spec.ts`: lỗi tiếng Việt, lưu lead (danh mục, tỉnh, sourceUrl, UTM kiểm tra trực tiếp trong DB), honeypot, **lần gửi thứ 6 bị chặn**, giữ dữ liệu khi lỗi rồi gửi lại thành công. 86 unit + 95 e2e pass.

@@ -1,6 +1,7 @@
 "use server";
 
 import { headers } from "next/headers";
+import { after } from "next/server";
 import {
   leadInputSchema,
   type LeadFormValues,
@@ -9,6 +10,7 @@ import {
   type SubmitLeadState,
 } from "@/schemas/lead";
 import { db } from "@/server/db";
+import { notifyNewLead } from "@/server/notify";
 import { hashKey, hitRateLimit } from "@/server/rate-limit";
 import { verifyTurnstile } from "@/server/turnstile";
 
@@ -110,8 +112,8 @@ export async function submitLead(
         )
       : false;
 
-    // Save first; notifications (T16) come after and must not fail the request.
-    await db.lead.create({
+    // Save first; notifications come after and must not fail the request.
+    const lead = await db.lead.create({
       data: {
         name: input.name,
         phone: input.phone,
@@ -121,7 +123,23 @@ export async function submitLead(
         sourceUrl: input.sourceUrl,
         utm: input.utm ?? undefined,
       },
+      include: { category: { select: { name: true } } },
     });
+
+    // Runs after the response is sent; notifyNewLead never throws.
+    after(() =>
+      notifyNewLead({
+        id: lead.id,
+        name: lead.name,
+        phone: lead.phone,
+        province: lead.province,
+        categoryName: lead.category?.name ?? null,
+        message: lead.message,
+        sourceUrl: lead.sourceUrl,
+        utm: (input.utm as Record<string, string> | undefined) ?? null,
+        createdAt: lead.createdAt,
+      }),
+    );
   } catch (error) {
     console.error("[lead] failed to save lead", { phone: maskPhone(input.phone), error });
     return { status: "error", message: GENERIC_ERROR, values };
