@@ -9,6 +9,7 @@ import { PrismaClient, Prisma, Role } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import {
   CATEGORY_GROUPS,
+  PAGES,
   POSTS,
   PROJECTS,
   SAMPLE,
@@ -231,6 +232,24 @@ async function seedBanner() {
   await prisma.banner.upsert({ where: { id }, create: { id, ...data }, update: data });
 }
 
+async function seedPages() {
+  for (const p of PAGES) {
+    const content: Prisma.InputJsonValue = {
+      type: "doc",
+      content: p.sections.flatMap(([heading, paragraphs]) => [
+        { type: "heading", attrs: { level: 2 }, content: [{ type: "text", text: heading }] },
+        ...paragraphs.map((text) => ({ type: "paragraph", content: [{ type: "text", text }] })),
+      ]),
+    };
+    const data = { title: p.title, content, seoTitle: p.title, seoDescription: p.description };
+    await prisma.page.upsert({
+      where: { slug: p.slug },
+      create: { slug: p.slug, ...data },
+      update: data,
+    });
+  }
+}
+
 async function seedSettings() {
   for (const [key, value] of Object.entries(SITE_SETTINGS)) {
     const json = value as Prisma.InputJsonValue;
@@ -251,6 +270,7 @@ async function main() {
   await seedPosts(admin.id, imageIds);
   await seedBanner();
   await seedSettings();
+  await seedPages();
 
   const counts = {
     categories: await prisma.category.count(),
@@ -259,6 +279,7 @@ async function main() {
     posts: await prisma.post.count(),
     banners: await prisma.banner.count(),
     settings: await prisma.siteSetting.count(),
+    pages: await prisma.page.count(),
     users: await prisma.user.count(),
     images: await prisma.image.count(),
     galleryItems: await prisma.categoryImage.count(),

@@ -207,3 +207,81 @@ export const SITE_SETTINGS: Record<string, unknown> = {
     { value: "[MẪU] 0 năm", label: "Bảo hành kết cấu" },
   ],
 };
+
+/**
+ * Static pages served by /[slug]. Each section becomes an h2 + paragraphs.
+ * Legal pages are generic placeholders: the owner must have them reviewed.
+ */
+export const PAGES: {
+  slug: string;
+  title: string;
+  description: string;
+  sections: [string, string[]][];
+}[] = [
+  {
+    slug: "gioi-thieu",
+    title: "Giới thiệu",
+    description: `${SAMPLE} Giới thiệu xưởng chế tác đá mỹ nghệ: lịch sử, đội ngũ, năng lực sản xuất.`,
+    sections: [
+      ["Về chúng tôi", [`${SAMPLE} Giới thiệu ngắn về xưởng, năm thành lập và định hướng.`]],
+      ["Năng lực sản xuất", [`${SAMPLE} Quy mô xưởng, máy móc, đội ngũ thợ chế tác và lắp đặt.`]],
+      ["Cam kết với Quý khách", [`${SAMPLE} Các cam kết về chất lượng đá, tiến độ và bảo hành.`]],
+    ],
+  },
+  {
+    slug: "chinh-sach-bao-mat",
+    title: "Chính sách bảo mật",
+    description: `${SAMPLE} Cách chúng tôi thu thập, sử dụng và bảo vệ thông tin của Quý khách.`,
+    sections: [
+      [
+        "Thông tin thu thập",
+        [
+          `${SAMPLE} Họ tên, số điện thoại, tỉnh thành và nội dung yêu cầu khi Quý khách gửi form báo giá.`,
+        ],
+      ],
+      [
+        "Mục đích sử dụng",
+        [`${SAMPLE} Chỉ dùng để liên hệ tư vấn và báo giá theo yêu cầu của Quý khách.`],
+      ],
+      [
+        "Bảo vệ và lưu trữ",
+        [`${SAMPLE} Nội dung chi tiết cần được chủ xưởng rà soát trước khi công bố.`],
+      ],
+    ],
+  },
+  {
+    slug: "dieu-khoan-su-dung",
+    title: "Điều khoản sử dụng",
+    description: `${SAMPLE} Điều khoản khi sử dụng website.`,
+    sections: [
+      [
+        "Điều khoản chung",
+        [`${SAMPLE} Nội dung điều khoản cần được chủ xưởng rà soát trước khi công bố.`],
+      ],
+    ],
+  },
+  {
+    slug: "chinh-sach-cookie",
+    title: "Chính sách cookie",
+    description: `${SAMPLE} Website sử dụng cookie như thế nào.`,
+    sections: [
+      [
+        "Cookie là gì",
+        [`${SAMPLE} Nội dung chính sách cookie cần được chủ xưởng rà soát trước khi công bố.`],
+      ],
+    ],
+  },
+  {
+    slug: "mien-tru-trach-nhiem",
+    title: "Miễn trừ trách nhiệm",
+    description: `${SAMPLE} Giới hạn trách nhiệm đối với thông tin trên website.`,
+    sections: [
+      [
+        "Thông tin tham khảo",
+        [
+          `${SAMPLE} Giá và hình ảnh trên website chỉ mang tính tham khảo; báo giá chính thức theo khảo sát thực tế.`,
+        ],
+      ],
+    ],
+  },
+];

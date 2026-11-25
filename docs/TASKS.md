@@ -27,7 +27,7 @@ Làm theo thứ tự. Mỗi task đủ nhỏ để xong trong một phiên, có 
   _Xong khi:_ Lighthouse mobile SEO ≥ 95 trên trang mẫu `/mo-da-doi/`. — ✅ Đo 26/11 (chủ dự án, Chrome, mobile, bản production): SEO 100 · Accessibility 100 · Performance 99 · Best Practices 96.
 - [x] **T12 Công trình**: danh sách có lọc tỉnh/loại (query string), phân trang; trang chi tiết có gallery.
 - [x] **T13 Blog & thư viện ảnh**: `/tin-tuc`, `/tin-tuc/[slug]` (Article JSON-LD), `/thu-vien-hinh-anh`.
-- [ ] **T14 Trang tĩnh**: Giới thiệu, Hướng dẫn đặt hàng (timeline 7 bước), Liên hệ (bản đồ + form), các trang chính sách.
+- [x] **T14 Trang tĩnh**: Giới thiệu, Hướng dẫn đặt hàng (timeline 7 bước), Liên hệ (bản đồ + form), các trang chính sách.
 
 ## Giai đoạn 3 — Thu lead
 - [ ] **T15 QuoteForm + Server Action `submitLead`**: Zod (SĐT VN), honeypot, Turnstile, rate limit, lưu Lead, trạng thái thành công/lỗi.

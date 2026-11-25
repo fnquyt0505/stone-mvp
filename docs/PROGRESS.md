@@ -3,9 +3,9 @@
 > Cập nhật sau **mỗi** task. Mục mới nhất ở trên cùng. Giữ ngắn gọn, đủ để người/AI khác tiếp tục ngay.
 
 ## Trạng thái hiện tại
-- **Giai đoạn:** 2 — Nội dung cốt lõi
+- **Giai đoạn:** 3 — Thu lead
 - **Task đang làm:** —
-- **Task tiếp theo:** T14 Trang tĩnh
+- **Task tiếp theo:** T15 QuoteForm + Server Action `submitLead`
 - **Chặn bởi:** Cần chủ dự án chốt tên thương hiệu, logo, hotline, Zalo, địa chỉ (có thể dùng `[MẪU]` để làm trước).
 
 ## Tổng quan
@@ -13,12 +13,19 @@
 |---|---|---|
 | 0 Nền móng | T01–T05 | 5/5 |
 | 1 Khung site | T06–T09 | 4/4 |
-| 2 Nội dung | T10–T14 | 4/5 |
+| 2 Nội dung | T10–T14 | 5/5 |
 | 3 Thu lead | T15–T17 | 0/3 |
 | 4 Admin | T18–T25 | 0/8 |
 | 5 Ra mắt | T26–T30 | 0/5 |
 
 ## Nhật ký
+
+### 2026-11-26 — T14 Trang tĩnh
+- ✅ Đã xong: 5 trang Page trong DB (Giới thiệu + 4 chính sách) seed nội dung `[MẪU]`, hiển thị qua `/[slug]` bằng `StaticPageView` (Breadcrumb, H1, ngày cập nhật, nội dung, JSON-LD). `/huong-dan-dat-hang/` timeline dọc 7 bước (`ORDER_STEPS`) + hộp lưu ý "báo giá trọn gói nhưng không gồm phần móng". `/lien-he/`: Hotline, Zalo, email, địa chỉ, giờ làm; bản đồ Google Maps nhúng từ SiteSetting `mapEmbedUrl` (chỉ chấp nhận `https://www.google.com/maps/embed…`), chưa có → ô ghi chú; vùng `#bao-gia` chờ form T15. Test e2e mới: 5 trang tĩnh, 7 bước, trang liên hệ, **mọi link header/footer trả 200**; SEO check mở rộng 11 trang. 68 unit + 86 e2e pass.
+- 📁 File thay đổi: `src/app/(site)/{huong-dan-dat-hang,lien-he}/page.tsx`, `src/components/site/static-page-view.tsx`, `src/app/(site)/[slug]/page.tsx`, `src/schemas/site-settings.ts`, `prisma/{seed,seed-data}.ts`, `tests/unit/seed-data.test.ts`, `tests/e2e/{static-pages,seo-basics}.spec.ts`.
+- 🐞 Lỗi / vấn đề: không có.
+- 🧠 Quyết định quan trọng: **nội dung pháp lý (bảo mật, điều khoản, cookie, miễn trừ) chỉ là khung mẫu — chủ xưởng cần nhờ người có chuyên môn rà soát trước khi ra mắt.** Bản đồ cần chủ xưởng lấy link "Nhúng bản đồ" trên Google Maps.
+- ⏭️ Bước tiếp theo: T15 (giai đoạn 3).
 
 ### 2026-11-26 — T13 Blog & thư viện ảnh
 - ✅ Đã xong: `/tin-tuc/` (PostCard 3:2, mới nhất trước, phân trang 9/trang, trang ≥ 2 `noindex,follow`); `/tin-tuc/[slug]/` (Breadcrumb, H1, ngày + tác giả, tóm tắt, ảnh bìa, nội dung, 3 bài khác, CTA, JSON-LD **Article** + BreadcrumbList, `generateStaticParams`); chỉ hiện bài có `publishedAt` ≤ hiện tại (cache 10 phút để bài hẹn giờ tự lên). `/thu-vien-hinh-anh/`: mọi ảnh dùng trong gallery danh mục/công trình đã xuất bản, mỗi ảnh một lần, kèm chú thích + link "Xem: …" về trang nguồn, lightbox, 24 ảnh/trang. Tách `components/site/pagination.tsx` + `lib/pagination.ts` dùng chung (Công trình cũng dùng). Seed: ảnh bìa + nội dung dài hơn cho bài viết. Test SEO mở rộng ra 8 trang. 68 unit + 65 e2e pass.

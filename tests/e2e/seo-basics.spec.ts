@@ -14,6 +14,9 @@ const PAGES = [
   "/tin-tuc/",
   "/tin-tuc/mau-phan-biet-mo-cai-tang-va-an-tang/",
   "/thu-vien-hinh-anh/",
+  "/gioi-thieu/",
+  "/huong-dan-dat-hang/",
+  "/lien-he/",
 ];
 const GENERIC_LINK_TEXT = ["click here", "bấm vào đây", "xem thêm", "tại đây", "here", "more"];
 

@@ -1,5 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { CATEGORY_GROUPS, POSTS, PROJECTS, SAMPLE, TESTIMONIALS } from "../../prisma/seed-data";
+import {
+  CATEGORY_GROUPS,
+  PAGES,
+  POSTS,
+  PROJECTS,
+  SAMPLE,
+  TESTIMONIALS,
+} from "../../prisma/seed-data";
 
 const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const categories = CATEGORY_GROUPS.flatMap((g) => [g, ...g.children]);
@@ -11,7 +18,8 @@ describe("seed data", () => {
   });
 
   it("uses unique, url-safe slugs", () => {
-    const slugs = [...categories, ...PROJECTS, ...POSTS].map((x) => x.slug);
+    // Categories and pages share the /[slug] route, so they must not collide either.
+    const slugs = [...categories, ...PAGES, ...PROJECTS, ...POSTS].map((x) => x.slug);
     expect(new Set(slugs).size).toBe(slugs.length);
     for (const slug of slugs) expect(slug).toMatch(SLUG_RE);
   });
