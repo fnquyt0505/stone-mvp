@@ -1,0 +1,244 @@
+// Data model — source of truth: docs/ARCHITECTURE.md §3.
+// Change only via `pnpm db:migrate --name <meaningful-name>`.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  EDITOR
+}
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  QUOTED
+  WON
+  LOST
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  role         Role     @default(EDITOR)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  posts Post[]
+}
+
+model Image {
+  id        String   @id @default(cuid())
+  url       String
+  publicId  String   @unique
+  alt       String
+  width     Int
+  height    Int
+  createdAt DateTime @default(now())
+
+  categoryCovers     Category[]      @relation("CategoryCover")
+  categoryGallery    CategoryImage[]
+  projectCovers      Project[]       @relation("ProjectCover")
+  projectGallery     ProjectImage[]
+  postCovers         Post[]          @relation("PostCover")
+  testimonialAvatars Testimonial[]   @relation("TestimonialAvatar")
+  banners            Banner[]
+}
+
+/// Two-level product category; this is the public "product page" (e.g. /mo-da-doi/).
+/// Slug must be unique across Category AND Page (shared /[slug] route) — enforced in server actions.
+model Category {
+  id             String   @id @default(cuid())
+  parentId       String?
+  name           String
+  slug           String   @unique
+  excerpt        String?
+  /// Reference price range in VND.
+  priceFrom      Int?
+  priceTo        Int?
+  /// Tiptap JSON document.
+  content        Json?
+  /// [{ label: string, value: string }]
+  specs          Json     @default("[]")
+  /// [{ q: string, a: string }]
+  faqs           Json     @default("[]")
+  coverImageId   String?
+  seoTitle       String?
+  seoDescription String?
+  order          Int      @default(0)
+  isPublished    Boolean  @default(false)
+  /// Mega-menu column/group label for top-level categories.
+  menuGroup      String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  parent     Category?       @relation("CategoryTree", fields: [parentId], references: [id], onDelete: SetNull)
+  children   Category[]      @relation("CategoryTree")
+  coverImage Image?          @relation("CategoryCover", fields: [coverImageId], references: [id], onDelete: SetNull)
+  gallery    CategoryImage[]
+  projects   Project[]
+  leads      Lead[]
+
+  @@index([parentId, order])
+  @@index([isPublished])
+}
+
+model CategoryImage {
+  categoryId String
+  imageId    String
+  caption    String?
+  order      Int     @default(0)
+
+  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  image    Image    @relation(fields: [imageId], references: [id], onDelete: Cascade)
+
+  @@id([categoryId, imageId])
+  @@index([categoryId, order])
+}
+
+model Project {
+  id             String    @id @default(cuid())
+  title          String
+  slug           String    @unique
+  province       String
+  categoryId     String?
+  summary        String?
+  /// Tiptap JSON document.
+  content        Json?
+  coverImageId   String?
+  completedAt    DateTime?
+  isFeatured     Boolean   @default(false)
+  isPublished    Boolean   @default(false)
+  seoTitle       String?
+  seoDescription String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  category   Category?      @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  coverImage Image?         @relation("ProjectCover", fields: [coverImageId], references: [id], onDelete: SetNull)
+  gallery    ProjectImage[]
+
+  @@index([isPublished, province])
+  @@index([isPublished, categoryId])
+  @@index([isFeatured])
+}
+
+model ProjectImage {
+  projectId String
+  imageId   String
+  caption   String?
+  order     Int     @default(0)
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  image   Image   @relation(fields: [imageId], references: [id], onDelete: Cascade)
+
+  @@id([projectId, imageId])
+  @@index([projectId, order])
+}
+
+model Post {
+  id             String    @id @default(cuid())
+  title          String
+  slug           String    @unique
+  excerpt        String?
+  /// Tiptap JSON document.
+  content        Json?
+  coverImageId   String?
+  authorId       String
+  publishedAt    DateTime?
+  seoTitle       String?
+  seoDescription String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  author     User   @relation(fields: [authorId], references: [id], onDelete: Restrict)
+  coverImage Image? @relation("PostCover", fields: [coverImageId], references: [id], onDelete: SetNull)
+
+  @@index([publishedAt])
+}
+
+model Testimonial {
+  id          String   @id @default(cuid())
+  name        String
+  province    String?
+  content     String
+  rating      Int?
+  avatarId    String?
+  order       Int      @default(0)
+  isPublished Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  avatar Image? @relation("TestimonialAvatar", fields: [avatarId], references: [id], onDelete: SetNull)
+
+  @@index([isPublished, order])
+}
+
+model Banner {
+  id        String   @id @default(cuid())
+  title     String
+  subtitle  String?
+  ctaLabel  String?
+  ctaHref   String?
+  imageId   String?
+  isActive  Boolean  @default(false)
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  image Image? @relation(fields: [imageId], references: [id], onDelete: SetNull)
+
+  @@index([isActive, order])
+}
+
+/// Static pages (about, policies...). Shares the /[slug] route with Category.
+model Page {
+  id             String   @id @default(cuid())
+  slug           String   @unique
+  title          String
+  /// Tiptap JSON document.
+  content        Json?
+  seoTitle       String?
+  seoDescription String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model Lead {
+  id          String     @id @default(cuid())
+  name        String
+  phone       String
+  province    String?
+  categoryId  String?
+  message     String?
+  /// [{ url: string, publicId: string }]
+  attachments Json       @default("[]")
+  sourceUrl   String
+  /// { source?, medium?, campaign?, term?, content? }
+  utm         Json?
+  status      LeadStatus @default(NEW)
+  note        String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  category Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+
+  @@index([status, createdAt])
+  @@index([createdAt])
+  @@index([phone])
+}
+
+/// Key/value site settings: hotline, zalo, email, address, working hours, social links.
+model SiteSetting {
+  key       String   @id
+  value     Json
+  updatedAt DateTime @updatedAt
+}

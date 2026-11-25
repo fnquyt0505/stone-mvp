@@ -1,0 +1,21 @@
+# Local development database only. Production uses managed Postgres (see docs/ARCHITECTURE.md).
+services:
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: stone
+      POSTGRES_PASSWORD: stone
+      POSTGRES_DB: stone_mvp
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U stone -d stone_mvp"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  pgdata:

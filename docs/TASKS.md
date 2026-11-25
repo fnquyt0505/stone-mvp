@@ -7,7 +7,7 @@ Làm theo thứ tự. Mỗi task đủ nhỏ để xong trong một phiên, có 
   _Xong khi:_ `pnpm dev` chạy, `pnpm lint && pnpm typecheck` sạch.
 - [x] **T02 Design tokens & font**: khai báo màu, font Lora + Be Vietnam Pro (subset vietnamese), thang chữ trong DESIGN.md; cài shadcn/ui.
   _Xong khi:_ trang `/dev/styleguide` hiển thị màu, heading, nút.
-- [ ] **T03 Database & Prisma**: schema đầy đủ theo ARCHITECTURE.md §3, migration đầu tiên, `server/db.ts`.
+- [x] **T03 Database & Prisma**: schema đầy đủ theo ARCHITECTURE.md §3, migration đầu tiên, `server/db.ts`.
   _Xong khi:_ `prisma migrate dev` chạy, Prisma Studio thấy đủ bảng.
 - [ ] **T04 Seed dữ liệu mẫu**: 6 nhóm danh mục + ~15 danh mục con, 6 công trình, 3 đánh giá, 3 bài viết, 1 banner, cài đặt site, 1 admin. Mọi nội dung đánh dấu `[MẪU]`.
   _Xong khi:_ `pnpm db:seed` chạy lại nhiều lần không lỗi.
