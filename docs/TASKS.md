@@ -22,7 +22,7 @@ Làm theo thứ tự. Mỗi task đủ nhỏ để xong trong một phiên, có 
 - [x] **T09 Trang chủ**: Hero, lưới danh mục, công trình tiêu biểu, ProcessSteps, testimonial, khối thành tích, CTA báo giá.
 
 ## Giai đoạn 2 — Nội dung cốt lõi
-- [ ] **T10 Route `/[slug]`**: resolve Category hoặc Page; 404 nếu không có; `generateStaticParams`.
+- [x] **T10 Route `/[slug]`**: resolve Category hoặc Page; 404 nếu không có; `generateStaticParams`.
 - [ ] **T11 Trang danh mục**: Breadcrumb, H1, PriceRange, rich text, SpecTable, Gallery + lightbox, FAQ, danh mục liên quan, AuthorBox, QuoteForm; JSON-LD Breadcrumb + FAQPage.
   _Xong khi:_ Lighthouse mobile SEO ≥ 95 trên trang mẫu `/mo-da-doi/`.
 - [ ] **T12 Công trình**: danh sách có lọc tỉnh/loại (query string), phân trang; trang chi tiết có gallery.
