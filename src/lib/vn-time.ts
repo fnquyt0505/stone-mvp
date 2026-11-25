@@ -24,3 +24,18 @@ export function formatVnDateTime(date: Date | string): string {
     year: "numeric",
   });
 }
+
+/** "2026-11-26" -> start of that day in Vietnam (UTC Date); null when invalid. */
+export function vnDateStart(isoDate: string): Date | null {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(isoDate);
+  if (!m) return null;
+  const utc = Date.UTC(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+  const d = new Date(utc - VN_OFFSET_MS);
+  return Number.isNaN(d.getTime()) ? null : d;
+}
+
+/** "2026-11-26" -> start of the following day in Vietnam (exclusive end). */
+export function vnDateEnd(isoDate: string): Date | null {
+  const start = vnDateStart(isoDate);
+  return start ? new Date(start.getTime() + DAY_MS) : null;
+}

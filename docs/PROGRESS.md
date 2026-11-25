@@ -5,7 +5,7 @@
 ## Trạng thái hiện tại
 - **Giai đoạn:** 4 — Admin
 - **Task đang làm:** —
-- **Task tiếp theo:** T20 Quản lý Lead
+- **Task tiếp theo:** T21 Upload ảnh
 - **Chặn bởi:** Cần chủ dự án chốt tên thương hiệu, logo, hotline, Zalo, địa chỉ (có thể dùng `[MẪU]` để làm trước).
 
 ## Tổng quan
@@ -15,10 +15,17 @@
 | 1 Khung site | T06–T09 | 4/4 |
 | 2 Nội dung | T10–T14 | 5/5 |
 | 3 Thu lead | T15–T17 | 3/3 |
-| 4 Admin | T18–T25 | 2/8 |
+| 4 Admin | T18–T25 | 3/8 |
 | 5 Ra mắt | T26–T30 | 0/5 |
 
 ## Nhật ký
+
+### 2026-11-26 — T20 Quản lý Lead
+- ✅ Đã xong: `/admin/leads/`: lọc theo trạng thái, từ ngày / đến ngày (ranh giới ngày giờ VN), tìm tên hoặc SĐT (nhận cả "0987 654"), 20 lead/trang, mỗi lead có nút **gọi** (tel:+84), badge trạng thái, trích yêu cầu + ghi chú. `/admin/leads/[id]/`: đủ thông tin (thời gian, tỉnh, loại sản phẩm, yêu cầu, trang gửi, UTM), nút Gọi + Zalo, form đổi **trạng thái** (radio to, 5 trạng thái) + **ghi chú nội bộ** qua Server Action `updateLead` (`requireStaff` + Zod). **Xuất CSV** `/admin/leads/export/` theo đúng bộ lọc (BOM UTF-8, CRLF, chống CSV injection, SĐT dạng "0987 654 321" để Excel giữ số 0, tối đa 10.000 dòng; `requireStaff`). 8 unit + 3 e2e mới → 102 unit + 111 e2e pass.
+- 📁 File thay đổi: `src/app/admin/(panel)/leads/{page.tsx,[id]/page.tsx,[id]/lead-edit-form.tsx}`, `src/app/admin/leads/export/route.ts`, `src/server/{queries/admin-leads,actions/admin-lead}.ts`, `src/schemas/admin-lead.ts`, `src/lib/{csv,vn-time}.ts`, `tests/unit/admin-leads.test.ts`, `tests/e2e/admin-leads.spec.ts`.
+- 🐞 Lỗi / vấn đề: không có.
+- 🧠 Quyết định quan trọng: không có thao tác xóa lead trong admin (tránh mất dữ liệu); lead không còn quan tâm thì chuyển "Hủy".
+- ⏭️ Bước tiếp theo: T21.
 
 ### 2026-11-26 — T19 Khung admin
 - ✅ Đã xong: khung `/admin/(panel)`: header dính (Xem website, tên, Đăng xuất), **sidebar** desktop (9 mục, `aria-current`, icon + chữ) và **menu trượt** mobile (tự đóng khi chọn); mục Cài đặt chỉ hiện với ADMIN (`navForRole`). **Dashboard**: lead mới hôm nay / 7 ngày / đang "Mới" (theo giờ VN, `lib/vn-time.ts`), 5 lead gần nhất (badge trạng thái chữ + màu, nút gọi), số nội dung đang hiển thị. `LeadStatusBadge` + nhãn trạng thái tiếng Việt dùng chung. Trang tạm cho các mục T20–T25 (đều `requireStaff`/`requireAdmin`). Rate limit đăng nhập giờ **chỉ đếm lần sai** (`isRateLimited` + `recordHit`). Helper e2e `loginAsAdmin`. 94 unit + 108 e2e pass.
