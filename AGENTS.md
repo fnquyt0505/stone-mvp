@@ -10,17 +10,17 @@ Bạn đang xây MVP website giới thiệu và thu lead cho một **xưởng đ
 | `docs/DESIGN.md` | Trước khi viết bất kỳ UI nào |
 | `docs/RULES.md` | **Luôn luôn** — quy tắc code và danh sách điều cấm |
 | `docs/TASKS.md` | Chọn task tiếp theo chưa đánh dấu |
-| `PROGRESS.md` | Biết đã làm gì, lỗi gì, đang dở chỗ nào |
+| `docs/PROGRESS.md` | Biết đã làm gì, lỗi gì, đang dở chỗ nào |
 
 Thứ tự ưu tiên khi các file mâu thuẫn: **RULES > PRD > ARCHITECTURE > DESIGN > TASKS**. Gặp mâu thuẫn thì dừng và hỏi.
 
 ## Vòng làm việc chuẩn
-1. Đọc `PROGRESS.md` → xác định task tiếp theo trong `docs/TASKS.md`.
+1. Đọc `docs/PROGRESS.md` → xác định task tiếp theo trong `docs/TASKS.md`.
 2. Nêu ngắn kế hoạch cho task (file sẽ tạo/sửa, cách kiểm tra).
 3. Tạo nhánh mới từ `main` mới nhất: `git checkout main && git pull && git checkout -b task/Txx-<slug>` (ví dụ `task/T02-design-tokens`).
 4. Thực hiện **chỉ** task đó.
 5. Kiểm tra: `pnpm lint && pnpm typecheck && pnpm test` (+ chạy thử trên trình duyệt nếu là UI).
-6. Đánh dấu `[x]` trong `docs/TASKS.md`, thêm mục vào `PROGRESS.md` theo mẫu — commit chung trong nhánh task.
+6. Đánh dấu `[x]` trong `docs/TASKS.md`, thêm mục vào `docs/PROGRESS.md` theo mẫu — commit chung trong nhánh task.
 7. Push nhánh và mở PR vào `main`: `git push -u origin HEAD && gh pr create --fill --base main`. Workflow `.github/workflows/ci.yml` chạy lint/typecheck/test/build; **pass thì tự squash-merge và xóa nhánh**. Theo dõi bằng `gh pr checks --watch`; CI đỏ thì sửa trên cùng nhánh rồi push lại. Không commit thẳng lên `main`.
 8. Tóm tắt cho người dùng: đã làm gì, link PR, cần họ làm gì (nếu có).
 

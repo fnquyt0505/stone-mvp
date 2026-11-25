@@ -1,3 +1,143 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-/* Design tokens (colors, fonts, type scale) are added in T02 — see docs/DESIGN.md. */
+/*
+ * Design tokens — source of truth: docs/DESIGN.md.
+ * Components must use these tokens (e.g. bg-jade-700, text-stone-900), never raw hex.
+ */
+@theme {
+  /* Drop Tailwind's default stone/red scales so only DESIGN.md shades exist. */
+  --color-stone-*: initial;
+  --color-red-*: initial;
+
+  --color-stone-900: #1f2420;
+  --color-stone-700: #3e4741;
+  --color-stone-500: #7a847d;
+  --color-stone-200: #dcdfd9;
+  --color-stone-50: #f6f5f1;
+  --color-white: #ffffff;
+  --color-jade-700: #2f5d50;
+  --color-jade-50: #e8f0ec;
+  --color-gold-600: #b08a3e;
+  --color-gold-700: #8f6e2c;
+  --color-red-600: #c0392b;
+  --color-zalo: #0068ff;
+  --color-success: #2e7d4f;
+
+  /* Fonts are injected as CSS variables by next/font in app/layout.tsx. */
+  --font-sans: var(--font-be-vietnam-pro), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-lora), ui-serif, Georgia, serif;
+
+  /* Type scale (mobile / desktop) — see DESIGN.md §3. */
+  --text-h1: 1.75rem;
+  --text-h1--line-height: 1.25;
+  --text-h1-lg: 2.5rem;
+  --text-h1-lg--line-height: 1.25;
+  --text-h2: 1.5rem;
+  --text-h2--line-height: 1.3;
+  --text-h2-lg: 2rem;
+  --text-h2-lg--line-height: 1.3;
+  --text-h3: 1.25rem;
+  --text-h3--line-height: 1.35;
+  --text-h3-lg: 1.5rem;
+  --text-h3-lg--line-height: 1.35;
+  --text-body: 1.0625rem;
+  --text-body--line-height: 1.7;
+  --text-body-lg: 1.125rem;
+  --text-body-lg--line-height: 1.7;
+  --text-small: 0.875rem;
+  --text-small--line-height: 1.5;
+  --text-small-lg: 0.9375rem;
+  --text-small-lg--line-height: 1.5;
+}
+
+/* shadcn/ui semantic tokens mapped onto the palette. */
+@theme inline {
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.75);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.5);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+}
+
+:root {
+  /* 8px cards (rounded-lg), 6px buttons (rounded-md). */
+  --radius: 0.5rem;
+  --background: var(--color-white);
+  --foreground: var(--color-stone-900);
+  --card: var(--color-white);
+  --card-foreground: var(--color-stone-900);
+  --popover: var(--color-white);
+  --popover-foreground: var(--color-stone-900);
+  --primary: var(--color-jade-700);
+  --primary-foreground: var(--color-white);
+  --secondary: var(--color-stone-50);
+  --secondary-foreground: var(--color-stone-900);
+  /* stone-700 (not stone-500) keeps muted text at WCAG AA (9.6:1 vs 3.9:1). */
+  --muted: var(--color-stone-50);
+  --muted-foreground: var(--color-stone-700);
+  --accent: var(--color-jade-50);
+  --accent-foreground: var(--color-jade-700);
+  --destructive: var(--color-red-600);
+  --border: var(--color-stone-200);
+  --input: var(--color-stone-500);
+  --ring: var(--color-gold-600);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring;
+  }
+  html {
+    @apply scroll-smooth;
+  }
+  body {
+    @apply bg-background text-body text-foreground md:text-body-lg font-sans antialiased;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-heading font-semibold text-stone-900;
+  }
+  h1 {
+    @apply text-h1 md:text-h1-lg font-bold;
+  }
+  h2 {
+    @apply text-h2 md:text-h2-lg;
+  }
+  h3 {
+    @apply text-h3 md:text-h3-lg;
+  }
+  :focus-visible {
+    @apply outline-gold-600 outline-2 outline-offset-2;
+  }
+}
+
+/* Small text: 14px mobile / 15px desktop. */
+@utility text-small-responsive {
+  @apply text-small md:text-small-lg;
+}
+
+/* Brand ornament: thin 48×2px gold line under section headings. */
+@utility section-ornament {
+  @apply after:bg-gold-600 after:mt-3 after:block after:h-0.5 after:w-12 after:content-[''];
+}
