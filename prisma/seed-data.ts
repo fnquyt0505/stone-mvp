@@ -195,6 +195,11 @@ export const SITE_SETTINGS: Record<string, unknown> = {
   workingHours: `${SAMPLE} 7:00 – 21:00, tất cả các ngày`,
   social: { facebook: "", tiktok: "", youtube: "" },
   /** Placeholder figures only — replace with verified numbers before launch. */
+  author: {
+    name: "[MẪU] Biên tập viên",
+    role: "Kỹ sư thiết kế lăng mộ đá",
+    bio: "[MẪU] Giới thiệu ngắn về kinh nghiệm của người biên soạn nội dung, sẽ cập nhật trong trang quản trị.",
+  },
   achievements: [
     { value: "[MẪU] 00+", label: "Năm kinh nghiệm" },
     { value: "[MẪU] 000+", label: "Công trình đã thi công" },

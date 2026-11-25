@@ -2,9 +2,11 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { JsonLd } from "@/components/json-ld";
 import { RichText } from "@/components/rich-text";
-import { formatPriceRange } from "@/lib/format-price";
+import { CategoryView } from "@/components/site/category-view";
 import { breadcrumbJsonLd } from "@/lib/jsonld";
 import { buildMetadata } from "@/lib/seo";
+import { getRelatedCategories } from "@/server/queries/related";
+import { getSiteSettings } from "@/server/queries/site";
 import { getAllSlugs, resolveSlug } from "@/server/queries/slug";
 
 export const revalidate = 3600;
@@ -60,24 +62,9 @@ export default async function SlugPage({ params }: Props) {
     );
   }
 
-  // Basic category view; the full category template is built in T11.
-  const { category } = resolved;
-  const crumbs = [
-    { name: "Trang chủ", path: "/" },
-    ...(category.parent ? [{ name: category.parent.name, path: `/${category.parent.slug}/` }] : []),
-    { name: category.name, path: `/${category.slug}/` },
-  ];
-  return (
-    <main className={container}>
-      <h1>{category.name}</h1>
-      {category.excerpt ? (
-        <p className="mt-4 max-w-prose text-stone-700">{category.excerpt}</p>
-      ) : null}
-      <p className="mt-4 font-semibold text-jade-700">
-        Giá tham khảo: {formatPriceRange(category.priceFrom, category.priceTo)}
-      </p>
-      <RichText doc={category.content} className="mt-8 max-w-prose space-y-4" />
-      <JsonLd data={breadcrumbJsonLd(crumbs)} />
-    </main>
-  );
+  const [related, settings] = await Promise.all([
+    getRelatedCategories(resolved.category.id, resolved.category.parentId),
+    getSiteSettings(),
+  ]);
+  return <CategoryView category={resolved.category} related={related} settings={settings} />;
 }

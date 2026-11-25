@@ -4,8 +4,8 @@
 
 ## Trạng thái hiện tại
 - **Giai đoạn:** 2 — Nội dung cốt lõi
-- **Task đang làm:** —
-- **Task tiếp theo:** T11 Trang danh mục
+- **Task đang làm:** T11 — chờ đo Lighthouse
+- **Task tiếp theo:** T12 Công trình (sau khi chốt cách đo Lighthouse cho T11)
 - **Chặn bởi:** Cần chủ dự án chốt tên thương hiệu, logo, hotline, Zalo, địa chỉ (có thể dùng `[MẪU]` để làm trước).
 
 ## Tổng quan
@@ -19,6 +19,13 @@
 | 5 Ra mắt | T26–T30 | 0/5 |
 
 ## Nhật ký
+
+### 2026-11-26 — T11 Trang danh mục (code xong, chờ đo Lighthouse)
+- ✅ Đã xong: `components/site/category-view.tsx` — Breadcrumb, H1, mô tả, **PriceRange** (nền jade-50, "không gồm phần móng", nút Zalo + Gọi), nội dung Tiptap, **SpecTable** (caption, `th scope=row`, xen kẽ stone-50), **Gallery** 2/3/4 cột + lightbox `yet-another-react-lightbox` (chú thích, nhãn tiếng Việt, Esc), **FAQ** accordion một mục, **AuthorBox** (SiteSetting `author`, ngày cập nhật), danh mục liên quan (cùng nhóm, trừ chính nó), CTA báo giá `#bao-gia`; JSON-LD BreadcrumbList + FAQPage. Zod `schemas/category.ts` lọc specs/FAQ hỏng. Seed: 8 ảnh placeholder tự tạo `public/samples/mau-*.jpg` (ghi "[MẪU]" trên ảnh) làm ảnh bìa + gallery. Test: e2e `category-page` (4) + `seo-basics` (3 trang × 2 thiết bị, mô phỏng các audit SEO của Lighthouse) → 37 e2e + 54 unit pass; build OK.
+- 📁 File thay đổi: `src/components/site/{category-view,category-blocks,breadcrumb,gallery}.tsx`, `src/schemas/{category,site-settings}.ts`, `src/server/queries/{slug,related}.ts`, `src/server/cache-key.ts` + mọi query, `src/app/(site)/[slug]/page.tsx`, `next.config.ts`, `prisma/{seed,seed-data}.ts`, `public/samples/`, `tests/e2e/{category-page,seo-basics,slug-route}.spec.ts`.
+- 🐞 Lỗi / vấn đề: (1) `unstable_cache` trả dữ liệu theo **cấu trúc cũ** sau khi đổi query → thêm `cacheKey()` gắn `CACHE_BUILD_ID` (SHA commit / thời điểm build) vào mọi khóa cache. (2) `unstable_cache` **biến Date thành chuỗi** → `resolveSlug` trả `updatedAt` dạng ISO string. (3) Dev server đôi khi log "Unexpected end of JSON input" khi Playwright chạy song song (đọc/ghi cache dev cùng lúc) — không ảnh hưởng kết quả, chưa thấy ở production. (4) **Chưa chạy được Lighthouse**: `npx lighthouse` bị chặn quyền.
+- 🧠 Quyết định quan trọng: QuoteForm thật thuộc T15 → tạm đặt dải CTA (Báo giá/Gọi/Zalo) tại `#bao-gia`. Breadcrumb dùng stone-700 (AA). Hero trang chủ vẫn chưa dùng ảnh.
+- ⏭️ Bước tiếp theo: đo Lighthouse cho T11, rồi T12.
 
 ### 2026-11-25 — T10 Route `/[slug]`
 - ✅ Đã xong: `app/(site)/[slug]/page.tsx` resolve Category (đã xuất bản) rồi Page; 404 nếu không có hoặc slug sai định dạng (không truy vấn DB); `generateStaticParams` prerender 21 danh mục, `dynamicParams = true` cho slug mới; `generateMetadata` (seoTitle/seoDescription → canonical, OG); JSON-LD BreadcrumbList (Trang chủ → nhóm cha → danh mục). `server/queries/slug.ts` (`resolveSlug` cache tag `categories` + `pages`, `getAllSlugs`); `isValidSlug` trong `lib/slugify.ts`. Bộ render Tiptap JSON an toàn `components/rich-text.tsx` (chỉ React element, không HTML thô; không bao giờ ra `h1`; chặn link `javascript:`). Trang 404 tiếng Việt (trong layout site + bản gốc). Test: 15 unit mới (54 tổng) + 6 e2e mới (23 tổng) pass; build OK.

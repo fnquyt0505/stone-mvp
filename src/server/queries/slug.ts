@@ -2,6 +2,7 @@ import "server-only";
 import { unstable_cache } from "next/cache";
 import type { Prisma } from "@prisma/client";
 import { isValidSlug } from "@/lib/slugify";
+import { cacheKey } from "@/server/cache-key";
 import { db } from "@/server/db";
 import { CATEGORIES_TAG } from "./categories";
 
@@ -20,8 +21,16 @@ const categorySelect = {
   seoTitle: true,
   seoDescription: true,
   updatedAt: true,
+  parentId: true,
   parent: { select: { name: true, slug: true } },
   coverImage: { select: { url: true, alt: true, width: true, height: true } },
+  gallery: {
+    orderBy: { order: "asc" },
+    select: {
+      caption: true,
+      image: { select: { id: true, url: true, alt: true, width: true, height: true } },
+    },
+  },
 } satisfies Prisma.CategorySelect;
 
 const pageSelect = {
@@ -34,8 +43,12 @@ const pageSelect = {
   updatedAt: true,
 } satisfies Prisma.PageSelect;
 
-export type SlugCategory = Prisma.CategoryGetPayload<{ select: typeof categorySelect }>;
-export type SlugPage = Prisma.PageGetPayload<{ select: typeof pageSelect }>;
+// unstable_cache serializes results as JSON, so dates are exposed as ISO strings.
+type WithIsoDate<T> = Omit<T, "updatedAt"> & { updatedAt: string };
+export type SlugCategory = WithIsoDate<
+  Prisma.CategoryGetPayload<{ select: typeof categorySelect }>
+>;
+export type SlugPage = WithIsoDate<Prisma.PageGetPayload<{ select: typeof pageSelect }>>;
 
 export type ResolvedSlug =
   { kind: "category"; category: SlugCategory } | { kind: "page"; page: SlugPage } | null;
@@ -51,11 +64,18 @@ export const resolveSlug = unstable_cache(
       where: { slug, isPublished: true },
       select: categorySelect,
     });
-    if (category) return { kind: "category", category };
+    if (category) {
+      return {
+        kind: "category",
+        category: { ...category, updatedAt: category.updatedAt.toISOString() },
+      };
+    }
     const page = await db.page.findUnique({ where: { slug }, select: pageSelect });
-    return page ? { kind: "page", page } : null;
+    return page
+      ? { kind: "page", page: { ...page, updatedAt: page.updatedAt.toISOString() } }
+      : null;
   },
-  ["resolve-slug"],
+  cacheKey("resolve-slug"),
   { tags: [CATEGORIES_TAG, PAGES_TAG], revalidate: 3600 },
 );
 

@@ -31,6 +31,7 @@
     "react": "19",
     "react-dom": "19",
     "server-only": "^0.0.1",
+    "yet-another-react-lightbox": "3",
     "zod": "3"
   },
   "devDependencies": {

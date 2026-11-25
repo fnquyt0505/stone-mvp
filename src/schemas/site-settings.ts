@@ -34,6 +34,14 @@ export const siteSettingsSchema = z.object({
     .array(z.object({ value: z.string().trim().min(1), label: z.string().trim().min(1) }))
     .max(6)
     .default([]),
+  /** Content author shown in AuthorBox on category pages (E-E-A-T). */
+  author: z
+    .object({
+      name: z.string().trim().min(1),
+      role: z.string().trim().default(""),
+      bio: z.string().trim().default(""),
+    })
+    .optional(),
 });
 
 export type SiteSettings = z.infer<typeof siteSettingsSchema>;

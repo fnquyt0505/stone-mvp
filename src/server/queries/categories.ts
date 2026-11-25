@@ -1,5 +1,6 @@
 import "server-only";
 import { unstable_cache } from "next/cache";
+import { cacheKey } from "@/server/cache-key";
 import { db } from "@/server/db";
 
 export const CATEGORIES_TAG = "categories";
@@ -28,6 +29,6 @@ export const getMenuCategories = unstable_cache(
         },
       },
     }),
-  ["menu-categories"],
+  cacheKey("menu-categories"),
   { tags: [CATEGORIES_TAG], revalidate: 3600 },
 );

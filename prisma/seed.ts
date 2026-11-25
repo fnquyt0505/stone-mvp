@@ -53,6 +53,32 @@ async function seedAdmin() {
   });
 }
 
+/** Placeholder images generated into public/samples (labelled "[MẪU]" on the image). */
+const SAMPLE_IMAGE_COUNT = 8;
+
+async function seedImages(): Promise<string[]> {
+  const ids: string[] = [];
+  for (let n = 1; n <= SAMPLE_IMAGE_COUNT; n++) {
+    const publicId = `sample/mau-${n}`;
+    const data = {
+      url: `/samples/mau-${n}.jpg`,
+      alt: `${SAMPLE} Ảnh minh họa công trình đá số ${n}`,
+      width: n === 1 ? 1600 : 1200,
+      height: 900,
+    };
+    const image = await prisma.image.upsert({
+      where: { publicId },
+      create: { publicId, ...data },
+      update: data,
+    });
+    ids.push(image.id);
+  }
+  return ids;
+}
+
+/** Picks a sample image id deterministically (skips #1, reserved for the hero). */
+const pick = (ids: string[], i: number) => ids[1 + (i % (ids.length - 1))] ?? null;
+
 function categoryFields(c: SeedCategory, order: number) {
   return {
     name: c.name,
@@ -72,14 +98,16 @@ function categoryFields(c: SeedCategory, order: number) {
   };
 }
 
-async function seedCategories() {
+async function seedCategories(imageIds: string[]) {
   const idBySlug = new Map<string, string>();
+  let imageCursor = 0;
 
   for (const [groupIndex, group] of CATEGORY_GROUPS.entries()) {
     const groupData = {
       ...categoryFields(group, groupIndex),
       menuGroup: group.menuGroup,
       parentId: null,
+      coverImageId: pick(imageIds, imageCursor++),
     };
     const parent = await prisma.category.upsert({
       where: { slug: group.slug },
@@ -89,20 +117,34 @@ async function seedCategories() {
     idBySlug.set(parent.slug, parent.id);
 
     for (const [childIndex, c] of group.children.entries()) {
-      const childData = { ...categoryFields(c, childIndex), parentId: parent.id };
+      const childData = {
+        ...categoryFields(c, childIndex),
+        parentId: parent.id,
+        coverImageId: pick(imageIds, imageCursor++),
+      };
       const created = await prisma.category.upsert({
         where: { slug: c.slug },
         create: { slug: c.slug, ...childData },
         update: childData,
       });
       idBySlug.set(created.slug, created.id);
+
+      // Gallery: every sample image except the hero, with a sample caption.
+      for (const [order, imageId] of imageIds.slice(1).entries()) {
+        const galleryData = { caption: `${SAMPLE} ${c.name} — ảnh ${order + 1}`, order };
+        await prisma.categoryImage.upsert({
+          where: { categoryId_imageId: { categoryId: created.id, imageId } },
+          create: { categoryId: created.id, imageId, ...galleryData },
+          update: galleryData,
+        });
+      }
     }
   }
 
   return idBySlug;
 }
 
-async function seedProjects(categoryIds: Map<string, string>) {
+async function seedProjects(categoryIds: Map<string, string>, imageIds: string[]) {
   for (const [i, p] of PROJECTS.entries()) {
     const data = {
       title: `${SAMPLE} ${p.title} tại ${p.province}`,
@@ -113,6 +155,7 @@ async function seedProjects(categoryIds: Map<string, string>) {
       completedAt: new Date(Date.UTC(2025, i, 1)),
       isFeatured: p.featured,
       isPublished: true,
+      coverImageId: pick(imageIds, i + 3),
       seoTitle: `${SAMPLE} ${p.title} tại ${p.province}`,
     };
     await prisma.project.upsert({
@@ -185,8 +228,9 @@ async function seedSettings() {
 
 async function main() {
   const admin = await seedAdmin();
-  const categoryIds = await seedCategories();
-  await seedProjects(categoryIds);
+  const imageIds = await seedImages();
+  const categoryIds = await seedCategories(imageIds);
+  await seedProjects(categoryIds, imageIds);
   await seedTestimonials();
   await seedPosts(admin.id);
   await seedBanner();
@@ -200,6 +244,8 @@ async function main() {
     banners: await prisma.banner.count(),
     settings: await prisma.siteSetting.count(),
     users: await prisma.user.count(),
+    images: await prisma.image.count(),
+    galleryItems: await prisma.categoryImage.count(),
   };
   console.log("Seed complete:", counts);
 }
