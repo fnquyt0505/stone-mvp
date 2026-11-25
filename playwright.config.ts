@@ -29,6 +29,6 @@ export default defineConfig({
     url: BASE_URL,
     reuseExistingServer: false,
     timeout: 300_000,
-    env: { NEXT_DIST_DIR: ".next-e2e", ALLOW_LOCAL_UPLOADS: "1" },
+    env: { NEXT_DIST_DIR: ".next-e2e", ALLOW_LOCAL_UPLOADS: "1", ENABLE_EDITOR_PLAYGROUND: "1" },
   },
 });

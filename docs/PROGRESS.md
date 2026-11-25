@@ -5,7 +5,7 @@
 ## Trạng thái hiện tại
 - **Giai đoạn:** 4 — Admin
 - **Task đang làm:** —
-- **Task tiếp theo:** T22 Rich text editor
+- **Task tiếp theo:** T23 CRUD Danh mục
 - **Chặn bởi:** Cần chủ dự án chốt tên thương hiệu, logo, hotline, Zalo, địa chỉ (có thể dùng `[MẪU]` để làm trước).
 
 ## Tổng quan
@@ -15,10 +15,17 @@
 | 1 Khung site | T06–T09 | 4/4 |
 | 2 Nội dung | T10–T14 | 5/5 |
 | 3 Thu lead | T15–T17 | 3/3 |
-| 4 Admin | T18–T25 | 4/8 |
+| 4 Admin | T18–T25 | 5/8 |
 | 5 Ra mắt | T26–T30 | 0/5 |
 
 ## Nhật ký
+
+### 2026-11-26 — T22 Rich text editor (tạm dừng theo yêu cầu chủ dự án sau task này)
+- ✅ Đã xong: **Tiptap v3.35** `RichTextEditor` (StarterKit chỉ bật phần cho phép — tắt code/codeBlock/strike; tiêu đề H2–H4, đậm/nghiêng/gạch chân, danh sách, trích dẫn, liên kết an toàn, **bảng** TableKit với thêm/xóa hàng-cột, **ảnh** từ thư viện hoặc upload mới qua `ImagePickerDialog` + lưu width/height, hoàn tác/làm lại); thanh công cụ nhãn tiếng Việt, nút 40px, `aria-pressed`; nội dung ghi JSON vào ô ẩn để form gửi. `lib/rich-text-sanitize.ts`: lọc whitelist khi lưu (gỡ node lạ giữ chữ, bỏ mark/thuộc tính lạ, link chỉ http/https/mailto/tel/đường dẫn nội bộ, ảnh chỉ Cloudinary/`/uploads/`/`/samples/`, giới hạn độ sâu + 300 KB). `RichText` phía site render thêm bảng + ảnh (`next/image`), dùng chung regex an toàn. Trang thử `/admin/dev/editor/` chỉ bật khi `ENABLE_EDITOR_PLAYGROUND=1` (e2e). 7 unit + 2 e2e mới → 116 unit + 114 e2e pass.
+- 📁 File thay đổi: `src/components/admin/{rich-text-editor,editor-toolbar,image-picker-dialog}.tsx`, `src/components/rich-text.tsx`, `src/lib/rich-text-sanitize.ts`, `src/server/actions/{image-picker,rich-text-preview}.ts`, `src/app/admin/(panel)/dev/editor/*`, `playwright.config.ts`, `package.json`, `tests/unit/rich-text-sanitize.test.tsx`, `tests/e2e/rich-text-editor.spec.ts`.
+- 🐞 Lỗi / vấn đề: không có.
+- 🧠 Quyết định quan trọng: chèn liên kết dùng hộp nhập của trình duyệt (đơn giản cho MVP). Editor sẽ được gắn vào form Danh mục (T23) và Công trình/Bài viết/Trang (T24).
+- ⏭️ Bước tiếp theo: T23 — **đang tạm dừng chờ chủ dự án cho tiếp tục.**
 
 ### 2026-11-26 — T21 Upload ảnh
 - ✅ Đã xong: `POST /api/upload` (chỉ nhân viên) trả **chữ ký Cloudinary** (SHA-1, secret không rời server) để trình duyệt upload thẳng lên Cloudinary; chưa có key → chế độ **lưu cục bộ chỉ cho dev/e2e** (`/api/upload/local`, kiểm tra magic bytes, lưu `public/uploads/YYYY/MM/<uuid>.<ext>`; khóa khi có Cloudinary, trên Vercel hoặc production trừ khi `ALLOW_LOCAL_UPLOADS=1` cho e2e). Server Action `saveImages` (`requireStaff`, Zod, chỉ nhận URL Cloudinary hoặc đúng định dạng file cục bộ, publicId phải thuộc thư mục `stone-mvp/`). **ImageUploader**: kéo-thả/chọn nhiều ảnh, xem trước, **bắt buộc mô tả (alt) ≥ 3 ký tự** từng ảnh, chặn loại/dung lượng (JPG/PNG/WebP/AVIF ≤ 10 MB, 30 ảnh/lần), báo lỗi tiếng Việt. Trang admin mới **Thư viện ảnh** (`/admin/images/`) + mục sidebar. Route `/api/local-uploads/…` + rewrite `/uploads/*` để bản build phục vụ ảnh upload sau build. 9 unit + 3 e2e mới → 109 unit + 112 e2e pass.
