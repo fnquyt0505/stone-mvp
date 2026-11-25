@@ -4,10 +4,10 @@ import { AuthError } from "next-auth";
 import { headers } from "next/headers";
 import { signIn, signOut } from "@/auth";
 import { loginSchema, type LoginState } from "@/schemas/auth";
-import { hashKey, hitRateLimit } from "@/server/rate-limit";
+import { hashKey, isRateLimited, recordHit } from "@/server/rate-limit";
 
 const INVALID = "Email hoặc mật khẩu không đúng.";
-/** Brute-force protection: 10 attempts / 15 minutes per IP and per email. */
+/** Brute-force protection: 10 failed attempts / 15 minutes per IP and per email. */
 const LIMIT = { limit: 10, windowMs: 15 * 60 * 1000 };
 
 /** Only allow redirects back into the admin area. */
@@ -28,11 +28,13 @@ export async function login(_prev: LoginState, formData: FormData): Promise<Logi
 
   const h = await headers();
   const ip = h.get("x-forwarded-for")?.split(",")[0]?.trim() || h.get("x-real-ip") || "unknown";
-  const [byIp, byEmail] = await Promise.all([
-    hitRateLimit(hashKey("login-ip", ip), LIMIT.limit, LIMIT.windowMs),
-    hitRateLimit(hashKey("login-email", parsed.data.email), LIMIT.limit, LIMIT.windowMs),
+  const ipKey = hashKey("login-ip", ip);
+  const emailKey = hashKey("login-email", parsed.data.email);
+  const limited = await Promise.all([
+    isRateLimited(ipKey, LIMIT.limit, LIMIT.windowMs),
+    isRateLimited(emailKey, LIMIT.limit, LIMIT.windowMs),
   ]);
-  if (!byIp.allowed || !byEmail.allowed) {
+  if (limited.some(Boolean)) {
     return {
       status: "error",
       message: "Đăng nhập sai quá nhiều lần. Vui lòng thử lại sau 15 phút.",
@@ -48,7 +50,11 @@ export async function login(_prev: LoginState, formData: FormData): Promise<Logi
     });
   } catch (error) {
     // signIn throws a redirect on success; only AuthError means bad credentials.
-    if (error instanceof AuthError) return { status: "error", message: INVALID, email };
+    if (error instanceof AuthError) {
+      // Only failed attempts count towards the lockout.
+      await Promise.all([recordHit(ipKey), recordHit(emailKey)]);
+      return { status: "error", message: INVALID, email };
+    }
     throw error;
   }
   return { status: "idle" };

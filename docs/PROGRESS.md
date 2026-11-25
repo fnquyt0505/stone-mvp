@@ -5,7 +5,7 @@
 ## Trạng thái hiện tại
 - **Giai đoạn:** 4 — Admin
 - **Task đang làm:** —
-- **Task tiếp theo:** T19 Khung admin
+- **Task tiếp theo:** T20 Quản lý Lead
 - **Chặn bởi:** Cần chủ dự án chốt tên thương hiệu, logo, hotline, Zalo, địa chỉ (có thể dùng `[MẪU]` để làm trước).
 
 ## Tổng quan
@@ -15,10 +15,17 @@
 | 1 Khung site | T06–T09 | 4/4 |
 | 2 Nội dung | T10–T14 | 5/5 |
 | 3 Thu lead | T15–T17 | 3/3 |
-| 4 Admin | T18–T25 | 1/8 |
+| 4 Admin | T18–T25 | 2/8 |
 | 5 Ra mắt | T26–T30 | 0/5 |
 
 ## Nhật ký
+
+### 2026-11-26 — T19 Khung admin
+- ✅ Đã xong: khung `/admin/(panel)`: header dính (Xem website, tên, Đăng xuất), **sidebar** desktop (9 mục, `aria-current`, icon + chữ) và **menu trượt** mobile (tự đóng khi chọn); mục Cài đặt chỉ hiện với ADMIN (`navForRole`). **Dashboard**: lead mới hôm nay / 7 ngày / đang "Mới" (theo giờ VN, `lib/vn-time.ts`), 5 lead gần nhất (badge trạng thái chữ + màu, nút gọi), số nội dung đang hiển thị. `LeadStatusBadge` + nhãn trạng thái tiếng Việt dùng chung. Trang tạm cho các mục T20–T25 (đều `requireStaff`/`requireAdmin`). Rate limit đăng nhập giờ **chỉ đếm lần sai** (`isRateLimited` + `recordHit`). Helper e2e `loginAsAdmin`. 94 unit + 108 e2e pass.
+- 📁 File thay đổi: `src/app/admin/(panel)/{layout,page}.tsx` + 8 trang tạm, `src/components/admin/{admin-nav,admin-sidebar,lead-status,coming-soon}.tsx|ts`, `src/server/queries/admin-stats.ts`, `src/lib/vn-time.ts`, `src/server/{rate-limit,actions/auth}.ts`, `tests/unit/admin-shell.test.ts`, `tests/e2e/{admin-shell.spec.ts,helpers/auth.ts}`.
+- 🐞 Lỗi / vấn đề: rate limit đăng nhập trước đó đếm cả lần thành công → nhân viên có thể bị khóa oan; đã sửa.
+- 🧠 Quyết định quan trọng: số liệu dashboard không cache (luôn mới).
+- ⏭️ Bước tiếp theo: T20.
 
 ### 2026-11-26 — T18 Auth admin
 - ✅ Đã xong: **Auth.js v5** (`next-auth@5.0.0-beta.32`) Credentials + JWT 12 giờ. `auth.config.ts` (edge-safe, callback đưa `id`/`role` vào session) + `auth.ts` (Prisma + bcryptjs; email lạ vẫn so với hash giả để không lộ tài khoản nào tồn tại). `middleware.ts`: giữ chuyển hướng chữ thường + chặn `/admin/*` khi chưa đăng nhập (→ `/admin/login/?next=…`), đã đăng nhập vào trang login → `/admin/`, header `X-Robots-Tag: noindex` + `Cache-Control: private, no-store`. `server/auth-guard.ts`: **`requireStaff()`** (ADMIN|EDITOR) / **`requireAdmin()`** kiểm tra lại ở server. `server/actions/auth.ts`: `login` (Zod, rate limit 10 lần/15 phút theo IP và theo email, `next` chỉ nhận đường dẫn trong `/admin/`) và `logout`. Trang `/admin/login/` tiếng Việt; khung `/admin/(panel)` tạm (T19 làm sidebar). E2E `admin-auth.spec.ts` 4 test (chưa đăng nhập bị chuyển hướng, sai mật khẩu, đăng nhập/đăng xuất, khóa sau 10 lần sai). 91 unit + 102 e2e pass.
