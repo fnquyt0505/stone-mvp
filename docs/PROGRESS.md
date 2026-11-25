@@ -5,7 +5,7 @@
 ## Trạng thái hiện tại
 - **Giai đoạn:** 4 — Admin
 - **Task đang làm:** —
-- **Task tiếp theo:** T18 Auth admin
+- **Task tiếp theo:** T19 Khung admin
 - **Chặn bởi:** Cần chủ dự án chốt tên thương hiệu, logo, hotline, Zalo, địa chỉ (có thể dùng `[MẪU]` để làm trước).
 
 ## Tổng quan
@@ -15,10 +15,17 @@
 | 1 Khung site | T06–T09 | 4/4 |
 | 2 Nội dung | T10–T14 | 5/5 |
 | 3 Thu lead | T15–T17 | 3/3 |
-| 4 Admin | T18–T25 | 0/8 |
+| 4 Admin | T18–T25 | 1/8 |
 | 5 Ra mắt | T26–T30 | 0/5 |
 
 ## Nhật ký
+
+### 2026-11-26 — T18 Auth admin
+- ✅ Đã xong: **Auth.js v5** (`next-auth@5.0.0-beta.32`) Credentials + JWT 12 giờ. `auth.config.ts` (edge-safe, callback đưa `id`/`role` vào session) + `auth.ts` (Prisma + bcryptjs; email lạ vẫn so với hash giả để không lộ tài khoản nào tồn tại). `middleware.ts`: giữ chuyển hướng chữ thường + chặn `/admin/*` khi chưa đăng nhập (→ `/admin/login/?next=…`), đã đăng nhập vào trang login → `/admin/`, header `X-Robots-Tag: noindex` + `Cache-Control: private, no-store`. `server/auth-guard.ts`: **`requireStaff()`** (ADMIN|EDITOR) / **`requireAdmin()`** kiểm tra lại ở server. `server/actions/auth.ts`: `login` (Zod, rate limit 10 lần/15 phút theo IP và theo email, `next` chỉ nhận đường dẫn trong `/admin/`) và `logout`. Trang `/admin/login/` tiếng Việt; khung `/admin/(panel)` tạm (T19 làm sidebar). E2E `admin-auth.spec.ts` 4 test (chưa đăng nhập bị chuyển hướng, sai mật khẩu, đăng nhập/đăng xuất, khóa sau 10 lần sai). 91 unit + 102 e2e pass.
+- 📁 File thay đổi: `src/auth.ts`, `src/auth.config.ts`, `src/middleware.ts`, `src/server/{auth-guard,actions/auth}.ts`, `src/schemas/auth.ts`, `src/app/api/auth/[...nextauth]/route.ts`, `src/app/admin/{layout.tsx,login/*,(panel)/*}`, `.github/workflows/ci.yml` (AUTH_SECRET giả cho CI), `package.json`.
+- 🐞 Lỗi / vấn đề: phần tử thông báo chuyển trang của Next cũng có `role=alert` → test giới hạn trong form.
+- 🧠 Quyết định quan trọng: Auth.js v5 vẫn là bản beta (đúng ARCHITECTURE, ghim phiên bản). `AUTH_SECRET` local sinh ngẫu nhiên trong `.env`; **production phải đặt AUTH_SECRET riêng** (T29).
+- ⏭️ Bước tiếp theo: T19.
 
 ### 2026-11-26 — T17 Popup báo giá
 - ✅ Đã xong: `QuoteDialog` (shadcn Dialog) gắn một lần trong layout site; listener **pha capture** trên `document` bắt mọi click vào link `/lien-he/#bao-gia` hoặc phần tử `[data-open-quote]` → mở popup, không rời trang (Ctrl/Cmd/Shift-click giữ hành vi link; không có JS thì link tới form trang Liên hệ). Trang danh mục báo loại sản phẩm qua store client `quote-context.ts` (`QuoteCategory`) → popup **tự chọn sẵn loại sản phẩm**; form mới mỗi lần mở; sourceUrl + UTM giữ từ T15. Event GA `contact_click` (quote) cho mọi CTA. Nút đóng dialog 44×44px, nhãn "Đóng"; `lib/quote-options.ts` dùng chung. E2E `quote-popup.spec.ts` (mở từ hero, gửi lead với sourceUrl "/", Esc đóng; mobile: bottom bar trên `/mo-da-doi/` chọn sẵn "Mộ đá đôi"; Ctrl-click mở trang Liên hệ). 91 unit + 98 e2e pass.
