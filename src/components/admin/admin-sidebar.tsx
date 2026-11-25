@@ -7,6 +7,7 @@ import {
   Building2,
   FileText,
   FolderTree,
+  Images,
   Image as ImageIcon,
   LayoutDashboard,
   Menu,
@@ -37,6 +38,7 @@ const ICONS = {
   testimonials: MessageSquareQuote,
   banners: ImageIcon,
   settings: Settings,
+  images: Images,
 } as const;
 
 function isActive(pathname: string, href: string) {

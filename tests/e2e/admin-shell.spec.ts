@@ -17,7 +17,7 @@ test("sidebar lists every section and highlights the current one", async ({ page
   test.skip(isMobile, "desktop sidebar");
   await loginAsAdmin(page);
   const nav = page.getByRole("navigation", { name: "Menu quản trị" });
-  await expect(nav.getByRole("link")).toHaveCount(9);
+  await expect(nav.getByRole("link")).toHaveCount(10);
   await expect(nav.getByRole("link", { name: "Tổng quan" })).toHaveAttribute(
     "aria-current",
     "page",

@@ -5,7 +5,7 @@
 ## Trạng thái hiện tại
 - **Giai đoạn:** 4 — Admin
 - **Task đang làm:** —
-- **Task tiếp theo:** T21 Upload ảnh
+- **Task tiếp theo:** T22 Rich text editor
 - **Chặn bởi:** Cần chủ dự án chốt tên thương hiệu, logo, hotline, Zalo, địa chỉ (có thể dùng `[MẪU]` để làm trước).
 
 ## Tổng quan
@@ -15,10 +15,17 @@
 | 1 Khung site | T06–T09 | 4/4 |
 | 2 Nội dung | T10–T14 | 5/5 |
 | 3 Thu lead | T15–T17 | 3/3 |
-| 4 Admin | T18–T25 | 3/8 |
+| 4 Admin | T18–T25 | 4/8 |
 | 5 Ra mắt | T26–T30 | 0/5 |
 
 ## Nhật ký
+
+### 2026-11-26 — T21 Upload ảnh
+- ✅ Đã xong: `POST /api/upload` (chỉ nhân viên) trả **chữ ký Cloudinary** (SHA-1, secret không rời server) để trình duyệt upload thẳng lên Cloudinary; chưa có key → chế độ **lưu cục bộ chỉ cho dev/e2e** (`/api/upload/local`, kiểm tra magic bytes, lưu `public/uploads/YYYY/MM/<uuid>.<ext>`; khóa khi có Cloudinary, trên Vercel hoặc production trừ khi `ALLOW_LOCAL_UPLOADS=1` cho e2e). Server Action `saveImages` (`requireStaff`, Zod, chỉ nhận URL Cloudinary hoặc đúng định dạng file cục bộ, publicId phải thuộc thư mục `stone-mvp/`). **ImageUploader**: kéo-thả/chọn nhiều ảnh, xem trước, **bắt buộc mô tả (alt) ≥ 3 ký tự** từng ảnh, chặn loại/dung lượng (JPG/PNG/WebP/AVIF ≤ 10 MB, 30 ảnh/lần), báo lỗi tiếng Việt. Trang admin mới **Thư viện ảnh** (`/admin/images/`) + mục sidebar. Route `/api/local-uploads/…` + rewrite `/uploads/*` để bản build phục vụ ảnh upload sau build. 9 unit + 3 e2e mới → 109 unit + 112 e2e pass.
+- 📁 File thay đổi: `src/app/api/{upload/route.ts,upload/local/route.ts,local-uploads/[...path]/route.ts}`, `src/server/{storage,actions/images}.ts`, `src/schemas/image.ts`, `src/components/admin/{image-uploader,upload-client,admin-nav,admin-sidebar}.tsx|ts`, `src/app/admin/(panel)/images/page.tsx`, `next.config.ts`, `playwright.config.ts`, `.gitignore`, `.env.example`, `tests/unit/image-upload.test.ts`, `tests/e2e/admin-images.spec.ts`.
+- 🐞 Lỗi / vấn đề: (1) Unit test phát hiện regex URL cục bộ nhận `/uploads/../..` → siết đúng định dạng server sinh ra. (2) Lỗi giải mã ảnh hiện tiếng Anh → dịch sang tiếng Việt. (3) `next start` không phục vụ file thêm vào `public/` sau build → route + rewrite. Chữ ký Cloudinary kiểm tra theo ví dụ chính thức trong tài liệu Cloudinary; **chưa upload thử lên Cloudinary thật** (chưa có key).
+- 🧠 Quyết định quan trọng: **Cần chủ xưởng tạo tài khoản Cloudinary** (cloud name, API key, API secret) trước khi deploy (T29).
+- ⏭️ Bước tiếp theo: T22.
 
 ### 2026-11-26 — T20 Quản lý Lead
 - ✅ Đã xong: `/admin/leads/`: lọc theo trạng thái, từ ngày / đến ngày (ranh giới ngày giờ VN), tìm tên hoặc SĐT (nhận cả "0987 654"), 20 lead/trang, mỗi lead có nút **gọi** (tel:+84), badge trạng thái, trích yêu cầu + ghi chú. `/admin/leads/[id]/`: đủ thông tin (thời gian, tỉnh, loại sản phẩm, yêu cầu, trang gửi, UTM), nút Gọi + Zalo, form đổi **trạng thái** (radio to, 5 trạng thái) + **ghi chú nội bộ** qua Server Action `updateLead` (`requireStaff` + Zod). **Xuất CSV** `/admin/leads/export/` theo đúng bộ lọc (BOM UTF-8, CRLF, chống CSV injection, SĐT dạng "0987 654 321" để Excel giữ số 0, tối đa 10.000 dòng; `requireStaff`). 8 unit + 3 e2e mới → 102 unit + 111 e2e pass.
