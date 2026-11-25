@@ -131,6 +131,7 @@ export function StickyBottomBar({ hotline, zalo }: ContactInfo) {
       ) : null}
       <Link
         href={QUOTE_HREF}
+        data-tracked
         onClick={() => trackContactClick("quote", "bottom_bar")}
         className={cn(CELL, "bg-gold-600 text-stone-900")}
       >

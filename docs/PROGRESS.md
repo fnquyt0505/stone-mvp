@@ -3,9 +3,9 @@
 > Cập nhật sau **mỗi** task. Mục mới nhất ở trên cùng. Giữ ngắn gọn, đủ để người/AI khác tiếp tục ngay.
 
 ## Trạng thái hiện tại
-- **Giai đoạn:** 3 — Thu lead
+- **Giai đoạn:** 4 — Admin
 - **Task đang làm:** —
-- **Task tiếp theo:** T17 Popup báo giá
+- **Task tiếp theo:** T18 Auth admin
 - **Chặn bởi:** Cần chủ dự án chốt tên thương hiệu, logo, hotline, Zalo, địa chỉ (có thể dùng `[MẪU]` để làm trước).
 
 ## Tổng quan
@@ -14,11 +14,18 @@
 | 0 Nền móng | T01–T05 | 5/5 |
 | 1 Khung site | T06–T09 | 4/4 |
 | 2 Nội dung | T10–T14 | 5/5 |
-| 3 Thu lead | T15–T17 | 2/3 |
+| 3 Thu lead | T15–T17 | 3/3 |
 | 4 Admin | T18–T25 | 0/8 |
 | 5 Ra mắt | T26–T30 | 0/5 |
 
 ## Nhật ký
+
+### 2026-11-26 — T17 Popup báo giá
+- ✅ Đã xong: `QuoteDialog` (shadcn Dialog) gắn một lần trong layout site; listener **pha capture** trên `document` bắt mọi click vào link `/lien-he/#bao-gia` hoặc phần tử `[data-open-quote]` → mở popup, không rời trang (Ctrl/Cmd/Shift-click giữ hành vi link; không có JS thì link tới form trang Liên hệ). Trang danh mục báo loại sản phẩm qua store client `quote-context.ts` (`QuoteCategory`) → popup **tự chọn sẵn loại sản phẩm**; form mới mỗi lần mở; sourceUrl + UTM giữ từ T15. Event GA `contact_click` (quote) cho mọi CTA. Nút đóng dialog 44×44px, nhãn "Đóng"; `lib/quote-options.ts` dùng chung. E2E `quote-popup.spec.ts` (mở từ hero, gửi lead với sourceUrl "/", Esc đóng; mobile: bottom bar trên `/mo-da-doi/` chọn sẵn "Mộ đá đôi"; Ctrl-click mở trang Liên hệ). 91 unit + 98 e2e pass.
+- 📁 File thay đổi: `src/components/site/{quote-dialog,quote-context,quote-section,category-view,contact-actions}.tsx|ts`, `src/components/ui/dialog.tsx`, `src/lib/quote-options.ts`, `src/app/(site)/layout.tsx`, `tests/e2e/quote-popup.spec.ts`.
+- 🐞 Lỗi / vấn đề: `next/link` tự preventDefault + điều hướng trước listener bubble → chuyển listener sang capture.
+- 🧠 Quyết định quan trọng: popup mở ở mọi trang (kể cả trang có form tại chỗ) cho thống nhất.
+- ⏭️ Bước tiếp theo: T18 (giai đoạn 4 — Admin).
 
 ### 2026-11-26 — T16 Thông báo lead
 - ✅ Đã xong: `server/notify.ts`: email qua **Resend REST API** (`RESEND_API_KEY`, `LEAD_NOTIFY_EMAIL` nhiều người nhận cách nhau dấu phẩy, `LEAD_NOTIFY_FROM` mới — mặc định người gửi test của Resend) + **Telegram** tùy chọn (`TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID`); timeout 8 giây; chưa cấu hình → bỏ qua. `lib/lead-notification.ts` dựng nội dung (họ tên, SĐT + link gọi, tỉnh, loại sản phẩm, ghi chú, trang gửi, UTM, giờ VN, link danh sách lead) và **escape HTML** dữ liệu khách nhập. `submitLead` gọi `notifyNewLead` trong `after()` — chạy sau khi đã trả kết quả cho khách; `notifyNewLead` không bao giờ ném lỗi, chỉ log (SĐT che `091****678`). Vitest alias `server-only` → stub để test được module server. 5 unit test mới (91 tổng) + 95 e2e pass.

@@ -1,9 +1,10 @@
 import { Phone } from "lucide-react";
 import { formatPhone, telHref, zaloHref } from "@/lib/phone";
+import { toQuoteCategoryOptions } from "@/lib/quote-options";
 import { getMenuCategories } from "@/server/queries/categories";
 import { getSiteSettings } from "@/server/queries/site";
 import { getTurnstileSiteKey } from "@/server/turnstile";
-import { QuoteForm, type CategoryOptionGroup } from "./quote-form";
+import { QuoteForm } from "./quote-form";
 
 /**
  * "Nhận báo giá" section with the quote form and direct contact options.
@@ -17,10 +18,7 @@ export async function QuoteSection({
   idPrefix?: string;
 }) {
   const [menu, settings] = await Promise.all([getMenuCategories(), getSiteSettings()]);
-  const categories: CategoryOptionGroup[] = menu.map((g) => ({
-    name: g.name,
-    options: [{ id: g.id, name: `${g.name} (chưa chọn mẫu)` }, ...g.children],
-  }));
+  const categories = toQuoteCategoryOptions(menu);
   const zaloNumber = settings.zalo || settings.hotline;
 
   return (
