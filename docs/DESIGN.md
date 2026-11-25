@@ -25,7 +25,7 @@ Tương phản: chữ trên nền phải đạt WCAG AA (≥ 4.5:1). Chữ trắ
 ## 3. Font chữ
 - **Tiêu đề:** `Lora` (serif, hỗ trợ tiếng Việt đầy đủ) — 600/700.
 - **Nội dung & UI:** `Be Vietnam Pro` — 400/500/600.
-- Nạp bằng `next/font/google` với `subsets: ['vietnamese', 'latin']`, `display: 'swap'`.
+- **Tự lưu trong repo** (`src/fonts/`, gói Fontsource, giấy phép OFL) và nạp bằng `next/font/local` (`src/app/fonts.ts`), subset `latin` + `vietnamese` theo `unicode-range`, `display: 'swap'`. Không phụ thuộc Google Fonts khi build (đổi ngày 26/11/2026 vì CI lỗi tải font).
 
 | Cấp | Mobile | Desktop | Line-height |
 |---|---|---|---|

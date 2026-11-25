@@ -26,8 +26,8 @@
   --color-success: #2e7d4f;
 
   /* Fonts are injected as CSS variables by next/font in app/layout.tsx. */
-  --font-sans: var(--font-be-vietnam-pro), ui-sans-serif, system-ui, sans-serif;
-  --font-heading: var(--font-lora), ui-serif, Georgia, serif;
+  --font-sans: var(--font-body-latin), var(--font-body-vi), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-heading-latin), var(--font-heading-vi), ui-serif, Georgia, serif;
 
   /* Type scale (mobile / desktop) — see DESIGN.md §3. */
   --text-h1: 1.75rem;

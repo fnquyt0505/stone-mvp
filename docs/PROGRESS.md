@@ -20,6 +20,11 @@
 
 ## Nhật ký
 
+### 2026-11-26 — Chore: tự lưu font trong repo
+- ✅ Đã xong: theo quyết định của chủ dự án, thay `next/font/google` bằng `next/font/local` (`src/app/fonts.ts`) với file woff2 từ Fontsource (`src/fonts/`, kèm giấy phép OFL): Be Vietnam Pro 400/500/600 + Lora variable, mỗi họ tách face `latin` và `vietnamese` theo `unicode-range`. Cập nhật DESIGN.md §3. Đã kiểm tra trên trình duyệt: cả 4 face đều tải, chữ có dấu đúng font; 37 e2e pass; build OK.
+- 🐞 Lỗi / vấn đề: CI lỗi 2 lần vì Google Fonts trả CSS hỏng. Khi tự lưu, font fallback tự sinh của face latin (Arial) "bắt" mất ký tự tiếng Việt → tắt `adjustFontFallback` cho face latin.
+- 🧠 Quyết định quan trọng: build không còn phụ thuộc mạng tới Google Fonts.
+
 ### 2026-11-26 — T11 Trang danh mục (code xong, chờ đo Lighthouse)
 - ✅ Đã xong: `components/site/category-view.tsx` — Breadcrumb, H1, mô tả, **PriceRange** (nền jade-50, "không gồm phần móng", nút Zalo + Gọi), nội dung Tiptap, **SpecTable** (caption, `th scope=row`, xen kẽ stone-50), **Gallery** 2/3/4 cột + lightbox `yet-another-react-lightbox` (chú thích, nhãn tiếng Việt, Esc), **FAQ** accordion một mục, **AuthorBox** (SiteSetting `author`, ngày cập nhật), danh mục liên quan (cùng nhóm, trừ chính nó), CTA báo giá `#bao-gia`; JSON-LD BreadcrumbList + FAQPage. Zod `schemas/category.ts` lọc specs/FAQ hỏng. Seed: 8 ảnh placeholder tự tạo `public/samples/mau-*.jpg` (ghi "[MẪU]" trên ảnh) làm ảnh bìa + gallery. Test: e2e `category-page` (4) + `seo-basics` (3 trang × 2 thiết bị, mô phỏng các audit SEO của Lighthouse) → 37 e2e + 54 unit pass; build OK.
 - 📁 File thay đổi: `src/components/site/{category-view,category-blocks,breadcrumb,gallery}.tsx`, `src/schemas/{category,site-settings}.ts`, `src/server/queries/{slug,related}.ts`, `src/server/cache-key.ts` + mọi query, `src/app/(site)/[slug]/page.tsx`, `next.config.ts`, `prisma/{seed,seed-data}.ts`, `public/samples/`, `tests/e2e/{category-page,seo-basics,slug-route}.spec.ts`.
@@ -123,3 +128,4 @@ _Chưa có._
 | 2026-11-25 | Next.js + Prisma + Postgres thay cho WordPress | SEO tốt, admin tùy biến cho quản lý lead |
 | 2026-11-25 | Trang danh mục là "trang sản phẩm", không làm trang chi tiết từng mẫu | Giống mô hình site tham chiếu, phù hợp SEO và cách khách hỏi giá |
 | 2026-11-25 | Thêm form báo giá + quản lý lead | Site tham chiếu chỉ có gọi/Zalo, mất lead ngoài giờ |
+| 2026-11-26 | Tự lưu font (next/font/local) thay Google Fonts | CI lỗi khi Google Fonts trả dữ liệu hỏng; chủ dự án đồng ý |
