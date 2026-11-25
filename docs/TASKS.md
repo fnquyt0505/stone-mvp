@@ -33,7 +33,7 @@ Làm theo thứ tự. Mỗi task đủ nhỏ để xong trong một phiên, có 
 - [x] **T15 QuoteForm + Server Action `submitLead`**: Zod (SĐT VN), honeypot, Turnstile, rate limit, lưu Lead, trạng thái thành công/lỗi.
   _Xong khi:_ gửi form tạo bản ghi Lead; gửi 6 lần liên tiếp bị chặn.
 - [x] **T16 Thông báo lead**: email Resend (+ Telegram tùy chọn), lỗi không làm hỏng việc lưu.
-- [ ] **T17 Popup báo giá**: mở từ CTA bất kỳ, tự điền loại sản phẩm theo trang đang xem, lưu `sourceUrl` + UTM.
+- [x] **T17 Popup báo giá**: mở từ CTA bất kỳ, tự điền loại sản phẩm theo trang đang xem, lưu `sourceUrl` + UTM.
 
 ## Giai đoạn 4 — Admin
 - [ ] **T18 Auth admin**: Auth.js Credentials, trang login, middleware + `requireAdmin()`.

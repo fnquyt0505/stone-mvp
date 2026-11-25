@@ -9,6 +9,7 @@ import { Breadcrumb } from "./breadcrumb";
 import { CategoryCard } from "./cards";
 import { AuthorBox, FaqList, PriceRange, SpecTable } from "./category-blocks";
 import { Gallery } from "./gallery";
+import { QuoteCategory } from "./quote-context";
 import { QuoteSection } from "./quote-section";
 import { Section, SectionHeading } from "./section";
 
@@ -102,6 +103,7 @@ export function CategoryView({
       ) : null}
 
       <QuoteSection defaultCategoryId={category.id} idPrefix="category-quote" />
+      <QuoteCategory id={category.id} />
 
       <JsonLd data={[breadcrumbJsonLd(crumbs), faqJsonLd(faqs)].filter((d) => d !== null)} />
     </main>

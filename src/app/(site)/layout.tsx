@@ -4,12 +4,15 @@ import { FloatingContact, StickyBottomBar } from "@/components/site/contact-acti
 import { PromoBanner } from "@/components/site/promo-banner";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
+import { QuoteDialog } from "@/components/site/quote-dialog";
 import { TopBar } from "@/components/site/top-bar";
 import { localBusinessJsonLd } from "@/lib/jsonld";
 import { normalizePhone } from "@/lib/phone";
+import { toQuoteCategoryOptions } from "@/lib/quote-options";
 import { getSiteUrl } from "@/lib/site-url";
 import { getMenuCategories } from "@/server/queries/categories";
 import { getActiveBanner, getSiteSettings } from "@/server/queries/site";
+import { getTurnstileSiteKey } from "@/server/turnstile";
 
 export const revalidate = 3600;
 
@@ -53,6 +56,10 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
         tiktok={settings.social.tiktok}
       />
       <StickyBottomBar hotline={settings.hotline} zalo={settings.zalo} />
+      <QuoteDialog
+        categories={toQuoteCategoryOptions(categories)}
+        turnstileSiteKey={getTurnstileSiteKey()}
+      />
       <JsonLd
         data={localBusinessJsonLd({
           name: settings.brandName,
