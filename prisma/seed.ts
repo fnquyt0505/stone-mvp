@@ -158,11 +158,23 @@ async function seedProjects(categoryIds: Map<string, string>, imageIds: string[]
       coverImageId: pick(imageIds, i + 3),
       seoTitle: `${SAMPLE} ${p.title} tại ${p.province}`,
     };
-    await prisma.project.upsert({
+    const project = await prisma.project.upsert({
       where: { slug: p.slug },
       create: { slug: p.slug, ...data },
       update: data,
     });
+
+    // Gallery: four sample images per project.
+    for (let order = 0; order < 4; order++) {
+      const imageId = pick(imageIds, i + order);
+      if (!imageId) continue;
+      const galleryData = { caption: `${SAMPLE} ${p.title} — ảnh ${order + 1}`, order };
+      await prisma.projectImage.upsert({
+        where: { projectId_imageId: { projectId: project.id, imageId } },
+        create: { projectId: project.id, imageId, ...galleryData },
+        update: galleryData,
+      });
+    }
   }
 }
 

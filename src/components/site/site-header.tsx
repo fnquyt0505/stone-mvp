@@ -25,7 +25,7 @@ export function SiteHeader({
           <MobileMenu categories={categories} brandName={brandName} />
           <Link
             href="/"
-            className="truncate font-heading text-lg leading-tight font-bold text-jade-700 md:text-xl"
+            className="truncate py-1 font-heading text-lg leading-normal font-bold text-jade-700 md:text-xl"
           >
             {brandName}
           </Link>

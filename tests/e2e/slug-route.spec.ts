@@ -29,7 +29,15 @@ test("adds the trailing slash", async ({ page }) => {
   await expect(page).toHaveURL(/\/mo-da-doi\/$/);
 });
 
-for (const path of ["/khong-ton-tai/", "/Mo-Da-Doi/", "/mo--da/"]) {
+test("redirects uppercase URLs to the lowercase canonical", async ({ page, request }) => {
+  const res = await request.get("/Mo-Da-Doi/", { maxRedirects: 0 });
+  expect(res.status()).toBe(308);
+  expect(res.headers()["location"]).toMatch(/\/mo-da-doi\/$/);
+  await page.goto("/Mo-Da-Doi/");
+  await expect(page).toHaveURL(/\/mo-da-doi\/$/);
+});
+
+for (const path of ["/khong-ton-tai/", "/mo--da/"]) {
   test(`unknown or invalid slug ${path} returns 404`, async ({ page }) => {
     const res = await page.goto(path);
     expect(res?.status()).toBe(404);
