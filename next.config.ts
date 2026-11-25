@@ -2,6 +2,8 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   // Keep old WordPress-style URLs such as /mo-da-doi/ (see docs/ARCHITECTURE.md §5).
+  // Separate build output for e2e runs (see playwright.config.ts).
+  distDir: process.env.NEXT_DIST_DIR ?? ".next",
   trailingSlash: true,
   env: {
     // Versions data-cache keys per build (see src/server/cache-key.ts).

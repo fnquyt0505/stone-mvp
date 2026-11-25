@@ -4,8 +4,8 @@
 
 ## Trạng thái hiện tại
 - **Giai đoạn:** 2 — Nội dung cốt lõi
-- **Task đang làm:** T11 — chờ đo Lighthouse
-- **Task tiếp theo:** T12 Công trình (sau khi chốt cách đo Lighthouse cho T11)
+- **Task đang làm:** —
+- **Task tiếp theo:** T13 Blog & thư viện ảnh
 - **Chặn bởi:** Cần chủ dự án chốt tên thương hiệu, logo, hotline, Zalo, địa chỉ (có thể dùng `[MẪU]` để làm trước).
 
 ## Tổng quan
@@ -13,12 +13,20 @@
 |---|---|---|
 | 0 Nền móng | T01–T05 | 5/5 |
 | 1 Khung site | T06–T09 | 4/4 |
-| 2 Nội dung | T10–T14 | 1/5 |
+| 2 Nội dung | T10–T14 | 3/5 |
 | 3 Thu lead | T15–T17 | 0/3 |
 | 4 Admin | T18–T25 | 0/8 |
 | 5 Ra mắt | T26–T30 | 0/5 |
 
 ## Nhật ký
+
+### 2026-11-26 — T12 Công trình (+ T11 đạt Lighthouse)
+- ✅ T11: chủ dự án đo Lighthouse mobile bản production `/mo-da-doi/`: **SEO 100**, Accessibility 100, Performance 99, Best Practices 96 → đánh dấu xong.
+- ✅ T12: `/cong-trinh/` danh sách, lọc theo tỉnh (`?tinh=`) và nhóm danh mục (`?loai=`, gồm cả danh mục con) bằng form GET (chạy không cần JS, URL chia sẻ được), phân trang 9/trang (`?trang=`, trang vượt quá → trang cuối), trang lọc/phân trang `noindex,follow`; `/cong-trinh/[slug]/` chi tiết: tỉnh (link lọc), năm, danh mục, mô tả, ảnh bìa, nội dung, gallery + lightbox, CTA, Breadcrumb JSON-LD, `generateStaticParams`. Zod `schemas/project-filter.ts` (giá trị sai → bỏ qua). Seed thêm 4 ảnh gallery/công trình. `src/middleware.ts`: URL có chữ hoa → 308 về chữ thường.
+- 📁 File thay đổi: `src/app/(site)/cong-trinh/{page.tsx,[slug]/page.tsx}`, `src/components/site/project-list-controls.tsx`, `src/server/queries/projects.ts`, `src/schemas/project-filter.ts`, `src/middleware.ts`, `src/components/site/site-header.tsx`, `prisma/seed.ts`, `playwright.config.ts`, `next.config.ts`, `tests/unit/project-filter.test.ts`, `tests/e2e/{projects,slug-route}.spec.ts`.
+- 🐞 Lỗi / vấn đề: (1) Playwright từng **dùng lại server production cũ** người dùng bật ở cổng 3000 → 404 sai. (2) Dev server lỗi "Unexpected end of JSON input"/timeout khi test song song. → **E2E giờ chạy trên bản build production** riêng: `.next-e2e`, cổng 3100, không reuse server. (3) Windows không phân biệt hoa thường nên `/Mo-Da-Doi/` ra 200 (Vercel sẽ 404) → thêm middleware chuyển về chữ thường. (4) Logo header mất dấu ngã "Ẫ" do `truncate` + `leading-tight` cắt dấu chồng → `leading-normal py-1`.
+- 🧠 Quyết định quan trọng: bộ lọc "loại" theo **nhóm danh mục cấp 1**. `pnpm test:e2e` giờ tự build (~40 giây) — chậm hơn nhưng ổn định. Test: 59 unit + 47 e2e pass, chạy 2 lần liên tiếp đều xanh.
+- ⏭️ Bước tiếp theo: T13.
 
 ### 2026-11-26 — Chore: tự lưu font trong repo
 - ✅ Đã xong: theo quyết định của chủ dự án, thay `next/font/google` bằng `next/font/local` (`src/app/fonts.ts`) với file woff2 từ Fontsource (`src/fonts/`, kèm giấy phép OFL): Be Vietnam Pro 400/500/600 + Lora variable, mỗi họ tách face `latin` và `vietnamese` theo `unicode-range`. Cập nhật DESIGN.md §3. Đã kiểm tra trên trình duyệt: cả 4 face đều tải, chữ có dấu đúng font; 37 e2e pass; build OK.

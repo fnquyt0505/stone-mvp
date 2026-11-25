@@ -23,9 +23,9 @@ Làm theo thứ tự. Mỗi task đủ nhỏ để xong trong một phiên, có 
 
 ## Giai đoạn 2 — Nội dung cốt lõi
 - [x] **T10 Route `/[slug]`**: resolve Category hoặc Page; 404 nếu không có; `generateStaticParams`.
-- [ ] **T11 Trang danh mục**: Breadcrumb, H1, PriceRange, rich text, SpecTable, Gallery + lightbox, FAQ, danh mục liên quan, AuthorBox, QuoteForm; JSON-LD Breadcrumb + FAQPage.
-  _Xong khi:_ Lighthouse mobile SEO ≥ 95 trên trang mẫu `/mo-da-doi/`. — ⏳ Đã làm xong phần code (PR T11); **chưa đo Lighthouse thật** (lệnh bị chặn quyền), mới kiểm tra tương đương bằng `tests/e2e/seo-basics.spec.ts`.
-- [ ] **T12 Công trình**: danh sách có lọc tỉnh/loại (query string), phân trang; trang chi tiết có gallery.
+- [x] **T11 Trang danh mục**: Breadcrumb, H1, PriceRange, rich text, SpecTable, Gallery + lightbox, FAQ, danh mục liên quan, AuthorBox, QuoteForm; JSON-LD Breadcrumb + FAQPage.
+  _Xong khi:_ Lighthouse mobile SEO ≥ 95 trên trang mẫu `/mo-da-doi/`. — ✅ Đo 26/11 (chủ dự án, Chrome, mobile, bản production): SEO 100 · Accessibility 100 · Performance 99 · Best Practices 96.
+- [x] **T12 Công trình**: danh sách có lọc tỉnh/loại (query string), phân trang; trang chi tiết có gallery.
 - [ ] **T13 Blog & thư viện ảnh**: `/tin-tuc`, `/tin-tuc/[slug]` (Article JSON-LD), `/thu-vien-hinh-anh`.
 - [ ] **T14 Trang tĩnh**: Giới thiệu, Hướng dẫn đặt hàng (timeline 7 bước), Liên hệ (bản đồ + form), các trang chính sách.
 
