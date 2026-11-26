@@ -188,7 +188,8 @@ export function SettingsForm({ settings }: { settings: SiteSettings }) {
           Website đang dùng dữ liệu mẫu ([MẪU])
         </label>
         <p className="text-stone-700">
-          Bỏ chọn khi đã thay toàn bộ thông tin thật trước khi ra mắt.
+          Khi còn chọn, Google sẽ không lập chỉ mục website (robots.txt chặn toàn bộ). Bỏ chọn khi
+          đã thay toàn bộ thông tin thật và sẵn sàng ra mắt.
         </p>
       </FormSection>
 
