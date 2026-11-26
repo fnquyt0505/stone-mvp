@@ -21,8 +21,9 @@ test("filters by province and type with a shareable URL", async ({ page }) => {
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
 
   await page.goto("/cong-trinh/?loai=lang-mo-da");
-  // Mộ đá đôi + Lăng thờ đá + Khu lăng mộ đá are all children of "Lăng mộ đá".
-  await expect(page.locator("main article")).toHaveCount(3);
+  // Mộ đá đôi + Lăng thờ đá + Khu lăng mộ đá + Mộ đá đơn (granite sample) are all
+  // children of "Lăng mộ đá".
+  await expect(page.locator("main article")).toHaveCount(4);
   await page.getByRole("link", { name: "Xóa lọc" }).click();
   await expect(page).toHaveURL(/\/cong-trinh\/$/);
 });

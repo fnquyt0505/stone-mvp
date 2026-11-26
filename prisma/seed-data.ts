@@ -61,6 +61,30 @@ const child = (
   faqs: sampleFaqs,
 });
 
+const materialFaqs: Faq[] = [
+  {
+    q: "Có được xem mẫu đá thực tế trước khi đặt không?",
+    a: `${SAMPLE} Có. Quý khách có thể đến xưởng hoặc nhắn Zalo để nhận ảnh, video mẫu đá thực tế.`,
+  },
+  {
+    q: "Nên chọn loại đá nào cho công trình của gia đình?",
+    a: `${SAMPLE} Tùy công trình, khuôn viên và ngân sách. Chúng tôi tư vấn miễn phí trước khi báo giá.`,
+  },
+];
+
+/** A stone material: an introduction page, no price range. */
+const material = (slug: string, name: string, look: string, uses: string): SeedCategory => ({
+  slug,
+  name,
+  excerpt: `${SAMPLE} ${name}: ${look.toLowerCase()}. Phù hợp: ${uses.toLowerCase()}.`,
+  specs: [
+    { label: "Màu sắc, vân đá", value: `${SAMPLE} ${look}` },
+    { label: "Công trình phù hợp", value: `${SAMPLE} ${uses}` },
+    { label: "Hoàn thiện", value: `${SAMPLE} Mài bóng, mài mờ hoặc băm, chạm khắc thủ công` },
+  ],
+  faqs: materialFaqs,
+});
+
 export const CATEGORY_GROUPS: SeedGroup[] = [
   {
     slug: "lang-mo-da",
@@ -86,13 +110,36 @@ export const CATEGORY_GROUPS: SeedGroup[] = [
     ],
   },
   {
-    slug: "da-granite",
-    name: "Đá granite",
-    menuGroup: "Đá granite",
-    excerpt: `${SAMPLE} Mộ và bia mộ đá granite tự nhiên.`,
+    slug: "chat-lieu-da",
+    name: "Chất liệu đá",
+    menuGroup: "Chất liệu đá",
+    excerpt: `${SAMPLE} Giới thiệu các loại đá xưởng sử dụng: màu sắc, đặc điểm và công trình phù hợp.`,
     children: [
-      child("mo-da-granite", "Mộ đá granite", 25, 90, "Granite tự nhiên"),
-      child("bia-mo-granite", "Bia mộ granite", 2, 10, "Granite tự nhiên"),
+      material(
+        "da-xanh-den",
+        "Đá xanh đen",
+        "Xanh đen sẫm, mặt đá mịn",
+        "Lăng mộ, lăng thờ, cuốn thư",
+      ),
+      material(
+        "da-xanh-reu",
+        "Đá xanh rêu",
+        "Xanh ngả rêu, vẻ cổ kính",
+        "Mộ đá, lăng thờ, tượng đá",
+      ),
+      material(
+        "da-granite-an-do",
+        "Đá granite Ấn Độ",
+        "Nhiều màu (đen, đỏ, vàng…), mài bóng",
+        "Ốp mộ, bia mộ, bậc và mặt bàn thờ",
+      ),
+      material(
+        "da-van-may",
+        "Đá vân mây",
+        "Vân loang tự nhiên như mây",
+        "Mộ đá, lan can, ốp trang trí",
+      ),
+      material("da-trang", "Đá trắng", "Trắng sáng, vân nhẹ", "Tượng Phật, tượng thánh, linh vật"),
     ],
   },
   {
@@ -157,7 +204,7 @@ export const PROJECTS = [
     slug: "mau-mo-granite-hai-phong",
     title: "Mộ đá granite",
     province: "Hải Phòng",
-    categorySlug: "mo-da-granite",
+    categorySlug: "mo-da-don",
     featured: false,
   },
   {

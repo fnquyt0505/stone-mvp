@@ -6,7 +6,7 @@ Website giới thiệu và **thu lead** cho một xưởng chế tác đá mỹ 
 ## 2. Phân tích site tham chiếu (lamtao.vn)
 | Nhóm | Những gì site đang có | Ghi chú cho MVP |
 |---|---|---|
-| Danh mục sản phẩm | Mega menu 6 nhóm (Lăng mộ đá, Nhà thờ họ, Đá granite, Tượng đá, Đồ thờ đá, Kiến trúc đá), ~60 trang danh mục con | Làm danh mục 2 cấp, quản lý từ admin |
+| Danh mục sản phẩm | Mega menu 6 nhóm (Lăng mộ đá, Nhà thờ họ, Chất liệu đá, Tượng đá, Đồ thờ đá, Kiến trúc đá — "Chất liệu đá" thay "Đá granite" theo yêu cầu khách 26/11/2026: đá xanh đen, xanh rêu, granite Ấn Độ, vân mây, đá trắng), ~60 trang danh mục con | Làm danh mục 2 cấp, quản lý từ admin |
 | Trang danh mục | Breadcrumb, H1, đoạn giới thiệu + khoảng giá ("20–50 triệu"), bảng thông số, bài viết SEO dài, thư viện 60–70 ảnh, bảng kích thước Lỗ Ban, FAQ, thẻ danh mục liên quan ("giá từ…"), bài liên quan, hộp tác giả, bản đồ | Đây là "trang sản phẩm" thực sự — **không có trang chi tiết từng sản phẩm** |
 | Công trình | Bài dự án theo tỉnh, ảnh + mô tả | Làm module Dự án có lọc theo tỉnh/loại |
 | Uy tín | 3 đánh giá khách hàng, trang danh hiệu/thành tích | Module Testimonial + trang Giới thiệu |
