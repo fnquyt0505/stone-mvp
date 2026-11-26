@@ -5,7 +5,7 @@
 ## Trạng thái hiện tại
 - **Giai đoạn:** 5 — Hoàn thiện & ra mắt
 - **Task đang làm:** —
-- **Task tiếp theo:** T29 Deploy — **chờ chủ dự án** (tài khoản Vercel, Postgres production, tên miền, key Cloudinary/Turnstile/Resend). T27 chờ đo Lighthouse.
+- **Task tiếp theo:** T29 Deploy — website **đã chạy** tại https://stone-mvp.vercel.app; còn các việc trong danh sách *Việc cần làm tiếp sau deploy* (mục nhật ký mới nhất). T27 chờ đo Lighthouse.
 - **Chặn bởi:** Cần chủ dự án chốt tên thương hiệu, logo, hotline, Zalo, địa chỉ (có thể dùng `[MẪU]` để làm trước).
 
 ## Tổng quan
@@ -16,9 +16,23 @@
 | 2 Nội dung | T10–T14 | 5/5 |
 | 3 Thu lead | T15–T17 | 3/3 |
 | 4 Admin | T18–T25 | 8/8 |
-| 5 Ra mắt | T26–T30 | 3/5 (T27 chờ đo, T29 chờ tài khoản) |
+| 5 Ra mắt | T26–T30 | 3/5 (T27 chờ đo, T29 đã deploy, còn cấu hình) |
 
 ## Nhật ký
+
+### 2026-11-27 — T29 Deploy lần đầu lên Vercel + Neon
+- ✅ Đã xong: Neon (vùng Singapore) đã migrate + seed dữ liệu mẫu từ máy; Vercel project `stone-mvp` (Hobby) deploy thành công từ `main` với `DATABASE_URL`, `DIRECT_URL`, `AUTH_SECRET`, `NEXT_PUBLIC_SITE_URL`. Kiểm tra từ bên ngoài: `/`, `/mo-da-doi/`, `/cong-trinh/`, `/lien-he/`, `/admin/login/`, `/sitemap.xml` trả 200 (~1 giây); canonical đúng `https://stone-mvp.vercel.app`; `robots.txt` chặn toàn site (còn dữ liệu mẫu); `/admin` có `X-Robots-Tag: noindex`.
+- 🐞 Lỗi / vấn đề: migrate lần đầu lỗi `P1001` do Neon "ngủ" → thêm `&connect_timeout=30` vào cả hai chuỗi kết nối.
+- ⏭️ Việc cần làm tiếp sau deploy (chủ dự án):
+  - [ ] Đăng nhập admin trên production và gửi thử form báo giá → thấy trong **Yêu cầu báo giá**.
+  - [ ] **Cloudinary**: thêm `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET` vào Vercel → Redeploy (chưa có thì admin không tải ảnh lên được).
+  - [ ] **Turnstile**: Cloudflare → Turnstile → Add site (`stone-mvp.vercel.app`) → thêm `TURNSTILE_SITE_KEY`, `TURNSTILE_SECRET_KEY` vào Vercel → Redeploy.
+  - [ ] **Đổi mật khẩu Neon** (đã lộ trong ảnh chụp màn hình) → cập nhật `DATABASE_URL`, `DIRECT_URL` trên Vercel → Redeploy. Đổi mật khẩu admin production thành mật khẩu mạnh.
+  - [ ] Trả `.env` trên máy về Postgres local (`postgresql://stone:stone@localhost:5432/stone_mvp?schema=public` cho cả `DATABASE_URL` và `DIRECT_URL`).
+  - [ ] Tùy chọn: email báo lead qua Resend (`RESEND_API_KEY`, `LEAD_NOTIFY_EMAIL`, `LEAD_NOTIFY_FROM`), Telegram, GA4 (`NEXT_PUBLIC_GA_ID`).
+  - [ ] Gắn tên miền riêng (Vercel → Settings → Domains) → đổi `NEXT_PUBLIC_SITE_URL`, thêm tên miền vào Turnstile → Redeploy.
+  - [ ] Đo Lighthouse trên production cho T27 (`/`, `/mo-da-doi/`, `/cong-trinh/`, `/lien-he/`).
+- 🧠 Quyết định quan trọng: T29 chỉ đánh dấu `[x]` khi xong tên miền + GA4 (đúng phạm vi task).
 
 ### 2026-11-27 — T29 (chuẩn bị) Deploy Vercel + Neon
 - ✅ Đã xong: Prisma `directUrl = env("DIRECT_URL")` (Neon: `DATABASE_URL` = chuỗi pooled, `DIRECT_URL` = chuỗi trực tiếp cho migration; local/CI dùng cùng một chuỗi); script `vercel-build` = `prisma migrate deploy && next build` (Vercel tự chạy migration mỗi lần deploy); `vercel.json` đặt vùng `sin1` (Singapore, cùng vùng Neon); hướng dẫn từng bước `docs/DEPLOY.md` (tạo Neon → migrate + seed từ máy → biến môi trường → import vào Vercel → kiểm tra → tên miền → sự cố thường gặp); cập nhật README, ARCHITECTURE, `.env.example`, CI.
