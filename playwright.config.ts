@@ -7,7 +7,7 @@ const BASE_URL = `http://localhost:${PORT}`;
 const channel = process.env.CI ? undefined : (process.env.E2E_CHANNEL ?? "msedge");
 /** Specs that write to the database (admin CRUD, form submissions, uploads). */
 const WRITE_SPECS =
-  /(admin-(auth|categories|content|images|leads|misc)|lead|quote-popup|rich-text-editor)\.spec\.ts$/;
+  /(admin-(auth|categories|content|images|leads|misc)|journey|lead|quote-popup|rich-text-editor)\.spec\.ts$/;
 
 export default defineConfig({
   testDir: "tests/e2e",

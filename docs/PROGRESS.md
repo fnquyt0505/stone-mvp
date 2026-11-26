@@ -5,7 +5,7 @@
 ## Trạng thái hiện tại
 - **Giai đoạn:** 5 — Hoàn thiện & ra mắt
 - **Task đang làm:** —
-- **Task tiếp theo:** T28 Test E2E (T27 chờ đo Lighthouse)
+- **Task tiếp theo:** T29 Deploy (T27 chờ đo Lighthouse)
 - **Chặn bởi:** Cần chủ dự án chốt tên thương hiệu, logo, hotline, Zalo, địa chỉ (có thể dùng `[MẪU]` để làm trước).
 
 ## Tổng quan
@@ -16,9 +16,16 @@
 | 2 Nội dung | T10–T14 | 5/5 |
 | 3 Thu lead | T15–T17 | 3/3 |
 | 4 Admin | T18–T25 | 8/8 |
-| 5 Ra mắt | T26–T30 | 1/5 |
+| 5 Ra mắt | T26–T30 | 2/5 |
 
 ## Nhật ký
+
+### 2026-11-27 — T28 Test E2E (Playwright) + e2e trong CI
+- ✅ Đã xong: `tests/e2e/journey.spec.ts` — luồng nghiệp vụ chính: khách (điện thoại) mở `/mo-da-doi/` → gửi form báo giá tại trang (loại sản phẩm chọn sẵn, Turnstile) → nhân viên (desktop) đăng nhập, thấy lead ở dashboard + danh sách (Mới, đúng loại sản phẩm/tỉnh) → chuyển "Đã báo giá" + ghi chú → kiểm tra DB và bộ lọc. **E2E chạy trong CI**: `.github/workflows/ci.yml` cài Chromium, chạy `pnpm test:e2e` sau build (Postgres service đã seed, key test Turnstile công khai của Cloudflare), tải báo cáo Playwright khi lỗi — **PR có e2e đỏ sẽ không tự merge**. Trong CI bỏ ngưỡng LCP (máy chủ chung dao động), giữ ngưỡng CLS/JS. Tổng: 143 unit + 160 e2e.
+- 📁 File thay đổi: `tests/e2e/{journey,performance}.spec.ts`, `playwright.config.ts`, `.github/workflows/ci.yml`.
+- 🐞 Lỗi / vấn đề: không có.
+- 🧠 Quyết định quan trọng: CI chạy e2e trên Chromium của Playwright (local dùng Edge) — cùng engine.
+- ⏭️ Bước tiếp theo: T29 (cần tài khoản Vercel, Postgres production, tên miền, các key dịch vụ — **cần chủ dự án**).
 
 ### 2026-11-27 — T27 Hiệu năng & truy cập (chờ đo Lighthouse)
 - ✅ Đã xong: `tests/e2e/a11y.spec.ts` — **axe-core** (bộ máy chấm Accessibility của Lighthouse) trên 12 trang (site + đăng nhập admin) × desktop/mobile, quy tắc WCAG 2.1 A/AA + best-practice, **mọi lỗi trên mức "minor" làm test đỏ** → hiện 0 lỗi. Sửa 2 lỗi mức trung bình: TopBar và cột nút liên hệ nổi nằm ngoài landmark → thành `<aside>` có nhãn; danh sách Công trình/Tin tức nhảy từ H1 xuống H3 → thêm H2 ẩn (`sr-only`). `tests/e2e/performance.spec.ts` — bản production, giả lập điện thoại (4G chậm 150 ms/1,6 Mbps, CPU chậm 4×): `/` LCP 1,33 s · CLS 0 · JS 216 KB; `/mo-da-doi/` 1,44 s · 0,05 · 229 KB; `/cong-trinh/` 1,18 s · 0 · 219 KB; `/lien-he/` 1,18 s · 0 · 218 KB; ngân sách: CLS < 0,1, LCP < 4 s, JS nén < 260 KB. Thêm devDependency `@axe-core/playwright`. 143 unit + 159 e2e pass.
