@@ -43,7 +43,7 @@ Làm theo thứ tự. Mỗi task đủ nhỏ để xong trong một phiên, có 
 - [x] **T22 Rich text editor**: Tiptap (heading, list, bảng, ảnh, link) + renderer phía site đã sanitize.
 - [x] **T23 CRUD Danh mục**: cha/con, thứ tự, specs, FAQs, gallery sắp xếp kéo-thả, SEO; kiểm tra slug trùng với Page; `revalidateTag`.
 - [x] **T24 CRUD Công trình, Bài viết, Trang tĩnh**.
-- [ ] **T25 CRUD Đánh giá, Banner, Cài đặt site**.
+- [x] **T25 CRUD Đánh giá, Banner, Cài đặt site**.
 
 ## Giai đoạn 5 — Hoàn thiện & ra mắt
 - [ ] **T26 SEO kỹ thuật**: `sitemap.ts`, `robots.ts`, LocalBusiness JSON-LD, canonical, OG image mặc định, redirect 301 cho slug cũ (nếu migrate).
