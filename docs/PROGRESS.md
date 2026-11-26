@@ -24,8 +24,8 @@
 - ✅ Đã xong: seed thay nhóm `da-granite` (Mộ đá granite, Bia mộ granite) bằng `chat-lieu-da` gồm 5 trang giới thiệu chất liệu: Đá xanh đen, Đá xanh rêu, Đá granite Ấn Độ, Đá vân mây, Đá trắng (`/da-xanh-den/`, `/da-xanh-reu/`, `/da-granite-an-do/`, `/da-van-may/`, `/da-trang/`), không có giá, có thông số + FAQ mẫu. **Trang nhóm** (mọi nhóm, ví dụ `/chat-lieu-da/`, `/lang-mo-da/`) giờ hiện lưới mục con có ảnh "… nổi bật" ngay dưới tiêu đề, thay khối "Các dòng sản phẩm" ở cuối trang. Thẻ không có giá hiện "Xem chi tiết" thay vì "Giá: Liên hệ". Công trình mẫu "Mộ đá granite" chuyển sang danh mục Mộ đá đơn. Thêm e2e cho `/chat-lieu-da/`.
 - 🐞 Lỗi / vấn đề: seed không bao giờ xóa dữ liệu → trên production (Neon) nhóm "Đá granite" cũ vẫn còn.
 - ⏭️ Việc cần làm trên production (chủ dự án), chọn một cách:
-  - [ ] **Cách 1 (nhanh)**: chạy `pnpm db:seed` vào Neon như lần đầu (tài khoản admin không bị đổi) → vào admin **Danh mục** xóa "Mộ đá granite", "Bia mộ granite", rồi xóa nhóm "Đá granite".
-  - [ ] **Cách 2 (chỉ dùng admin)**: sửa nhóm "Đá granite" thành "Chất liệu đá", sửa 2 mục con thành 2 chất liệu, thêm 3 chất liệu còn lại, gắn ảnh đại diện cho từng mục.
+  - [x] **Cách 1 (nhanh)**: chạy `pnpm db:seed` vào Neon như lần đầu (tài khoản admin không bị đổi) → vào admin **Danh mục** xóa "Mộ đá granite", "Bia mộ granite", rồi xóa nhóm "Đá granite". — ✅ 27/11: đã seed + xóa; kiểm tra ngoài: `/chat-lieu-da/` và 5 trang chất liệu trả 200, `/da-granite/`, `/mo-da-granite/`, `/bia-mo-granite/` trả 404. (Sitemap tự làm mới sau ≤ 1 giờ.)
+  - [ ] ~~**Cách 2 (chỉ dùng admin)**~~ (không cần — đã dùng cách 1): sửa nhóm "Đá granite" thành "Chất liệu đá", sửa 2 mục con thành 2 chất liệu, thêm 3 chất liệu còn lại, gắn ảnh đại diện cho từng mục.
   - [ ] Thay ảnh `[MẪU]` bằng ảnh thật của từng loại đá (ảnh đại diện = ảnh trong lưới "nổi bật").
 
 ### 2026-11-27 — T29 Deploy lần đầu lên Vercel + Neon
