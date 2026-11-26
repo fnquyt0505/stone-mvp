@@ -5,7 +5,7 @@
 ## Trạng thái hiện tại
 - **Giai đoạn:** 5 — Hoàn thiện & ra mắt
 - **Task đang làm:** —
-- **Task tiếp theo:** T27 Hiệu năng & truy cập
+- **Task tiếp theo:** T28 Test E2E (T27 chờ đo Lighthouse)
 - **Chặn bởi:** Cần chủ dự án chốt tên thương hiệu, logo, hotline, Zalo, địa chỉ (có thể dùng `[MẪU]` để làm trước).
 
 ## Tổng quan
@@ -19,6 +19,13 @@
 | 5 Ra mắt | T26–T30 | 1/5 |
 
 ## Nhật ký
+
+### 2026-11-27 — T27 Hiệu năng & truy cập (chờ đo Lighthouse)
+- ✅ Đã xong: `tests/e2e/a11y.spec.ts` — **axe-core** (bộ máy chấm Accessibility của Lighthouse) trên 12 trang (site + đăng nhập admin) × desktop/mobile, quy tắc WCAG 2.1 A/AA + best-practice, **mọi lỗi trên mức "minor" làm test đỏ** → hiện 0 lỗi. Sửa 2 lỗi mức trung bình: TopBar và cột nút liên hệ nổi nằm ngoài landmark → thành `<aside>` có nhãn; danh sách Công trình/Tin tức nhảy từ H1 xuống H3 → thêm H2 ẩn (`sr-only`). `tests/e2e/performance.spec.ts` — bản production, giả lập điện thoại (4G chậm 150 ms/1,6 Mbps, CPU chậm 4×): `/` LCP 1,33 s · CLS 0 · JS 216 KB; `/mo-da-doi/` 1,44 s · 0,05 · 229 KB; `/cong-trinh/` 1,18 s · 0 · 219 KB; `/lien-he/` 1,18 s · 0 · 218 KB; ngân sách: CLS < 0,1, LCP < 4 s, JS nén < 260 KB. Thêm devDependency `@axe-core/playwright`. 143 unit + 159 e2e pass.
+- 📁 File thay đổi: `src/components/site/{top-bar,contact-actions}.tsx`, `src/app/(site)/{cong-trinh,tin-tuc}/page.tsx`, `tests/e2e/{a11y,performance,contact-actions}.spec.ts`, `package.json`.
+- 🐞 Lỗi / vấn đề: không chạy được Lighthouse CLI (bị chặn quyền) → dùng axe-core + đo Web Vitals bằng Playwright làm kiểm tra tương đương; **ô T27 chưa đánh dấu cho tới khi chủ dự án đo Lighthouse thật** trên `/`, `/mo-da-doi/`, `/cong-trinh/`, `/lien-he/`.
+- 🧠 Quyết định quan trọng: test hiệu năng dùng ngưỡng LCP rộng (4 s) vì máy local dao động; ngưỡng CLS và dung lượng JS là chặt.
+- ⏭️ Bước tiếp theo: T28.
 
 ### 2026-11-27 — T26 SEO kỹ thuật
 - ✅ Đã xong: `app/sitemap.ts` (`server/queries/sitemap.ts`): trang chủ + 5 trang cố định, danh mục đã hiện (con ưu tiên 0.9), công trình đã hiện, bài đã đăng (không gồm nháp/hẹn giờ), trang tĩnh; URL tuyệt đối có `/` cuối, `lastmod` từ `updatedAt`, làm mới mỗi giờ. `app/robots.ts` (`lib/robots-rules.ts`): chặn `/admin/`, `/api/`, `/dev/`, khai báo sitemap; **khi SiteSetting `isSampleData` = true thì chặn toàn site** (tránh Google lập chỉ mục nội dung `[MẪU]`), có ghi chú trong trang Cài đặt. **Ảnh OG mặc định** `public/og-default.jpg` (1200×630, tự tạo, không có thương hiệu/số liệu) cho trang không có ảnh bìa; Twitter card luôn `summary_large_image`. Canonical + LocalBusiness/Breadcrumb/FAQ/Article JSON-LD đã có từ T05–T13. 3 unit + 3 e2e mới → 143 unit + 131 e2e pass.

@@ -19,7 +19,7 @@ test.describe("floating contact (desktop)", () => {
     await mockGtag(page);
     await page.goto("/");
 
-    const floating = page.getByRole("group", { name: "Liên hệ nhanh" });
+    const floating = page.getByRole("complementary", { name: "Liên hệ nhanh" });
     const call = floating.getByRole("link", { name: /^Gọi ngay \d/ });
     await expect(call).toHaveAttribute("href", /^tel:\+84\d{9}$/);
     const zalo = floating.getByRole("link", { name: "Nhắn tin Zalo" });

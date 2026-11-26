@@ -42,6 +42,7 @@ export default async function PostsPage({ searchParams }: Props) {
       <h1 className="mt-4">{TITLE}</h1>
       <p className="mt-4 max-w-prose text-lg text-stone-700">{DESCRIPTION}</p>
 
+      <h2 className="sr-only">Danh sách bài viết</h2>
       {items.length ? (
         <ul className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {items.map((p) => (
