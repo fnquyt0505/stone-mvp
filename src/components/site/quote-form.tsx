@@ -14,7 +14,7 @@ import { TurnstileWidget, type TurnstileHandle } from "./turnstile-widget";
 export type CategoryOptionGroup = { name: string; options: { id: string; name: string }[] };
 
 const FIELD =
-  "w-full rounded-md border border-stone-500 bg-white px-3 text-base text-stone-900 placeholder:text-stone-500 aria-[invalid=true]:border-red-600";
+  "w-full rounded-md border border-stone-500 bg-white px-3 text-stone-900 placeholder:text-stone-500 aria-[invalid=true]:border-red-600";
 export function QuoteForm({
   categories,
   defaultCategoryId,

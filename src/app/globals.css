@@ -148,6 +148,12 @@
   h3 {
     @apply text-h3 md:text-h3-lg;
   }
+  /* Single-line controls clip text to their line box; stacked capital diacritics
+     (Ẫ, Ỗ) in Be Vietnam Pro need ~3× the font size. Inputs have fixed heights. */
+  input,
+  select {
+    line-height: 3;
+  }
   :focus-visible {
     @apply outline-2 outline-offset-2 outline-gold-600;
   }

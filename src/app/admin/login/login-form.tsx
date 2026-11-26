@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import type { LoginState } from "@/schemas/auth";
 import { login } from "@/server/actions/auth";
 
-const FIELD = "h-12 w-full rounded-md border border-stone-500 bg-white px-3 text-base";
+const FIELD = "h-12 w-full rounded-md border border-stone-500 bg-white px-3";
 
 export function LoginForm({ next }: { next: string }) {
   const [state, action, pending] = useActionState<LoginState, FormData>(login, {

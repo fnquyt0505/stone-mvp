@@ -12,16 +12,27 @@ import {
 import { listPickerImages, type PickerImage } from "@/server/actions/image-picker";
 import { ImageUploader } from "./image-uploader";
 
-/** Choose an image from the library (or upload new ones) to insert. */
+/**
+ * Choose an image from the library (or upload new ones). With `onPickMany`,
+ * every uploaded image is returned and the dialog stays open for more picks.
+ */
 export function ImagePickerDialog({
   open,
   onOpenChange,
   onPick,
+  onPickMany,
+  title = "Chèn ảnh",
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onPick: (image: PickerImage) => void;
+  onPick?: (image: PickerImage) => void;
+  onPickMany?: (images: PickerImage[]) => void;
+  title?: string;
 }) {
+  const pick = (imgs: PickerImage[]) => {
+    if (onPickMany) onPickMany(imgs);
+    else if (imgs[0]) onPick?.(imgs[0]);
+  };
   const [images, setImages] = useState<PickerImage[]>([]);
   const [query, setQuery] = useState("");
   const [pending, startTransition] = useTransition();
@@ -39,14 +50,14 @@ export function ImagePickerDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-h-[90dvh] w-[calc(100%-1.5rem)] max-w-4xl overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="pr-10 text-xl leading-snug">Chèn ảnh</DialogTitle>
+          <DialogTitle className="pr-10 text-xl leading-snug">{title}</DialogTitle>
           <DialogDescription>Chọn ảnh có sẵn hoặc tải ảnh mới lên.</DialogDescription>
         </DialogHeader>
 
         <details className="rounded-lg border p-3">
           <summary className="cursor-pointer font-semibold">Tải ảnh mới</summary>
           <div className="mt-3">
-            <ImageUploader onUploaded={(saved) => saved[0] && onPick(saved[0])} />
+            <ImageUploader onUploaded={(saved) => pick(saved)} />
           </div>
         </details>
 
@@ -65,7 +76,7 @@ export function ImagePickerDialog({
             <li key={img.id}>
               <button
                 type="button"
-                onClick={() => onPick(img)}
+                onClick={() => pick([img])}
                 className="grid w-full gap-1 rounded-md border bg-white p-1 text-left hover:border-jade-700"
               >
                 <span className="relative block aspect-square overflow-hidden rounded bg-stone-200">

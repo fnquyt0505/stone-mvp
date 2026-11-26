@@ -4,7 +4,7 @@ import type { ProjectFilter } from "@/schemas/project-filter";
 import type { FilterOption } from "@/server/queries/projects";
 
 const SELECT =
-  "h-12 w-full rounded-md border border-stone-500 bg-white px-3 text-base text-stone-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-600";
+  "h-12 w-full rounded-md border border-stone-500 bg-white px-3 text-stone-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-600";
 
 /** Plain GET form so filtering works without JavaScript and URLs are shareable. */
 export function ProjectFilterForm({

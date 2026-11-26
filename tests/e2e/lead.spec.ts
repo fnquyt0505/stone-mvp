@@ -138,3 +138,14 @@ test("keeps typed values after an error and keeps the source page on retry", asy
     utm: { source: "zalo" },
   });
 });
+
+test("form inputs leave room for stacked Vietnamese diacritics", async ({ page }) => {
+  await page.goto("/lien-he/");
+  const name = page.getByRole("form", { name: "Yêu cầu báo giá" }).getByLabel(/Họ và tên/);
+  // Single-line inputs clip to their line box: ≥ 3 × font size keeps Ẫ/Ỗ visible.
+  const ratio = await name.evaluate((el) => {
+    const style = getComputedStyle(el);
+    return parseFloat(style.lineHeight) / parseFloat(style.fontSize);
+  });
+  expect(ratio).toBeGreaterThanOrEqual(3);
+});
