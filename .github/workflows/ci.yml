@@ -34,6 +34,7 @@ jobs:
           --health-retries 10
     env:
       DATABASE_URL: postgresql://ci:ci@localhost:5432/stone_ci?schema=public
+      DIRECT_URL: postgresql://ci:ci@localhost:5432/stone_ci?schema=public
       NEXT_PUBLIC_SITE_URL: http://localhost:3000
       # CI-only throwaway credentials for the seeded admin; not a real secret.
       SEED_ADMIN_EMAIL: ci-admin@example.com

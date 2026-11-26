@@ -3,6 +3,7 @@
 Website giới thiệu và **thu yêu cầu báo giá** cho xưởng chế tác đá mỹ nghệ: lăng mộ đá, nhà thờ họ, tượng đá, đồ thờ, kiến trúc đá. Khách không mua online — mọi trang dẫn tới 3 hành động: **gọi, nhắn Zalo, gửi form báo giá**.
 
 - Hướng dẫn cho nhân viên dùng trang quản trị: [`docs/HUONG-DAN-ADMIN.md`](docs/HUONG-DAN-ADMIN.md)
+- Hướng dẫn deploy lên Vercel + Neon: [`docs/DEPLOY.md`](docs/DEPLOY.md)
 - Tài liệu sản phẩm / kỹ thuật: [`docs/`](docs/) (PRD, ARCHITECTURE, DESIGN, RULES, TASKS, PROGRESS)
 - Quy ước cho AI agent: [`AGENTS.md`](AGENTS.md)
 
@@ -64,7 +65,8 @@ Xem đầy đủ trong [`.env.example`](.env.example).
 
 | Biến | Bắt buộc ở production | Ghi chú |
 |---|---|---|
-| `DATABASE_URL` | ✅ | PostgreSQL (Neon / Supabase…) |
+| `DATABASE_URL` | ✅ | PostgreSQL — Neon: chuỗi **pooled** (`-pooler`) |
+| `DIRECT_URL` | ✅ | Chuỗi kết nối trực tiếp cho migration (local: giống `DATABASE_URL`) |
 | `AUTH_SECRET` | ✅ | Chuỗi bí mật riêng cho production |
 | `NEXT_PUBLIC_SITE_URL` | ✅ | Ví dụ `https://ten-mien.vn` (dùng cho canonical, sitemap) |
 | `CLOUDINARY_CLOUD_NAME` / `_API_KEY` / `_API_SECRET` | ✅ | Upload ảnh |
@@ -76,7 +78,7 @@ Xem đầy đủ trong [`.env.example`](.env.example).
 
 ## Trước khi ra mắt (checklist)
 
-1. Tạo Postgres production, đặt toàn bộ biến môi trường trên Vercel, chạy `prisma migrate deploy` và seed lần đầu (để có admin).
+1. Deploy theo [`docs/DEPLOY.md`](docs/DEPLOY.md) (Neon + Vercel; migration tự chạy mỗi lần deploy qua script `vercel-build`).
 2. Đăng nhập admin → **Cài đặt**: tên thương hiệu, hotline, Zalo, email, địa chỉ, giờ làm, bản đồ, mạng xã hội, thành tích thật, người biên soạn.
 3. Thay toàn bộ nội dung `[MẪU]`: danh mục, công trình (ảnh thật), bài viết, trang tĩnh, đánh giá thật, banner.
 4. **Nhờ người có chuyên môn rà soát** các trang chính sách (bảo mật, điều khoản, cookie, miễn trừ).
