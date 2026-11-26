@@ -23,6 +23,7 @@
 ### 2026-11-27 — T30 Bàn giao (tài liệu)
 - ✅ Đã xong: `README.md` (giới thiệu, chạy trên máy, lệnh, quy trình PR + CI, cấu trúc thư mục, bảng biến môi trường, **checklist trước khi ra mắt**); `docs/HUONG-DAN-ADMIN.md` cho nhân viên (đăng nhập, tổng quan, xử lý yêu cầu báo giá + bảng trạng thái, danh mục, công trình, bài viết nháp/hẹn giờ, trang tĩnh, đánh giá/banner/thư viện ảnh, soạn nội dung, cài đặt, xử lý sự cố) — ngôn ngữ đời thường, không thuật ngữ.
 - 📁 File thay đổi: `README.md`, `docs/HUONG-DAN-ADMIN.md`, `docs/TASKS.md`, `docs/PROGRESS.md`.
+- 🐞 Lỗi / vấn đề: CI (máy chậm) cho thấy **lỗi UX thật** của trình soạn thảo — bấm nút định dạng bằng chuột làm mất focus nên phím đầu tiên gõ ngay sau đó bị mất → nút công cụ chặn `mousedown` (giữ focus/vùng chọn trong ô soạn thảo; bàn phím vẫn Tab tới nút bình thường).
 - 🧠 Quyết định quan trọng: làm T30 trước T29 vì T29 cần tài khoản/khóa của chủ dự án; phần deploy cụ thể (tên miền, nhà cung cấp DB) sẽ cập nhật vào README sau T29.
 - ⏭️ Bước tiếp theo: T29 — cần chủ dự án cung cấp/quyết định.
 
