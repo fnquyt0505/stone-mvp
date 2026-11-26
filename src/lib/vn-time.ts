@@ -39,3 +39,18 @@ export function vnDateEnd(isoDate: string): Date | null {
   const start = vnDateStart(isoDate);
   return start ? new Date(start.getTime() + DAY_MS) : null;
 }
+
+/** "2026-11-27T09:30" typed in Vietnam time -> UTC Date; null when empty/invalid. */
+export function vnLocalInputToDate(value: string): Date | null {
+  const m = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})$/.exec(value.trim());
+  if (!m) return null;
+  const utc = Date.UTC(Number(m[1]), Number(m[2]) - 1, Number(m[3]), Number(m[4]), Number(m[5]));
+  return new Date(utc - VN_OFFSET_MS);
+}
+
+/** UTC Date -> "YYYY-MM-DDTHH:mm" in Vietnam time, for <input type="datetime-local">. */
+export function dateToVnLocalInput(date: Date | string | null): string {
+  if (!date) return "";
+  const vn = new Date(new Date(date).getTime() + VN_OFFSET_MS);
+  return vn.toISOString().slice(0, 16);
+}

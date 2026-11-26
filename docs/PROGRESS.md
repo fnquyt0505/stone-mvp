@@ -5,7 +5,7 @@
 ## Trạng thái hiện tại
 - **Giai đoạn:** 4 — Admin
 - **Task đang làm:** —
-- **Task tiếp theo:** T24 CRUD Công trình, Bài viết, Trang tĩnh
+- **Task tiếp theo:** T25 CRUD Đánh giá, Banner, Cài đặt site
 - **Chặn bởi:** Cần chủ dự án chốt tên thương hiệu, logo, hotline, Zalo, địa chỉ (có thể dùng `[MẪU]` để làm trước).
 
 ## Tổng quan
@@ -15,10 +15,17 @@
 | 1 Khung site | T06–T09 | 4/4 |
 | 2 Nội dung | T10–T14 | 5/5 |
 | 3 Thu lead | T15–T17 | 3/3 |
-| 4 Admin | T18–T25 | 6/8 |
+| 4 Admin | T18–T25 | 7/8 |
 | 5 Ra mắt | T26–T30 | 0/5 |
 
 ## Nhật ký
+
+### 2026-11-27 — T24 CRUD Công trình, Bài viết, Trang tĩnh
+- ✅ Đã xong: **Công trình** (`/admin/projects/`): tên + đường dẫn tự sinh, tỉnh (34 tỉnh, bắt buộc), loại sản phẩm (nhóm/con), ngày hoàn thành, tóm tắt, ảnh bìa, tiêu biểu, nội dung (editor), thư viện ảnh kéo-thả, SEO, hiện/ẩn. **Bài viết** (`/admin/posts/`): tiêu đề, đường dẫn, **ngày giờ đăng theo giờ VN** (trống = nháp; tương lai = hẹn giờ; danh sách hiện "Nháp" / "Hẹn đăng …" / "Đã đăng"), tóm tắt, ảnh bìa, nội dung, SEO; tác giả = người tạo. **Trang tĩnh** (`/admin/pages/`): tiêu đề, đường dẫn, nội dung, SEO. Server Action `server/actions/admin-content.ts` (`requireStaff`, Zod `schemas/admin-content.ts`, đường dẫn không trùng; trang không trùng danh mục; ảnh/danh mục phải tồn tại; gallery trong transaction; `revalidateTag` projects/posts/pages + đường dẫn cũ/mới). **Đường dẫn dành riêng** (`lib/reserved-slugs.ts`: lien-he, cong-trinh, tin-tuc, thu-vien-hinh-anh, huong-dan-dat-hang, admin, api…) bị chặn cho trang tĩnh **và danh mục** (trước đó danh mục/trang trùng route có sẵn sẽ không bao giờ hiển thị). Phần dùng chung: `schemas/admin-shared.ts`, hook `useAdminForm` + `FormMessage`/`FormActions`/`SavedNotice`, `TitleSlugFields`, `ListHeader`/`EditHeader`/`StatusPill`, `vnLocalInputToDate`/`dateToVnLocalInput`. 7 unit + 4 e2e mới → 127 unit + 124 e2e pass.
+- 📁 File thay đổi: `src/app/admin/(panel)/{projects,posts,pages}/**`, `src/components/admin/{use-admin-form,title-slug-fields,admin-page-header}.tsx`, `src/server/{actions/admin-content,actions/admin-category,queries/admin-content}.ts`, `src/schemas/{admin-content,admin-shared}.ts`, `src/lib/{reserved-slugs,vn-time}.ts`, `tests/unit/admin-content-schema.test.ts`, `tests/e2e/admin-content.spec.ts`.
+- 🐞 Lỗi / vấn đề: phát hiện lỗ hổng logic: đường dẫn danh mục/trang trùng route có sẵn → đã chặn.
+- 🧠 Quyết định quan trọng: bài viết không có ô "hiển thị" riêng — dùng ngày đăng (trống = nháp) cho đơn giản; trang tĩnh luôn hiển thị (muốn ẩn thì xóa).
+- ⏭️ Bước tiếp theo: T25.
 
 ### 2026-11-27 — T23 CRUD Danh mục
 - ✅ Đã xong: `/admin/categories/` dạng cây (nhóm → con, trạng thái hiện/ẩn, khoảng giá, số ảnh, thứ tự, link xem site); `/admin/categories/new/` + `/admin/categories/[id]/`: tên (tự sinh đường dẫn khi tạo mới), đường dẫn, nhóm cha, tên cột menu, mô tả ngắn, **giá nhập theo triệu** ("1,5" được), ảnh bìa, nội dung (editor T22), **bảng thông số** + **FAQ** (thêm/xóa/lên/xuống), **thư viện ảnh kéo-thả** (+ nút Lên/Xuống cho bàn phím, chú thích từng ảnh, chọn nhiều ảnh/upload mới), SEO, thứ tự, hiện/ẩn. Server Action `saveCategory`/`deleteCategory` (`requireStaff`, Zod `schemas/admin-category.ts`): **đường dẫn không trùng danh mục khác hoặc trang tĩnh**, chỉ 2 cấp (nhóm có con không thể thành con), ảnh phải tồn tại, gallery lưu trong transaction, nội dung qua bộ lọc T22, `revalidateTag("categories")` + đường dẫn cũ/mới → site và menu cập nhật ngay. Xóa có xác nhận, chặn xóa nhóm còn danh mục con (công trình/lead giữ nguyên, chỉ bỏ liên kết). Component dùng chung cho T24: `Field`/`FormSection`, `RowsEditor`, `GalleryEditor`, `CoverImageField`, `SeoVisibilityFields`. 4 unit + 4 e2e mới → 120 unit + 120 e2e pass.

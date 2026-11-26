@@ -2,6 +2,7 @@
 
 import { revalidatePath, revalidateTag } from "next/cache";
 import type { Prisma } from "@prisma/client";
+import { isReservedSlug } from "@/lib/reserved-slugs";
 import {
   categoryFormInput,
   categoryInputSchema,
@@ -45,6 +46,9 @@ export async function saveCategory(formData: FormData): Promise<SaveCategoryResu
       })
     : null;
   if (v.id && !existing) return { ok: false, message: "Không tìm thấy danh mục này." };
+
+  if (isReservedSlug(v.slug))
+    return fail("slug", "Đường dẫn này dành cho trang có sẵn của website.");
 
   // Slugs are shared by /[slug] for categories and static pages.
   const [slugCategory, slugPage] = await Promise.all([

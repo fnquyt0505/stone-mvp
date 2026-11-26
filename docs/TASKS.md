@@ -42,7 +42,7 @@ Làm theo thứ tự. Mỗi task đủ nhỏ để xong trong một phiên, có 
 - [x] **T21 Upload ảnh**: `/api/upload` ký Cloudinary, ImageUploader kéo-thả nhiều ảnh, bắt buộc alt.
 - [x] **T22 Rich text editor**: Tiptap (heading, list, bảng, ảnh, link) + renderer phía site đã sanitize.
 - [x] **T23 CRUD Danh mục**: cha/con, thứ tự, specs, FAQs, gallery sắp xếp kéo-thả, SEO; kiểm tra slug trùng với Page; `revalidateTag`.
-- [ ] **T24 CRUD Công trình, Bài viết, Trang tĩnh**.
+- [x] **T24 CRUD Công trình, Bài viết, Trang tĩnh**.
 - [ ] **T25 CRUD Đánh giá, Banner, Cài đặt site**.
 
 ## Giai đoạn 5 — Hoàn thiện & ra mắt
