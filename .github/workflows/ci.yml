@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   check:
-    name: Lint, typecheck, test, build
+    name: Lint, typecheck, test, build, e2e
     runs-on: ubuntu-latest
     # Throwaway database so `next build` can prerender pages that read from Postgres.
     services:
@@ -39,6 +39,9 @@ jobs:
       SEED_ADMIN_EMAIL: ci-admin@example.com
       SEED_ADMIN_PASSWORD: ci-only-password-not-secret
       AUTH_SECRET: ci-only-auth-secret-not-used-in-production
+      # Cloudflare's public Turnstile test keys (always pass) — not secrets.
+      TURNSTILE_SITE_KEY: 1x00000000000000000000AA
+      TURNSTILE_SECRET_KEY: 1x0000000000000000000000000000000AA
     steps:
       - uses: actions/checkout@v4
 
@@ -56,6 +59,19 @@ jobs:
       - run: pnpm prisma migrate deploy
       - run: pnpm db:seed
       - run: pnpm build
+      - name: Install Playwright Chromium
+        run: pnpm exec playwright install --with-deps chromium
+      - name: End-to-end tests
+        run: pnpm test:e2e
+      - name: Upload Playwright report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7
 
   auto-merge:
     name: Auto-merge into main

@@ -10,19 +10,32 @@ test("format text, add a table and an image, then preview the sanitized result",
   const editor = page.getByRole("textbox", { name: "Nội dung" });
   await expect(editor).toBeVisible();
 
+  // Slow CI runners drop keystrokes typed while the toolbar re-renders, so type
+  // with a small delay and confirm each step in the editor before moving on.
+  const type = (text: string) => page.keyboard.type(text, { delay: 30 });
+
   await editor.click();
   await page.getByRole("button", { name: "Tiêu đề lớn" }).click();
-  await page.keyboard.type("Mộ đá đôi xanh rêu");
+  await expect(page.getByRole("button", { name: "Tiêu đề lớn" })).toHaveAttribute(
+    "aria-pressed",
+    "true",
+  );
+  await type("Mộ đá đôi xanh rêu");
+  await expect(editor.getByRole("heading", { level: 2 })).toHaveText("Mộ đá đôi xanh rêu");
   await page.keyboard.press("Enter");
   await page.getByRole("button", { name: "Đậm" }).click();
-  await page.keyboard.type("Chất liệu bền");
+  await expect(page.getByRole("button", { name: "Đậm" })).toHaveAttribute("aria-pressed", "true");
+  await type("Chất liệu bền");
+  await expect(editor.locator("strong")).toHaveText("Chất liệu bền");
   await page.getByRole("button", { name: "Đậm" }).click();
   await page.keyboard.press("Enter");
 
-  // Table with header-less 3×2 grid; type into the first cell.
+  // Table with a header-less 3×2 grid; click the first cell, then type.
   await page.getByRole("button", { name: "Chèn bảng" }).click();
-  await page.keyboard.type("Kích thước");
   await expect(page.getByRole("button", { name: "+ Hàng" })).toBeVisible();
+  await editor.locator("td").first().click();
+  await type("Kích thước");
+  await expect(editor.locator("td").first()).toHaveText("Kích thước");
 
   // Insert a seeded sample image from the library.
   await editor.press("Control+End");
@@ -30,8 +43,10 @@ test("format text, add a table and an image, then preview the sanitized result",
   const picker = page.getByRole("dialog", { name: "Chèn ảnh" });
   await picker.getByRole("button", { name: /Ảnh minh họa công trình đá số 2/ }).click();
   await expect(picker).toBeHidden();
+  await expect(editor.locator("img")).toHaveCount(1);
 
   await page.getByRole("button", { name: "Xem trước" }).click();
+  await expect(page.getByTestId("sanitized-json")).not.toBeEmpty({ timeout: 15_000 });
   const preview = page.getByRole("region", { name: "Bản xem trước" });
   await expect(
     preview.getByRole("heading", { level: 2, name: "Mộ đá đôi xanh rêu" }),
