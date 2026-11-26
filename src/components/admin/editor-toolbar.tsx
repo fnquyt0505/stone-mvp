@@ -20,6 +20,13 @@ import {
 import { SAFE_LINK } from "@/lib/rich-text-sanitize";
 import { cn } from "@/lib/utils";
 
+/**
+ * Keep focus and selection inside the editor when a toolbar button is clicked
+ * with the mouse; otherwise the first keystroke after e.g. "Đậm" can be lost.
+ * Keyboard users still Tab to the buttons and press Enter as usual.
+ */
+const keepEditorFocus = (e: React.MouseEvent) => e.preventDefault();
+
 function Tool({
   label,
   active,
@@ -36,6 +43,7 @@ function Tool({
   return (
     <button
       type="button"
+      onMouseDown={keepEditorFocus}
       title={label}
       aria-label={label}
       aria-pressed={active}
@@ -145,6 +153,7 @@ export function EditorToolbar({
         <span className="flex flex-wrap gap-1 border-l pl-1">
           <button
             type="button"
+            onMouseDown={keepEditorFocus}
             className="h-10 rounded-md px-2 hover:bg-stone-50"
             onClick={() => chain().addRowAfter().run()}
           >
@@ -152,6 +161,7 @@ export function EditorToolbar({
           </button>
           <button
             type="button"
+            onMouseDown={keepEditorFocus}
             className="h-10 rounded-md px-2 hover:bg-stone-50"
             onClick={() => chain().addColumnAfter().run()}
           >
@@ -159,6 +169,7 @@ export function EditorToolbar({
           </button>
           <button
             type="button"
+            onMouseDown={keepEditorFocus}
             className="h-10 rounded-md px-2 hover:bg-stone-50"
             onClick={() => chain().deleteRow().run()}
           >
@@ -166,6 +177,7 @@ export function EditorToolbar({
           </button>
           <button
             type="button"
+            onMouseDown={keepEditorFocus}
             className="h-10 rounded-md px-2 hover:bg-stone-50"
             onClick={() => chain().deleteColumn().run()}
           >
@@ -173,6 +185,7 @@ export function EditorToolbar({
           </button>
           <button
             type="button"
+            onMouseDown={keepEditorFocus}
             className="h-10 rounded-md px-2 text-red-600 hover:bg-stone-50"
             onClick={() => chain().deleteTable().run()}
           >

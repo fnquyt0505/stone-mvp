@@ -5,7 +5,7 @@
 ## Trạng thái hiện tại
 - **Giai đoạn:** 5 — Hoàn thiện & ra mắt
 - **Task đang làm:** —
-- **Task tiếp theo:** T29 Deploy (T27 chờ đo Lighthouse)
+- **Task tiếp theo:** T29 Deploy — **chờ chủ dự án** (tài khoản Vercel, Postgres production, tên miền, key Cloudinary/Turnstile/Resend). T27 chờ đo Lighthouse.
 - **Chặn bởi:** Cần chủ dự án chốt tên thương hiệu, logo, hotline, Zalo, địa chỉ (có thể dùng `[MẪU]` để làm trước).
 
 ## Tổng quan
@@ -16,9 +16,16 @@
 | 2 Nội dung | T10–T14 | 5/5 |
 | 3 Thu lead | T15–T17 | 3/3 |
 | 4 Admin | T18–T25 | 8/8 |
-| 5 Ra mắt | T26–T30 | 2/5 |
+| 5 Ra mắt | T26–T30 | 3/5 (T27 chờ đo, T29 chờ tài khoản) |
 
 ## Nhật ký
+
+### 2026-11-27 — T30 Bàn giao (tài liệu)
+- ✅ Đã xong: `README.md` (giới thiệu, chạy trên máy, lệnh, quy trình PR + CI, cấu trúc thư mục, bảng biến môi trường, **checklist trước khi ra mắt**); `docs/HUONG-DAN-ADMIN.md` cho nhân viên (đăng nhập, tổng quan, xử lý yêu cầu báo giá + bảng trạng thái, danh mục, công trình, bài viết nháp/hẹn giờ, trang tĩnh, đánh giá/banner/thư viện ảnh, soạn nội dung, cài đặt, xử lý sự cố) — ngôn ngữ đời thường, không thuật ngữ.
+- 📁 File thay đổi: `README.md`, `docs/HUONG-DAN-ADMIN.md`, `docs/TASKS.md`, `docs/PROGRESS.md`.
+- 🐞 Lỗi / vấn đề: CI (máy chậm) cho thấy **lỗi UX thật** của trình soạn thảo — bấm nút định dạng bằng chuột làm mất focus nên phím đầu tiên gõ ngay sau đó bị mất → nút công cụ chặn `mousedown` (giữ focus/vùng chọn trong ô soạn thảo; bàn phím vẫn Tab tới nút bình thường).
+- 🧠 Quyết định quan trọng: làm T30 trước T29 vì T29 cần tài khoản/khóa của chủ dự án; phần deploy cụ thể (tên miền, nhà cung cấp DB) sẽ cập nhật vào README sau T29.
+- ⏭️ Bước tiếp theo: T29 — cần chủ dự án cung cấp/quyết định.
 
 ### 2026-11-27 — T28 Test E2E (Playwright) + e2e trong CI
 - ✅ Đã xong: `tests/e2e/journey.spec.ts` — luồng nghiệp vụ chính: khách (điện thoại) mở `/mo-da-doi/` → gửi form báo giá tại trang (loại sản phẩm chọn sẵn, Turnstile) → nhân viên (desktop) đăng nhập, thấy lead ở dashboard + danh sách (Mới, đúng loại sản phẩm/tỉnh) → chuyển "Đã báo giá" + ghi chú → kiểm tra DB và bộ lọc. **E2E chạy trong CI**: `.github/workflows/ci.yml` cài Chromium, chạy `pnpm test:e2e` sau build (Postgres service đã seed, key test Turnstile công khai của Cloudflare), tải báo cáo Playwright khi lỗi — **PR có e2e đỏ sẽ không tự merge**. Trong CI bỏ ngưỡng LCP (máy chủ chung dao động), giữ ngưỡng CLS/JS. Tổng: 143 unit + 160 e2e.
