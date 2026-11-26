@@ -20,6 +20,14 @@
 
 ## Nhật ký
 
+### 2026-11-27 — Thay nhóm "Đá granite" bằng "Chất liệu đá" (yêu cầu khách)
+- ✅ Đã xong: seed thay nhóm `da-granite` (Mộ đá granite, Bia mộ granite) bằng `chat-lieu-da` gồm 5 trang giới thiệu chất liệu: Đá xanh đen, Đá xanh rêu, Đá granite Ấn Độ, Đá vân mây, Đá trắng (`/da-xanh-den/`, `/da-xanh-reu/`, `/da-granite-an-do/`, `/da-van-may/`, `/da-trang/`), không có giá, có thông số + FAQ mẫu. **Trang nhóm** (mọi nhóm, ví dụ `/chat-lieu-da/`, `/lang-mo-da/`) giờ hiện lưới mục con có ảnh "… nổi bật" ngay dưới tiêu đề, thay khối "Các dòng sản phẩm" ở cuối trang. Thẻ không có giá hiện "Xem chi tiết" thay vì "Giá: Liên hệ". Công trình mẫu "Mộ đá granite" chuyển sang danh mục Mộ đá đơn. Thêm e2e cho `/chat-lieu-da/`.
+- 🐞 Lỗi / vấn đề: seed không bao giờ xóa dữ liệu → trên production (Neon) nhóm "Đá granite" cũ vẫn còn.
+- ⏭️ Việc cần làm trên production (chủ dự án), chọn một cách:
+  - [ ] **Cách 1 (nhanh)**: chạy `pnpm db:seed` vào Neon như lần đầu (tài khoản admin không bị đổi) → vào admin **Danh mục** xóa "Mộ đá granite", "Bia mộ granite", rồi xóa nhóm "Đá granite".
+  - [ ] **Cách 2 (chỉ dùng admin)**: sửa nhóm "Đá granite" thành "Chất liệu đá", sửa 2 mục con thành 2 chất liệu, thêm 3 chất liệu còn lại, gắn ảnh đại diện cho từng mục.
+  - [ ] Thay ảnh `[MẪU]` bằng ảnh thật của từng loại đá (ảnh đại diện = ảnh trong lưới "nổi bật").
+
 ### 2026-11-27 — T29 Deploy lần đầu lên Vercel + Neon
 - ✅ Đã xong: Neon (vùng Singapore) đã migrate + seed dữ liệu mẫu từ máy; Vercel project `stone-mvp` (Hobby) deploy thành công từ `main` với `DATABASE_URL`, `DIRECT_URL`, `AUTH_SECRET`, `NEXT_PUBLIC_SITE_URL`. Kiểm tra từ bên ngoài: `/`, `/mo-da-doi/`, `/cong-trinh/`, `/lien-he/`, `/admin/login/`, `/sitemap.xml` trả 200 (~1 giây); canonical đúng `https://stone-mvp.vercel.app`; `robots.txt` chặn toàn site (còn dữ liệu mẫu); `/admin` có `X-Robots-Tag: noindex`.
 - 🐞 Lỗi / vấn đề: migrate lần đầu lỗi `P1001` do Neon "ngủ" → thêm `&connect_timeout=30` vào cả hai chuỗi kết nối.

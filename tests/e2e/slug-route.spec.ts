@@ -24,6 +24,27 @@ test("top-level category resolves", async ({ page }) => {
   await expect(page.locator("h1")).toHaveText("Lăng mộ đá");
 });
 
+test("group page features its children at the top, not as related at the bottom", async ({
+  page,
+}) => {
+  const res = await page.goto("/chat-lieu-da/");
+  expect(res?.status()).toBe(200);
+  await expect(page.locator("h1")).toHaveText("Chất liệu đá");
+
+  const featured = page.getByRole("region", { name: "Chất liệu đá nổi bật" });
+  await expect(featured.getByRole("article")).toHaveCount(5);
+  for (const name of ["Đá xanh đen", "Đá xanh rêu", "Đá granite Ấn Độ", "Đá vân mây", "Đá trắng"]) {
+    await expect(featured.getByRole("link", { name })).toBeVisible();
+  }
+  // Materials have no price: the cards show "Xem chi tiết" instead of a price.
+  await expect(featured.getByText("Giá: Liên hệ")).toHaveCount(0);
+  await expect(featured.getByText("Xem chi tiết")).toHaveCount(5);
+
+  await featured.getByRole("link", { name: "Đá xanh rêu" }).click();
+  await expect(page).toHaveURL(/\/da-xanh-reu\/$/, { timeout: 20_000 });
+  await expect(page.locator("h1")).toHaveText("Đá xanh rêu");
+});
+
 test("adds the trailing slash", async ({ page }) => {
   await page.goto("/mo-da-doi");
   await expect(page).toHaveURL(/\/mo-da-doi\/$/);

@@ -8,8 +8,19 @@ import { ImageFrame } from "./image-frame";
 const CARD =
   "group relative flex h-full flex-col overflow-hidden rounded-lg border bg-white shadow-sm";
 
-/** 4:3 image, name, one-line excerpt, "Giá từ …", "Xem mẫu →". */
-export function CategoryCard({ category }: { category: HomeCategory }) {
+/**
+ * 4:3 image, name, one-line excerpt, "Giá từ …", "Xem mẫu →".
+ * `showPrice={false}` hides the price line (e.g. material introduction pages).
+ */
+export function CategoryCard({
+  category,
+  showPrice = true,
+  ctaLabel = "Xem mẫu",
+}: {
+  category: HomeCategory;
+  showPrice?: boolean;
+  ctaLabel?: string;
+}) {
   const href = `/${category.slug}/`;
   return (
     <article className={CARD}>
@@ -27,11 +38,15 @@ export function CategoryCard({ category }: { category: HomeCategory }) {
         {category.excerpt ? (
           <p className="line-clamp-1 text-stone-700">{category.excerpt}</p>
         ) : null}
-        <p className="mt-auto pt-2 font-semibold text-jade-700">
-          {category.priceFrom ? `Giá từ ${formatVndShort(category.priceFrom)}` : "Giá: Liên hệ"}
-        </p>
-        <span className="inline-flex items-center gap-1 font-semibold text-stone-900 group-hover:text-jade-700">
-          Xem mẫu <ArrowRight aria-hidden className="size-4" />
+        {showPrice ? (
+          <p className="mt-auto pt-2 font-semibold text-jade-700">
+            {category.priceFrom ? `Giá từ ${formatVndShort(category.priceFrom)}` : "Giá: Liên hệ"}
+          </p>
+        ) : null}
+        <span
+          className={`inline-flex items-center gap-1 font-semibold text-stone-900 group-hover:text-jade-700 ${showPrice ? "" : "mt-auto pt-2"}`}
+        >
+          {ctaLabel} <ArrowRight aria-hidden className="size-4" />
         </span>
       </div>
     </article>

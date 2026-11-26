@@ -29,6 +29,11 @@ export function CategoryView({
   const specs = parseSpecs(category.specs);
   const faqs = parseFaqs(category.faqs);
   const gallery = category.gallery.map((g) => ({ ...g.image, caption: g.caption }));
+  // A group page (no parent) features its children at the top instead of a
+  // "related" block at the bottom.
+  const isGroup = !category.parent;
+  const featured = isGroup ? related : [];
+  const bottomRelated = isGroup ? [] : related;
   const crumbs: BreadcrumbItem[] = [
     { name: "Trang chủ", path: "/" },
     ...(category.parent ? [{ name: category.parent.name, path: `/${category.parent.slug}/` }] : []),
@@ -43,6 +48,24 @@ export function CategoryView({
         {category.excerpt ? (
           <p className="mt-4 max-w-prose text-lg text-stone-700">{category.excerpt}</p>
         ) : null}
+
+        {featured.length ? (
+          <section aria-labelledby="cat-featured" className="mt-8">
+            <SectionHeading id="cat-featured" title={`${category.name} nổi bật`} />
+            <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {featured.map((c) => (
+                <li key={c.id}>
+                  <CategoryCard
+                    category={c}
+                    showPrice={c.priceFrom !== null}
+                    ctaLabel={c.priceFrom !== null ? "Xem mẫu" : "Xem chi tiết"}
+                  />
+                </li>
+              ))}
+            </ul>
+          </section>
+        ) : null}
+
         <div className="mt-6">
           <PriceRange
             from={category.priceFrom}
@@ -82,20 +105,20 @@ export function CategoryView({
         </div>
       </div>
 
-      {related.length ? (
+      {bottomRelated.length && category.parent ? (
         <Section muted labelledBy="cat-related">
           <SectionHeading
             id="cat-related"
-            title={
-              category.parent
-                ? `Mẫu khác trong ${category.parent.name.toLowerCase()}`
-                : "Các dòng sản phẩm"
-            }
+            title={`Mẫu khác trong ${category.parent.name.toLowerCase()}`}
           />
           <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {related.map((c) => (
+            {bottomRelated.map((c) => (
               <li key={c.id}>
-                <CategoryCard category={c} />
+                <CategoryCard
+                  category={c}
+                  showPrice={c.priceFrom !== null}
+                  ctaLabel={c.priceFrom !== null ? "Xem mẫu" : "Xem chi tiết"}
+                />
               </li>
             ))}
           </ul>
