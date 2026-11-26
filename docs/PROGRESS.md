@@ -20,6 +20,11 @@
 
 ## Nhật ký
 
+### 2026-11-27 — T29 (chuẩn bị) Deploy Vercel + Neon
+- ✅ Đã xong: Prisma `directUrl = env("DIRECT_URL")` (Neon: `DATABASE_URL` = chuỗi pooled, `DIRECT_URL` = chuỗi trực tiếp cho migration; local/CI dùng cùng một chuỗi); script `vercel-build` = `prisma migrate deploy && next build` (Vercel tự chạy migration mỗi lần deploy); `vercel.json` đặt vùng `sin1` (Singapore, cùng vùng Neon); hướng dẫn từng bước `docs/DEPLOY.md` (tạo Neon → migrate + seed từ máy → biến môi trường → import vào Vercel → kiểm tra → tên miền → sự cố thường gặp); cập nhật README, ARCHITECTURE, `.env.example`, CI.
+- 🧠 Quyết định quan trọng: seed **trước** lần deploy đầu để build đầu tiên đã có nội dung. T29 chỉ đánh dấu xong sau khi website chạy thật trên Vercel.
+- ⏭️ Bước tiếp theo: chủ dự án làm theo `docs/DEPLOY.md`.
+
 ### 2026-11-27 — T30 Bàn giao (tài liệu)
 - ✅ Đã xong: `README.md` (giới thiệu, chạy trên máy, lệnh, quy trình PR + CI, cấu trúc thư mục, bảng biến môi trường, **checklist trước khi ra mắt**); `docs/HUONG-DAN-ADMIN.md` cho nhân viên (đăng nhập, tổng quan, xử lý yêu cầu báo giá + bảng trạng thái, danh mục, công trình, bài viết nháp/hẹn giờ, trang tĩnh, đánh giá/banner/thư viện ảnh, soạn nội dung, cài đặt, xử lý sự cố) — ngôn ngữ đời thường, không thuật ngữ.
 - 📁 File thay đổi: `README.md`, `docs/HUONG-DAN-ADMIN.md`, `docs/TASKS.md`, `docs/PROGRESS.md`.
