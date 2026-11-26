@@ -5,7 +5,7 @@
 ## Trạng thái hiện tại
 - **Giai đoạn:** 4 — Admin
 - **Task đang làm:** —
-- **Task tiếp theo:** T23 CRUD Danh mục
+- **Task tiếp theo:** T24 CRUD Công trình, Bài viết, Trang tĩnh
 - **Chặn bởi:** Cần chủ dự án chốt tên thương hiệu, logo, hotline, Zalo, địa chỉ (có thể dùng `[MẪU]` để làm trước).
 
 ## Tổng quan
@@ -15,10 +15,17 @@
 | 1 Khung site | T06–T09 | 4/4 |
 | 2 Nội dung | T10–T14 | 5/5 |
 | 3 Thu lead | T15–T17 | 3/3 |
-| 4 Admin | T18–T25 | 5/8 |
+| 4 Admin | T18–T25 | 6/8 |
 | 5 Ra mắt | T26–T30 | 0/5 |
 
 ## Nhật ký
+
+### 2026-11-27 — T23 CRUD Danh mục
+- ✅ Đã xong: `/admin/categories/` dạng cây (nhóm → con, trạng thái hiện/ẩn, khoảng giá, số ảnh, thứ tự, link xem site); `/admin/categories/new/` + `/admin/categories/[id]/`: tên (tự sinh đường dẫn khi tạo mới), đường dẫn, nhóm cha, tên cột menu, mô tả ngắn, **giá nhập theo triệu** ("1,5" được), ảnh bìa, nội dung (editor T22), **bảng thông số** + **FAQ** (thêm/xóa/lên/xuống), **thư viện ảnh kéo-thả** (+ nút Lên/Xuống cho bàn phím, chú thích từng ảnh, chọn nhiều ảnh/upload mới), SEO, thứ tự, hiện/ẩn. Server Action `saveCategory`/`deleteCategory` (`requireStaff`, Zod `schemas/admin-category.ts`): **đường dẫn không trùng danh mục khác hoặc trang tĩnh**, chỉ 2 cấp (nhóm có con không thể thành con), ảnh phải tồn tại, gallery lưu trong transaction, nội dung qua bộ lọc T22, `revalidateTag("categories")` + đường dẫn cũ/mới → site và menu cập nhật ngay. Xóa có xác nhận, chặn xóa nhóm còn danh mục con (công trình/lead giữ nguyên, chỉ bỏ liên kết). Component dùng chung cho T24: `Field`/`FormSection`, `RowsEditor`, `GalleryEditor`, `CoverImageField`, `SeoVisibilityFields`. 4 unit + 4 e2e mới → 120 unit + 120 e2e pass.
+- 📁 File thay đổi: `src/app/admin/(panel)/categories/*`, `src/components/admin/{form-fields,rows-editor,gallery-editor,cover-image-field,seo-visibility-fields,image-picker-dialog}.tsx`, `src/server/{actions/admin-category,queries/admin-categories}.ts`, `src/schemas/admin-category.ts`, `src/app/globals.css`, các class ô nhập (`quote-form`, `login-form`, `project-list-controls`), `package.json`, `.gitignore`, `tests/unit/admin-category-schema.test.ts`, `tests/e2e/{admin-categories,lead}.spec.ts`.
+- 🐞 Lỗi / vấn đề: (1) **Ô nhập cắt dấu chồng chữ hoa tiếng Việt** (Ẫ → Â, Ỗ → Ô) — cả form báo giá ngoài site; nguyên nhân: Chrome cắt chữ trong `<input>` theo chiều cao dòng và dấu ngã chữ hoa của Be Vietnam Pro rất cao → `input, select { line-height: 3 }` (ô có chiều cao cố định), bỏ `text-base` khỏi ô nhập (chữ to hơn: 17/18px); thêm test hồi quy. (2) Ô giá lệch hàng → `content-start` cho `Field`. (3) `next-env.d.ts` bị commit kèm đường dẫn build e2e → bỏ khỏi git, `pnpm typecheck` chạy `next typegen` trước `tsc`. (4) Form lớn gửi bằng `onSubmit` (không dùng `action`) để React không reset dữ liệu khi lỗi.
+- 🧠 Quyết định quan trọng: thứ tự danh mục chỉnh bằng ô số "Thứ tự" (đơn giản, rõ ràng); kéo-thả chỉ dùng cho ảnh gallery.
+- ⏭️ Bước tiếp theo: T24.
 
 ### 2026-11-26 — T22 Rich text editor (tạm dừng theo yêu cầu chủ dự án sau task này)
 - ✅ Đã xong: **Tiptap v3.35** `RichTextEditor` (StarterKit chỉ bật phần cho phép — tắt code/codeBlock/strike; tiêu đề H2–H4, đậm/nghiêng/gạch chân, danh sách, trích dẫn, liên kết an toàn, **bảng** TableKit với thêm/xóa hàng-cột, **ảnh** từ thư viện hoặc upload mới qua `ImagePickerDialog` + lưu width/height, hoàn tác/làm lại); thanh công cụ nhãn tiếng Việt, nút 40px, `aria-pressed`; nội dung ghi JSON vào ô ẩn để form gửi. `lib/rich-text-sanitize.ts`: lọc whitelist khi lưu (gỡ node lạ giữ chữ, bỏ mark/thuộc tính lạ, link chỉ http/https/mailto/tel/đường dẫn nội bộ, ảnh chỉ Cloudinary/`/uploads/`/`/samples/`, giới hạn độ sâu + 300 KB). `RichText` phía site render thêm bảng + ảnh (`next/image`), dùng chung regex an toàn. Trang thử `/admin/dev/editor/` chỉ bật khi `ENABLE_EDITOR_PLAYGROUND=1` (e2e). 7 unit + 2 e2e mới → 116 unit + 114 e2e pass.
