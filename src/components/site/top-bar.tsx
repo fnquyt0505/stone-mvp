@@ -8,7 +8,10 @@ export function TopBar({ settings }: { settings: SiteSettings }) {
   if (!workingHours && !hotline && !email) return null;
 
   return (
-    <div className="bg-stone-900 text-small-responsive text-stone-200">
+    <aside
+      aria-label="Giờ làm việc và liên hệ"
+      className="bg-stone-900 text-small-responsive text-stone-200"
+    >
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-2 md:px-6">
         {workingHours ? (
           <p className="flex items-center gap-2">
@@ -41,6 +44,6 @@ export function TopBar({ settings }: { settings: SiteSettings }) {
           ) : null}
         </div>
       </div>
-    </div>
+    </aside>
   );
 }
