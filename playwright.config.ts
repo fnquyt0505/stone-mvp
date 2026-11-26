@@ -5,6 +5,9 @@ const PORT = Number(process.env.E2E_PORT ?? 3100);
 const BASE_URL = `http://localhost:${PORT}`;
 /** Locally we reuse installed Edge; CI installs Playwright's Chromium. */
 const channel = process.env.CI ? undefined : (process.env.E2E_CHANNEL ?? "msedge");
+/** Specs that write to the database (admin CRUD, form submissions, uploads). */
+const WRITE_SPECS =
+  /(admin-(auth|categories|content|images|leads)|lead|quote-popup|rich-text-editor)\.spec\.ts$/;
 
 export default defineConfig({
   testDir: "tests/e2e",
@@ -18,9 +21,23 @@ export default defineConfig({
     locale: "vi-VN",
     trace: "retain-on-failure",
   },
+  // Specs that create/modify data run only after every read-only spec has
+  // finished, so counts asserted by read-only specs never race with them.
   projects: [
-    { name: "desktop", use: { ...devices["Desktop Chrome"], channel } },
-    { name: "mobile", use: { ...devices["Pixel 7"], channel } },
+    { name: "desktop", testIgnore: WRITE_SPECS, use: { ...devices["Desktop Chrome"], channel } },
+    { name: "mobile", testIgnore: WRITE_SPECS, use: { ...devices["Pixel 7"], channel } },
+    {
+      name: "desktop-write",
+      testMatch: WRITE_SPECS,
+      dependencies: ["desktop", "mobile"],
+      use: { ...devices["Desktop Chrome"], channel },
+    },
+    {
+      name: "mobile-write",
+      testMatch: WRITE_SPECS,
+      dependencies: ["desktop", "mobile"],
+      use: { ...devices["Pixel 7"], channel },
+    },
   ],
   // Tests run against a production build: closer to real traffic and free of
   // dev-mode on-demand compilation and cache races.
