@@ -10,6 +10,10 @@ export function SeoVisibilityFields({
   titleFallback,
   showOrder = true,
   showPublished = true,
+  showSeo = true,
+  title = "SEO và hiển thị",
+  publishedName = "isPublished",
+  publishedLabel = "Hiển thị trên website",
 }: {
   defaults: { seoTitle: string; seoDescription: string; order?: number; isPublished?: boolean };
   errors: Partial<Record<string, string>>;
@@ -17,42 +21,51 @@ export function SeoVisibilityFields({
   titleFallback: string;
   showOrder?: boolean;
   showPublished?: boolean;
+  showSeo?: boolean;
+  title?: string;
+  /** Checkbox field name/label (e.g. banners use "isActive"). */
+  publishedName?: string;
+  publishedLabel?: string;
 }) {
   return (
-    <FormSection title="SEO và hiển thị">
-      <Field
-        id="seoTitle"
-        label="Tiêu đề SEO"
-        hint={`Để trống sẽ dùng ${titleFallback}. Tối đa 70 ký tự.`}
-        error={errors.seoTitle}
-      >
-        {(p) => (
-          <input
-            {...p}
-            name="seoTitle"
-            defaultValue={defaults.seoTitle}
-            maxLength={70}
-            className={INPUT}
-          />
-        )}
-      </Field>
-      <Field
-        id="seoDescription"
-        label="Mô tả SEO"
-        hint="Tối đa 170 ký tự."
-        error={errors.seoDescription}
-      >
-        {(p) => (
-          <textarea
-            {...p}
-            name="seoDescription"
-            defaultValue={defaults.seoDescription}
-            rows={2}
-            maxLength={170}
-            className={TEXTAREA}
-          />
-        )}
-      </Field>
+    <FormSection title={title}>
+      {showSeo ? (
+        <>
+          <Field
+            id="seoTitle"
+            label="Tiêu đề SEO"
+            hint={`Để trống sẽ dùng ${titleFallback}. Tối đa 70 ký tự.`}
+            error={errors.seoTitle}
+          >
+            {(p) => (
+              <input
+                {...p}
+                name="seoTitle"
+                defaultValue={defaults.seoTitle}
+                maxLength={70}
+                className={INPUT}
+              />
+            )}
+          </Field>
+          <Field
+            id="seoDescription"
+            label="Mô tả SEO"
+            hint="Tối đa 170 ký tự."
+            error={errors.seoDescription}
+          >
+            {(p) => (
+              <textarea
+                {...p}
+                name="seoDescription"
+                defaultValue={defaults.seoDescription}
+                rows={2}
+                maxLength={170}
+                className={TEXTAREA}
+              />
+            )}
+          </Field>
+        </>
+      ) : null}
       {showOrder ? (
         <Field
           id="order"
@@ -78,11 +91,11 @@ export function SeoVisibilityFields({
         <label className="flex min-h-11 items-center gap-3 font-semibold">
           <input
             type="checkbox"
-            name="isPublished"
+            name={publishedName}
             defaultChecked={defaults.isPublished}
             className="size-5 accent-jade-700"
           />
-          Hiển thị trên website
+          {publishedLabel}
         </label>
       ) : null}
     </FormSection>

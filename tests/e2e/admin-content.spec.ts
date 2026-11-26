@@ -63,9 +63,12 @@ test("post: draft is hidden, scheduled is hidden, published is visible", async (
   await expect(page.getByRole("status").filter({ hasText: "Đã lưu bài viết." })).toBeVisible();
   expect((await page.request.get(`/tin-tuc/${slug}/`)).status()).toBe(404);
 
+  // The "saved" banner is already shown from the first save, so wait for the DB instead.
+  const publishedYear = () =>
+    db.post.findUnique({ where: { slug } }).then((p) => p?.publishedAt?.getUTCFullYear() ?? null);
   await form.getByLabel(/Ngày giờ đăng/).fill("2099-01-01T08:00");
   await form.getByRole("button", { name: "Lưu bài viết" }).click();
-  await expect(page.getByRole("status").filter({ hasText: "Đã lưu bài viết." })).toBeVisible();
+  await expect.poll(publishedYear).toBe(2099);
   await page.goto("/admin/posts/");
   await expect(
     page
@@ -79,7 +82,7 @@ test("post: draft is hidden, scheduled is hidden, published is visible", async (
   await page.goto(`/admin/posts/${post.id}/`);
   await page.getByLabel(/Ngày giờ đăng/).fill("2026-01-05T08:00");
   await page.getByRole("button", { name: "Lưu bài viết" }).click();
-  await expect(page.getByRole("status").filter({ hasText: "Đã lưu bài viết." })).toBeVisible();
+  await expect.poll(publishedYear).toBe(2026);
   const res = await page.goto(`/tin-tuc/${slug}/`);
   expect(res?.status()).toBe(200);
   await expect(page.locator("h1")).toHaveText(title);

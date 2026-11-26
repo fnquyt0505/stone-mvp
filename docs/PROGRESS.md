@@ -3,9 +3,9 @@
 > Cập nhật sau **mỗi** task. Mục mới nhất ở trên cùng. Giữ ngắn gọn, đủ để người/AI khác tiếp tục ngay.
 
 ## Trạng thái hiện tại
-- **Giai đoạn:** 4 — Admin
+- **Giai đoạn:** 5 — Hoàn thiện & ra mắt
 - **Task đang làm:** —
-- **Task tiếp theo:** T25 CRUD Đánh giá, Banner, Cài đặt site
+- **Task tiếp theo:** T26 SEO kỹ thuật
 - **Chặn bởi:** Cần chủ dự án chốt tên thương hiệu, logo, hotline, Zalo, địa chỉ (có thể dùng `[MẪU]` để làm trước).
 
 ## Tổng quan
@@ -15,10 +15,17 @@
 | 1 Khung site | T06–T09 | 4/4 |
 | 2 Nội dung | T10–T14 | 5/5 |
 | 3 Thu lead | T15–T17 | 3/3 |
-| 4 Admin | T18–T25 | 7/8 |
+| 4 Admin | T18–T25 | 8/8 |
 | 5 Ra mắt | T26–T30 | 0/5 |
 
 ## Nhật ký
+
+### 2026-11-27 — T25 CRUD Đánh giá, Banner, Cài đặt site
+- ✅ Đã xong: **Đánh giá** (`/admin/testimonials/`): tên, tỉnh, nội dung, số sao 1–5 (tùy chọn), thứ tự, hiện/ẩn; nhắc "chỉ đăng đánh giá thật". **Banner** (`/admin/banners/`): tiêu đề, phụ đề, chữ nút + liên kết (chỉ `tel:`, `https://`, đường dẫn nội bộ; có chữ nút thì bắt buộc có liên kết), thứ tự, bật/tắt; danh sách đánh dấu banner đang hiện. **Cài đặt** (`/admin/settings/`, **chỉ ADMIN** — `requireAdmin`, menu ẩn với EDITOR): tên thương hiệu, hotline/Zalo (chuẩn hóa + kiểm tra SĐT VN), email, địa chỉ, giờ làm, **bản đồ Google Maps — dán nguyên mã iframe, tự lấy link**, Facebook/TikTok/YouTube (https), thành tích (≤ 6), người biên soạn, cờ dữ liệu mẫu; lưu bằng transaction, `revalidateTag` + `revalidatePath("/", "layout")` → cả site cập nhật ngay. `SeoVisibilityFields` thêm tùy chọn (ẩn SEO, tiêu đề, tên/nhãn ô bật). Bỏ `ComingSoon` (không còn dùng). 13 unit + 4 e2e mới → 140 unit + 128 e2e pass (2 lần liên tiếp, mã thoát 0); test cài đặt tự khôi phục giá trị cũ.
+- 📁 File thay đổi: `src/app/admin/(panel)/{testimonials,banners,settings}/**`, `src/schemas/admin-misc.ts`, `src/server/actions/admin-misc.ts`, `src/components/admin/seo-visibility-fields.tsx`, `playwright.config.ts`, `tests/unit/admin-misc-schema.test.ts`, `tests/e2e/{admin-misc,admin-content}.spec.ts`.
+- 🐞 Lỗi / vấn đề: test bài viết (T24) đôi khi đọc nhầm thông báo "Đã lưu" của lần lưu trước → chờ dữ liệu trong DB. Prisma cần `Prisma.JsonNull` để lưu JSON null.
+- 🧠 Quyết định quan trọng: ảnh đại diện khách hàng và ảnh banner chưa làm (site chưa hiển thị) — thêm sau nếu cần. **Giai đoạn 4 (Admin) hoàn tất.**
+- ⏭️ Bước tiếp theo: T26.
 
 ### 2026-11-27 — Sửa: e2e chạy song song làm sai số liệu
 - 🐞 Lỗi / vấn đề: sau khi merge T24, 4 test e2e (trang Tin tức) lỗi vì test admin tạo bài viết **cùng lúc** test đọc đang đếm số bài. PR T24 vẫn được merge vì e2e chưa chạy trong CI và lệnh kiểm tra của AI đã lọc output qua `grep` nên không dừng khi lỗi (**lỗi quy trình của AI**).
