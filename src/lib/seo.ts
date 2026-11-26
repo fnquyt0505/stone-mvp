@@ -6,6 +6,14 @@ const DESCRIPTION_MAX = 160;
 
 export type SeoImage = { url: string; width?: number; height?: number; alt?: string };
 
+/** Generic share image used when a page has no cover (public/og-default.jpg). */
+export const DEFAULT_OG_IMAGE: SeoImage = {
+  url: "/og-default.jpg",
+  width: 1200,
+  height: 630,
+  alt: "Lăng mộ đá, nhà thờ họ, tượng đá",
+};
+
 export type PageSeoInput = {
   title: string;
   description?: string | null;
@@ -33,7 +41,8 @@ export function buildMetadata(input: PageSeoInput): Metadata {
   const siteName = input.siteName ?? DEFAULT_SITE_NAME;
   const url = absoluteUrl(input.path);
   const description = input.description ? truncateDescription(input.description) : undefined;
-  const images = input.image ? [{ ...input.image, url: absoluteUrl(input.image.url) }] : undefined;
+  const image = input.image ?? DEFAULT_OG_IMAGE;
+  const images = [{ ...image, url: absoluteUrl(image.url) }];
 
   return {
     title: input.title,
@@ -50,7 +59,8 @@ export function buildMetadata(input: PageSeoInput): Metadata {
       images,
     },
     twitter: {
-      card: images ? "summary_large_image" : "summary",
+      card: "summary_large_image",
+      images: images.map((i) => i.url),
       title: input.title,
       description,
     },

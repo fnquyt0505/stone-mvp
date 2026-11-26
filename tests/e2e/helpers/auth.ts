@@ -21,5 +21,8 @@ export async function loginAsAdmin(page: Page, next = "/admin/"): Promise<void> 
   await page.getByLabel("Email").fill(ADMIN_EMAIL);
   await page.getByLabel("Mật khẩu").fill(ADMIN_PASSWORD);
   await page.getByRole("button", { name: "Đăng nhập" }).click();
-  await expect(page).toHaveURL(new RegExp(`${next.replace(/[/?]/g, "\\$&")}$`));
+  // bcrypt (cost 12) + first render can be slow on a busy machine.
+  await expect(page).toHaveURL(new RegExp(`${next.replace(/[/?]/g, "\\$&")}$`), {
+    timeout: 20_000,
+  });
 }

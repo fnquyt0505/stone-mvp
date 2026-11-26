@@ -5,7 +5,7 @@
 ## Trạng thái hiện tại
 - **Giai đoạn:** 5 — Hoàn thiện & ra mắt
 - **Task đang làm:** —
-- **Task tiếp theo:** T26 SEO kỹ thuật
+- **Task tiếp theo:** T27 Hiệu năng & truy cập
 - **Chặn bởi:** Cần chủ dự án chốt tên thương hiệu, logo, hotline, Zalo, địa chỉ (có thể dùng `[MẪU]` để làm trước).
 
 ## Tổng quan
@@ -16,9 +16,16 @@
 | 2 Nội dung | T10–T14 | 5/5 |
 | 3 Thu lead | T15–T17 | 3/3 |
 | 4 Admin | T18–T25 | 8/8 |
-| 5 Ra mắt | T26–T30 | 0/5 |
+| 5 Ra mắt | T26–T30 | 1/5 |
 
 ## Nhật ký
+
+### 2026-11-27 — T26 SEO kỹ thuật
+- ✅ Đã xong: `app/sitemap.ts` (`server/queries/sitemap.ts`): trang chủ + 5 trang cố định, danh mục đã hiện (con ưu tiên 0.9), công trình đã hiện, bài đã đăng (không gồm nháp/hẹn giờ), trang tĩnh; URL tuyệt đối có `/` cuối, `lastmod` từ `updatedAt`, làm mới mỗi giờ. `app/robots.ts` (`lib/robots-rules.ts`): chặn `/admin/`, `/api/`, `/dev/`, khai báo sitemap; **khi SiteSetting `isSampleData` = true thì chặn toàn site** (tránh Google lập chỉ mục nội dung `[MẪU]`), có ghi chú trong trang Cài đặt. **Ảnh OG mặc định** `public/og-default.jpg` (1200×630, tự tạo, không có thương hiệu/số liệu) cho trang không có ảnh bìa; Twitter card luôn `summary_large_image`. Canonical + LocalBusiness/Breadcrumb/FAQ/Article JSON-LD đã có từ T05–T13. 3 unit + 3 e2e mới → 143 unit + 131 e2e pass.
+- 📁 File thay đổi: `src/app/{sitemap,robots}.ts`, `src/server/queries/sitemap.ts`, `src/lib/{robots-rules,seo}.ts`, `public/og-default.jpg`, `src/app/admin/(panel)/settings/settings-form.tsx`, `tests/unit/technical-seo.test.ts`, `tests/e2e/{technical-seo.spec.ts,helpers/auth.ts}`.
+- 🐞 Lỗi / vấn đề: đăng nhập trong e2e đôi khi > 5 giây khi máy bận → helper chờ tới 20 giây.
+- 🧠 Quyết định quan trọng: **Chuyển hướng 301 từ đường dẫn cũ chưa làm** — chỉ cần khi chuyển từ website cũ (cần danh sách URL cũ của chủ xưởng). Đổi đường dẫn trong admin sẽ làm URL cũ thành 404 — nên hạn chế đổi đường dẫn sau khi ra mắt. **Trước khi ra mắt phải bỏ cờ "dữ liệu mẫu"** trong Cài đặt, nếu không Google sẽ không lập chỉ mục.
+- ⏭️ Bước tiếp theo: T27.
 
 ### 2026-11-27 — T25 CRUD Đánh giá, Banner, Cài đặt site
 - ✅ Đã xong: **Đánh giá** (`/admin/testimonials/`): tên, tỉnh, nội dung, số sao 1–5 (tùy chọn), thứ tự, hiện/ẩn; nhắc "chỉ đăng đánh giá thật". **Banner** (`/admin/banners/`): tiêu đề, phụ đề, chữ nút + liên kết (chỉ `tel:`, `https://`, đường dẫn nội bộ; có chữ nút thì bắt buộc có liên kết), thứ tự, bật/tắt; danh sách đánh dấu banner đang hiện. **Cài đặt** (`/admin/settings/`, **chỉ ADMIN** — `requireAdmin`, menu ẩn với EDITOR): tên thương hiệu, hotline/Zalo (chuẩn hóa + kiểm tra SĐT VN), email, địa chỉ, giờ làm, **bản đồ Google Maps — dán nguyên mã iframe, tự lấy link**, Facebook/TikTok/YouTube (https), thành tích (≤ 6), người biên soạn, cờ dữ liệu mẫu; lưu bằng transaction, `revalidateTag` + `revalidatePath("/", "layout")` → cả site cập nhật ngay. `SeoVisibilityFields` thêm tùy chọn (ẩn SEO, tiêu đề, tên/nhãn ô bật). Bỏ `ComingSoon` (không còn dùng). 13 unit + 4 e2e mới → 140 unit + 128 e2e pass (2 lần liên tiếp, mã thoát 0); test cài đặt tự khôi phục giá trị cũ.

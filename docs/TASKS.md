@@ -46,7 +46,7 @@ Làm theo thứ tự. Mỗi task đủ nhỏ để xong trong một phiên, có 
 - [x] **T25 CRUD Đánh giá, Banner, Cài đặt site**.
 
 ## Giai đoạn 5 — Hoàn thiện & ra mắt
-- [ ] **T26 SEO kỹ thuật**: `sitemap.ts`, `robots.ts`, LocalBusiness JSON-LD, canonical, OG image mặc định, redirect 301 cho slug cũ (nếu migrate).
+- [x] **T26 SEO kỹ thuật**: `sitemap.ts`, `robots.ts`, LocalBusiness JSON-LD, canonical, OG image mặc định, redirect 301 cho slug cũ (nếu migrate).
 - [ ] **T27 Hiệu năng & truy cập**: Lighthouse mobile ≥ 85 perf / ≥ 95 SEO & a11y trên 4 trang chính; sửa lỗi.
 - [ ] **T28 Test E2E (Playwright)**: xem danh mục → gửi báo giá → lead xuất hiện trong admin → đổi trạng thái.
 - [ ] **T29 Deploy**: Vercel + Postgres production + biến môi trường + domain; GA4.
